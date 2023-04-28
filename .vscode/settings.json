@@ -1,4 +1,12 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "files.exclude": {
+    "**/.contentlayer": true,
+    "**/.next": true,
+    "next-env.d.ts": true
+  },
+  "[mdx]": {
+    "editor.wordWrap": "on"
+  }
 }

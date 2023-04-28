@@ -1,3 +1,4 @@
+import { byStringValue } from '@/util/sort'
 import { allBlogPosts } from 'contentlayer/generated'
 import Link from 'next/link'
 
@@ -6,11 +7,15 @@ export const metadata = {
 }
 
 export default async function BlogPage() {
+  const posts = [...allBlogPosts].sort(byStringValue((p) => p.title))
+
+  // TODO: Create list of cards instead with a bit more info (date, tags, category, etc.)
+
   return (
     <>
       <h1>Blog</h1>
       <ul>
-        {allBlogPosts.map((post) => (
+        {posts.map((post) => (
           <li key={post._id}>
             <Link href={`/blog/${post.slug}`}>{post.title}</Link>
           </li>
