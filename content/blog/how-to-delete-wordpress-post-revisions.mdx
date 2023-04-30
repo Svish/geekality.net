@@ -1,0 +1,39 @@
+---
+title: How to delete WordPress post revisions
+published: '2009-10-20'
+permalinks:
+  - /2009/10/20/how-to-delete-wordpress-post-revisions/
+  - /?p=689
+categories:
+  - software-development
+tags:
+  - mysql
+  - sql
+  - wordpress
+---
+
+Having revisions on my posts is nice I suppose. But I was starting to get a bit annoyed with the increasingly long list of revisions in each post. And they really did get long. Mainly because I am in a bit of a testing and experimenting phase which means that I have done a lot of adjustments to almost every single post so far because I don't have 100% control on how I want things or how things will end up looking and so on 😛 There's also of course all the obligatory spelling errors I only discover <em>after</em> I have clicked Publish 😛
+
+Anyways, I found a nice little MySQL snippet to clear out all of them in a French comment to <a href="http://www.mydigitallife.info/2008/07/22/how-to-delete-existing-wordpress-post-revisions-storedsaved/">a blog post</a>. Thought I could share it here. That way I won't lose it either 🙂
+
+```sql
+delete x,y,z from wp_posts x left join wp_term_relationships y on (x.id =
+y.object_id) left join wp_postmeta z on (x.id = z.post_id) where x.post_type =
+'revision'
+```
+
+You can swap `delete x,y,z` with `select \*` to check that it will delete what you really want to.
+
+Remember that if you have a table prefix other than 'wp\_' set in your wp-config.php, you need to change that in your SQL script before you run it. The line looks like this in my config file:
+
+```php
+$table_prefix = 'wp_';
+```
+
+I can also recommend setting WP_POST_REVISIONS to something in your wp-config.php file. Just search for REVISIONS in that file. If you don't find it, you can just add it somewhere. The line should look like the following, where N would be how many revisions you want to allow, or -1 if you want them all:
+
+```php
+define('WP_POST_REVISIONS', N);
+```
+
+I will still run the SQL script once in a while though, cause after a while my posts become sort of stable, and having revisions with my spelling errors hanging around for ever doesn't really make sense in my head 😛

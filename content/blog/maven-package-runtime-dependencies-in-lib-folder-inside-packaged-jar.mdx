@@ -1,0 +1,46 @@
+---
+title: 'Maven: Package runtime dependencies in lib folder inside packaged jar'
+published: '2013-09-12'
+permalinks:
+  - >-
+    /2013/09/12/maven-package-runtime-dependencies-in-lib-folder-inside-packaged-jar/
+  - /?p=2374
+categories:
+  - software-development
+tags:
+  - dependencies
+  - jar
+  - java
+  - maven
+---
+
+When running `mvn package`, here's how to end up with a lib folder inside the resulting jar file which contains all the runtime dependencies of your project. Just add the following to your pom.xml.
+
+```xml
+<build>
+<plugins>
+    <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>2.8</version>
+    <executions>
+        <execution>
+        <id>copy-dependencies</id>
+        <phase>prepare-package</phase>
+        <goals>
+            <goal>copy-dependencies</goal>
+        </goals>
+        <configuration>
+            <outputDirectory>
+              ${project.build.directory}/classes/lib
+            </outputDirectory>
+            <includeScope>runtime</includeScope>
+        </configuration>
+        </execution>
+    </executions>
+    </plugin>
+</plugins>
+</build>
+```
+
+Works on my machine anyways. When I now open up the packaged jar archive I find a lib folder containing all jar dependencies, with the exception of those belonging to the scopes test and provided. Which is what I wanted. Score!!

@@ -1,0 +1,17 @@
+---
+title: How to clear local NuGet cache
+published: '2020-08-10'
+permalinks:
+  - /2020/08/10/how-to-clear-local-nuget-cache/
+  - /?p=3391
+categories:
+  - software-development
+tags:
+  - nuget
+---
+
+```powershell
+dotnet nuget locals -Clear all
+# or
+nuget locals all -Clear
+```

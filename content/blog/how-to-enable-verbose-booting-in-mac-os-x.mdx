@@ -1,0 +1,29 @@
+---
+title: How to enable verbose booting in Mac OS X
+published: '2010-05-12'
+permalinks:
+  - /2010/05/12/how-to-enable-verbose-booting-in-mac-os-x/
+  - /?p=979
+categories:
+  - technology
+tags:
+  - command-line
+  - mac
+  - unix
+---
+
+I'm a curious guy, so I wanted to see if there was anything interesting happening behind the Apple logo when the Mac I use at work boots up.
+
+Turned out it was quite simple to enable and disable this feature. To enable it, just open up a Terminal and run the following command:
+
+```bash
+sudo nvram boot-args="-v"
+```
+
+When you reboot the next time, you will see all the fun stuff happening during the boot up. If you get tired of it, you can disable it again by running:
+
+```bash
+sudo nvram boot-args=
+```
+
+That's it!

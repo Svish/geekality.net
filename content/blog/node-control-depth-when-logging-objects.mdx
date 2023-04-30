@@ -1,0 +1,27 @@
+---
+title: 'Node: Control depth when logging objects'
+published: '2020-11-25'
+permalinks:
+  - /2020/11/25/node-control-depth-when-logging-objects/
+  - /?p=3420
+categories:
+  - software-development
+tags:
+  - javascript
+  - logging
+  - node-js
+---
+
+For debugging it's often useful to do `console.log(someObjectOrArray)`. However, if the array is long or the object deep, a lot will be truncated. Apparently there's a util one can use to get a bit more control over this though:
+
+```js
+import util from 'util'
+
+console.log(
+  util.inspect(someObjectOrArray, {
+    colors: true,
+    depth: 3,
+    compact: false,
+  })
+)
+```

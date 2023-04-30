@@ -1,0 +1,18 @@
+---
+title: Change license key of Windows Server
+published: '2015-08-05'
+permalinks:
+  - /2015/08/05/change-license-key-of-windows-server/
+  - /?p=2797
+categories:
+  - technology
+tags:
+  - windows
+  - windows-server
+---
+
+Needed to install two Windows Server 2012 R2 instances today, but didn't have a valid production license key yet and didn't seem like there was a way to skip the key in the setup. Found you can <a href="http://community.spiceworks.com/how_to/27819-change-windows-server-2012-product-key">remove a license key using a command</a>, so worked around it using a temporary dev key from MSDN for the installation and then removed that key afterwards. For future self-reference, here's how...
+
+1. Open an <a href="/?p=1139">elevated command prompt</a>
+1. To remove key run `slmgr -upk`
+1. To add new one run `slmgr -ipk NEW-KEY` _or_ use regular activation process

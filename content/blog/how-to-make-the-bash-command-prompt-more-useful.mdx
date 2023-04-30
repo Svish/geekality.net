@@ -1,0 +1,29 @@
+---
+title: How to make the Bash command prompt more useful
+published: '2011-02-17'
+permalinks:
+  - /2011/02/17/how-to-make-the-bash-command-prompt-more-useful/
+  - /?p=1483
+categories:
+  - technology
+tags:
+  - bash
+  - command-line
+  - unix
+---
+
+Was on a Linux box today and I found the command prompt rather useless. It looked like this:
+
+```bash
+-bash-3.2$
+```
+
+I know I'm using bash, and I don't really care about the version. Or that I'm using bash actually... But anyways, to make it more useful you can run this:
+
+```bash
+PS1="\u@\h:\w$ "
+```
+
+You will then get a prompt which contains your username, hostname and current working directory. _Much_ more useful in my opinion. If you have a different opinion, please share 🙂
+
+You can find more stuff to put in your prompt by reading the prompting section of the <a href="http://linux.die.net/man/1/bash">bash man page</a>.

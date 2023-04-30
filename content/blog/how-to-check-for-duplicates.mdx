@@ -1,0 +1,100 @@
+---
+title: 'C#: How to check for duplicates'
+published: '2010-01-19'
+permalinks:
+  - /2010/01/19/how-to-check-for-duplicates/
+  - /?p=884
+categories:
+  - software-development
+tags:
+  - csharp
+  - extension-methods
+  - ienumerable
+  - snippet
+---
+
+Say we have an `IEnumerable<T>` of some sort and we want to check if it contains any duplicates. How do we do that?
+
+## Terrible solution
+
+Needed to do this a while ago and the first solution that hit me wasn't exactly good... Linq has an extension method called Distinct, which returns the distinct items in a sequence (weeds out duplicates). Using that to check if duplicates exists we can do something like this:
+
+```csharp
+var hasDuplicates = subjects.Count() != subjects.Distinct().Count();
+```
+
+This is of course a <strong><em>really bad</em></strong> solution. So <em>don't</em> use it! 😛
+
+Why is it bad? Because we have to go through the collection 3 times. First to count all of the subjects, next to filter out duplicates, and finally to count them once again.
+
+## Good solution
+
+The much better solution is to use a `HashSet<T>`.
+
+> The [HashSet&lt;T&gt;](http://msdn.microsoft.com/en-us/library/bb359438.aspx) class provides high performance set operations. A set is a collection that contains no duplicate elements, and whose elements are in no particular order.
+
+In addition to the fact that it cannot contain duplicate items, it also has a very nice add-method which returns false if the item is already in the set.
+
+To check for duplicates using a hash set we can start out by assuming that no duplicates exists. We then add items to the set until we either run out of items or until we try to add an item that already exists. In the first case our assumption was right and in the second it turned out to be wrong.
+
+```csharp
+var hasDuplicates = false;
+
+var set = new HashSet<T>();
+foreach (var s in subjects)
+  if (!set.Add(s))
+  {
+    hasDuplicates = true;
+    break;
+  }
+```
+
+## Good and handy solution
+
+Since we don't want to type that in every time we want to check for duplicates, we want this snippet in a nice extension method. Code snippet coming up 🙂
+
+```csharp
+using System.Collections.Generic;
+
+namespace Geekality.Snippets
+{
+  public static class EnumerableExtensions
+  {
+    public static bool HasDuplicates<T>(this IEnumerable<T> subjects)
+    {
+      return HasDuplicates(subjects, EqualityComparer<T>.Default);
+    }
+
+    public static bool HasDuplicates<T>(this IEnumerable<T> subjects, IEqualityComparer<T> comparer)
+    {
+        if(subjects == null)
+          throw new ArgumentNullException("subjects");
+
+        if(comparer == null)
+          throw new ArgumentNullException("comparer");
+
+        var set = new HashSet<T>(comparer);
+
+        foreach (var s in subjects)
+          if (!set.Add(s))
+            return true;
+
+        return false;
+    }
+  }
+
+}
+```
+
+Simple and handy. You use it for example like this:
+
+```csharp
+if (subjects.HasDuplicates())
+{
+  // Do something
+}
+```
+
+Hope it can help someone, somewhere, somehow, below and/or over the rainbow 😛
+
+Let me know what we think! I'm always open for improvements and feedback 😎

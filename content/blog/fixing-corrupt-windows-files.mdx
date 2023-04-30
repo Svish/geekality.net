@@ -1,0 +1,22 @@
+---
+title: Fixing corrupt Windows files
+published: '2015-11-11'
+permalinks:
+  - /2015/11/11/fixing-corrupt-windows-files/
+  - /?p=2828
+categories:
+  - technology
+tags:
+  - troubleshooting
+  - windows
+  - windows-8-1
+---
+
+Just a note to self...
+
+```powershell
+dism /online /cleanup-image /restorehealth
+sfc /scannow
+```
+
+<b>Source:</b> <a href="http://superuser.com/a/755684">SuperUser</a>

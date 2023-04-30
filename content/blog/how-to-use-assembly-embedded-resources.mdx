@@ -1,0 +1,48 @@
+---
+title: 'C#: How to use assembly embedded resources'
+published: '2008-12-27'
+permalinks:
+  - /2008/12/27/how-to-use-assembly-embedded-resources/
+  - /?p=62
+categories:
+  - software-development
+tags:
+  - csharp
+  - embedded-resources
+  - tutorial
+---
+
+After some digging around, I found that it actually wasn't that difficult at all.
+
+## Getting it in
+
+Putting something in an assembly as an embedded resource is pretty easy. At least if you are using Visual Studio. Just add the file to your project, click on it, and then under Properties set Build Action to Embedded Resource. And thats it!
+
+## Getting it out
+
+Lets say we want an image called <em>hello.png</em> in a folder called <em>Wopdidoo</em> as a Stream.
+
+If we are executing code in the same assembly, we can do as follows:
+
+```csharp
+Assembly assembly = Assembly.GetExecutingAssembly();
+Stream imageStream = assembly
+  .GetManifestResourceStream("DefaultNameSpaceOfAssembly.Wopdidoo.hello.png");
+```
+
+If you are not executing code in the same assembly you just have to get that assembly reference in a different way. I often use `Assembly.GetAssembly(typeof(T))`, where `T` is some type you know exists in the same assembly as the file you want. The rest is the same.
+
+As far as I know, you use the stream as any other stream. Not sure if it is writable though? Probably not... let me know if you have some brilliant clues on that matter 🙂
+
+⚠ Remember to `Dispose` it when you are done.
+
+## Finding it
+
+I sometimes find it a bit difficult to figure out that string which identifies the resource. I then often use the following code to "find" it:
+
+```csharp
+foreach (string s in assembly.GetManifestResourceNames())
+  System.Diagnostics.Debug.WriteLine(s);
+```
+
+It basically just scans through all the resource names and prints them out to the debug console 🙂

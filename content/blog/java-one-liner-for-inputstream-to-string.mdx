@@ -1,0 +1,20 @@
+---
+title: 'Java: One-liner for InputStream to String'
+published: '2012-10-05'
+permalinks:
+  - /2012/10/05/java-one-liner-for-inputstream-to-string/
+  - /?p=2087
+categories:
+  - software-development
+tags:
+  - java
+  - stream
+---
+
+Just what the title says, for future reference 🙂
+
+```java
+String text = new Scanner(inputStream, charset)
+  .useDelimiter("\\A")
+  .next();
+```

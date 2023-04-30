@@ -1,0 +1,72 @@
+---
+title: 'Bat: Some simple things to make batch scripts more helpful'
+published: '2013-07-11'
+permalinks:
+  - /2013/07/11/bat-some-simple-things-to-make-batch-scripts-more-helpful/
+  - /?p=2350
+categories:
+  - software-development
+tags:
+  - batch-script
+  - command-line
+  - windows
+---
+
+Tried to make a helpful batch script for something at work and learned some new things I thought I'd write down here so I know where to find it later.
+
+## Turn off echoing
+
+Should be known by everyone really, but in case you don't. Prevents the commands in the batch script and the command prompt to show up while the script is running. Beginning a line with @ does this for a single command.
+
+```dos
+@echo off
+```
+
+## Comments
+
+```dos
+  REM Some comment REM Will still appear as a command if you haven't disabled
+  echoing
+```
+
+## Labels and goto
+
+Trivial, but I keep forgetting about this since I never use it in other programming.
+
+```dos
+goto end REM Will be skipped :end
+```
+
+## Set title of command prompt
+
+```dos
+title MyScript: Doing x now
+```
+
+## Check command line arguments
+
+```dos
+if "%~1"=="" (echo Usage: test.bat path && goto end) if not exist %~1 (echo
+%~1 does not exist && goto end)
+```
+
+## Simpe choices
+
+```dos
+choice /c ny /n /d y /t 10 /m "Do you really want to do this? [y=10s,n] if
+ERRORLEVEL 2 ( echo Ok, I'll do it )
+```
+
+## Run other batch scripts
+
+If you don't use the call command, the other script will actually take over and your script will end.
+
+```dos
+call other.bat arg1 arg2 ...
+```
+
+## Do the same thing with various subjects
+
+```dos
+for %%x in ( a b c ) do ( echo %%x )
+```

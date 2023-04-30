@@ -1,0 +1,31 @@
+---
+title: 'NuGet spec, pack and push'
+published: '2012-09-24'
+permalinks:
+  - /2012/09/24/nuget-spec-pack-and-push/
+  - /?p=2068
+categories:
+  - software-development
+tags:
+  - command-line
+  - nuget
+---
+
+Keep forgetting these lines, so sticking them here for future reference.
+
+## Spec
+
+```powershell
+nuget spec SomeProject.csproj
+```
+
+Fix up created nuspec file afterwards.
+
+## Pack and Publish
+
+```powershell
+nuget pack SomeProject.csproj -Build -Symbols -Properties Configuration=Release
+nuget push [main nupkg file created by previous command]
+```
+
+This will pack and push to both the public <a href="https://www.nuget.org/">NuGet</a> feed and to <a href="http://www.symbolsource.org/Public">SymbolSource</a>.

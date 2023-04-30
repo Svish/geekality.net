@@ -1,0 +1,37 @@
+---
+title: 'MySQL: How to reset the root account'
+published: '2008-12-27'
+permalinks:
+  - /2008/12/27/how-to-reset-the-mysql-root-account/
+  - /?p=55
+categories:
+  - software-development
+  - technology
+tags:
+  - mysql
+  - tutorial
+---
+
+I just managed to mess up the MySQL root account. Not a smart idea. After some MySQL manual reading and some serious Google-Fu, I figured out how to fix it.
+
+1. Stop the mysql server
+2. Add the following to the my.cnf file
+
+```ini
+[mysqld]
+skip-grant-tables
+```
+
+3. Start the mysql server
+4. Start a mysql client and run the following query
+
+```sql
+REPLACE INTO mysql.user VALUES ('localhost','root',PASSWORD('blah'),'Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','','','','',0,0,0,0);
+```
+
+5. Quit the mysql client
+6. Stop the mysql server
+7. Remove what we added to my.cnf in step 2
+8. Restart the mysql server
+
+Tadaa.

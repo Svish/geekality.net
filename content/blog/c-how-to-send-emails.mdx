@@ -1,0 +1,230 @@
+---
+title: 'C#: How to send emails'
+published: '2010-05-16'
+permalinks:
+  - /2010/05/16/c-how-to-send-emails/
+  - /?p=991
+categories:
+  - software-development
+tags:
+  - csharp
+  - email
+  - security
+  - snippet
+  - ssl
+---
+
+Sending a basic email message in a C# application is quite easy thanks to a class called <a href="http://msdn.microsoft.com/en-us/library/system.net.mail.smtpclient.aspx">SmptClient</a>. We simply need an address to send to, an address to send from, the message we want to send and the address of an SMTP server, hand it all to the SMTP client, and you're done:
+
+```csharp
+var from = new MailAddress("me@example.com", "Me");
+var to = new MailAddress("you@example.com", "You");
+
+var message = new MailMessage(from, to)
+{
+    Subject = "Greetings!",
+    Body = "How are you doing today?",
+};
+
+var client = new SmtpClient("smtp.example.com");
+
+using (client)
+{
+    try
+    {
+        client.Send(message);
+    }
+    catch (SmtpException e)
+    {
+        Console.WriteLine(e.Message);
+    }
+}
+```
+
+That was pretty simple, wasn't it? But what if we need to authenticate with our server? And what if we want to send our message in a more secure manner?
+
+<hr className="fix" />
+
+## Authentication
+
+You will quite often find that an <a href="http://en.wikipedia.org/wiki/Smtp_server">SMTP server</a> requires you to authenticate yourself before it will let you do anything. This is however very simple to do. All we need, is to provide our credentials to the client:
+
+```csharp
+var client = new SmtpClient("smtp.example.com")
+{
+    Credentials = new NetworkCredential
+    {
+        UserName = "me@example.com",
+        Password = "password",
+    },
+};
+```
+
+Now, when you try to send your message like before, it should be sent without problems 🙂 But what if you want to send your email securely?
+
+## Using SSL to encrypt the connection
+
+To send emails through an encrypted connection, all you have to do is to set the <a href="http://msdn.microsoft.com/en-us/library/system.net.mail.smtpclient.enablessl.aspx">EnableSSL</a> property of the SmtpClient to `true`:
+
+```csharp
+var client = new SmtpClient("smtp.example.com")
+{
+    EnableSSL = true,
+    Credentials = new NetworkCredential
+    {
+        UserName = "me@example.com",
+        Password = "password",
+    },
+};
+```
+
+When you now try to send your email, it will use the <a href="http://en.wikipedia.org/wiki/Transport_Layer_Security">Secure Socket Layer</a> to encrypt the connection. Like me, you might run into a problem though; an <a href="http://msdn.microsoft.com/en-us/library/system.security.authentication.authenticationexception.aspx">AuthenticationException</a> with the following message: <cite>The remote certificate is invalid according to the validation procedure.</cite>
+
+## Imperfect certificates
+
+After reading about <a href="https://www.symantec.com/page.jsp?id=how-ssl-works">how these certificates work</a> and some more digging around I found out that the certificate of the SMTP server I use is considered invalid for two reasons: Firstly it was not issued by a trusted Certification Authority (like VeriSign or Thawte), but by my host (<a href="http://www.dreamhost.com/r.cgi?322827">Dreamhost</a>) themselves. And finally there is a mismatch between the domain I'm connecting to (smtp.example.com) and the domain the certificate was issued to (mail.dreamhost.com).
+
+## Manual certificate validation
+
+SSL has two purposes: security and authentication. And the security will actually work fine and all the traffic will be encrypted even if the authentication fails. In other words, as long as we can look at the certificate ourselves and be sure that <em>we</em> thrust it, we can go ahead and continue with our work.
+
+To check the certificate ourselves we can provide a <a href="http://msdn.microsoft.com/en-us/library/system.net.security.remotecertificatevalidationcallback.aspx">RemoteCertificate&shy;ValidationCallback</a> delegate to a class called the <a href="http://msdn.microsoft.com/en-us/library/system.net.servicepointmanager.aspx">ServicePoint&shy;Manager</a>.
+
+```csharp
+  ServicePointManager.ServerCertificateValidationCallback = OurCertificateValidation;
+```
+
+But how can we decide if we should trust the certificate or not? Well, I have found three ways that works nicely. Well, actually just two since the first is just to cover your eyes and let anything pass...
+
+### Pretend validation
+
+The following implementation is a way to simply say that <cite>I don't care</cite>:
+
+```csharp
+static bool OurCertificateValidation(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+{
+    return true;
+}
+```
+
+This is of course not very good... we should at least make <em>some</em> effort and check if the certificate is the one we should be getting. We can for example...
+
+### Check the certificate fingerprint
+
+Certificates have something called a fingerprint and if we know the fingerprint of the certificate we <em>should</em> get, then we can compare it with the fingerprint of the one we actually got.
+
+```csharp
+static bool OurCertificateValidation(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+{
+    return certificate.GetCertHashString()
+        == "6B8C79AB966D70277BA86E6F820859A2B5B8CCC0"; // SHA-1 fingerprint
+}
+```
+
+If you don't think this is enough, you can for example...
+
+### Check the whole certificate
+
+If you can export the certificate to a file somehow, you can then later compare the certificate you get with the one you have stored and make sure they are equal.
+
+```csharp
+static bool OurCertificateValidation(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+{
+    var actualCertificate = X509Certificate.CreateFromCertFile("example.cert");
+    return certificate.Equals(actualCertificate);
+}
+```
+
+I got a hold of the certificate file by sticking the following snippet inside my validation delegate, ran my code once, and then changed it back to normal again:
+
+```csharp
+static bool OurCertificateValidation(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+{
+    using (var file = File.Create("example.cert"))
+    {
+        var cert = certificate.Export(X509ContentType.Cert);
+        file.Write(cert, 0, cert.Length);
+    }
+    return false;
+}
+```
+
+I also successfully exported it from Opera, which I use as an email client, by going to Preferences, Security, Manage Certificates, Approved and then export the one I want. This of course assumes you have have previously approved the certificate for use with Opera.
+
+## Wrap-up
+
+That's all for now! Found it kind of fun to get this working and thought I could share it in case someone else struggles with this. Please comment and let me know if I have misunderstood something or done a big blunder or something like that! I mostly just know that my code is working, so if you know more about how these security issues work and you know something you think i should know as well: Please share! I'd like to learn 🙂
+
+Here is my final, complete code:
+
+```csharp
+using System;
+using System.Net.Mail;
+using System.Net;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
+using System.IO;
+using System.Net.Security;
+
+namespace Geekality.SecureEmail
+{
+    class Program
+    {
+        static bool OurCertificateValidation(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            var actualCertificate = X509Certificate.CreateFromCertFile("example.com.cert");
+
+            return certificate.Equals(actualCertificate);
+        }
+
+        static void Main(string[] args)
+        {
+            // Register our own certificate validation
+            ServicePointManager.ServerCertificateValidationCallback = OurCertificateValidation;
+
+            // Message
+            var from = new MailAddress("me@example.com", "Me");
+            var to = new MailAddress("you@example.com", "Myself");
+
+            var message = new MailMessage(from, to)
+            {
+                Subject = "Greetings!",
+                Body = "How are you doing today?",
+            };
+
+            // Create client
+            var client = new SmtpClient("smtp.example.com")
+            {
+                EnableSsl = true,
+                Credentials = new NetworkCredential
+                {
+                    UserName = "me@example.com",
+                    Password = "password",
+                },
+            };
+
+            // Try to send
+            using (client)
+            {
+                try
+                {
+                    client.Send(message);
+                    Console.WriteLine("Message sent!");
+                }
+                catch (AuthenticationException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                catch (SmtpException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            Console.ReadKey(true);
+        }
+    }
+
+}
+
+```

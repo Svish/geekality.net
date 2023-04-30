@@ -1,0 +1,112 @@
+---
+title: Manual WAMP stack for PHP development on Windows
+published: '2017-11-01'
+permalinks:
+  - /2017/11/01/manual-wamp-stack/
+  - /?p=3163
+categories:
+  - software-development
+tags:
+  - apache
+  - composer
+  - installation
+  - mariadb
+  - mysql
+  - php
+  - wamp
+  - windows
+---
+
+For future reference...
+
+## PHP
+
+1. Download an <b>x64 Thread Safe zip</b> from <a href="http://windows.php.net/download/">php.net</a>.
+2. Read the note about <b>Visual C++ Redistributable</b> in the sidebar of that download page, and install the one required for your version.
+3. Unzip somewhere and add to <b>`PATH`</b>.
+4. Pick a <b>`php.ini`</b> and adjust as necessary (enabled extensions, etc.).
+5. In particular, make sure the following is not commented out:
+
+```ini
+extension_dir = "ext"
+```
+
+6. Check that it works:
+
+```dos
+php --version
+```
+
+## Composer
+
+1. Download the <b>Windows Installer</b> from <a href="https://getcomposer.org/download/">getcomposer.org</a>.
+2. Run the installer..
+3. Check that it works:
+
+```dos
+composer --version
+```
+
+## Apache
+
+1. Download the <b>Apache Win64 zip</b> from <a href="https://www.apachelounge.com/download/">apachelounge.com</a>.
+2. Read the note about <b>Visual C++ Redistributable</b> above the downloads on that download page, and install the required one.
+3. Unzip somewhere and adjust <b>httpd.conf</b> as necessary (paths, enabled modules, etc.).
+4. Install as service:
+
+```dos
+httpd.exe -k install
+```
+
+5. Start the service.
+6. Check that it works:
+
+```dos
+start http://localhost
+```
+
+## Apache with PHP
+
+1. Add the following to <b>httpd.conf</b>.
+
+```apache
+LoadModule php7_module C:/path/to/php/php7apache2_4.dll
+<IfModule php7_module>
+    DirectoryIndex index.html index.php
+    AddHandler application/x-httpd-php .php
+    PHPIniDir "C:/path/to/php"
+</IfModule>
+```
+
+2. Add an <b>index.php</b> to your <b><var>DocumentRoot</var></b> for testing, e.g.:
+
+```php
+<?php phpinfo();
+```
+
+3. Restart the Apache service.
+4. Check that it works:
+
+```dos
+start http://localhost
+```
+
+## MariaDB
+
+1. Download a <b>Windows x86_64 MSI Package</b> via <a href="https://downloads.mariadb.org/">mariadb.org</a>.
+2. Run the installer.
+3. Optionally add some of the following to <b>my.ini</b> under <b>mysqld</b> section:
+
+```ini
+; Only listen on localhost
+bind-address=127.0.0.1
+
+; Enable logging of queries
+; (probably bad in production, but very helpful for development debugging)
+general-log=1
+general-log-file=queries.log
+log-output=file
+```
+
+4. Restart the service, if you changed anything in the ini.
+5. Check that it works by connecting with <a href="https://www.heidisql.com/">HeidiSQL</a> or any other SQL client.

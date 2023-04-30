@@ -1,0 +1,50 @@
+---
+title: 'Java: Simple check to see if a server is listening on a port'
+published: '2013-04-30'
+permalinks:
+  - /2013/04/30/java-simple-check-to-see-if-a-server-is-listening-on-a-port/
+  - /?p=2282
+categories:
+  - software-development
+tags:
+  - integration-testing
+  - java
+  - junit
+  - server
+---
+
+Here is a simple method to check if a server is listening on a certain port. I used it to ignore certain non-critical SFTP related integration tests in a project when I hadn't bothered starting the SFTP server.
+
+```java
+public static boolean serverListening(String host, int port)
+{
+    Socket s = null;
+    try
+    {
+        s = new Socket(host, port);
+        return true;
+    }
+    catch (Exception e)
+    {
+        return false;
+    }
+    finally
+    {
+        if(s != null)
+            try {s.close();}
+            catch(Exception e){}
+    }
+}
+```
+
+To ignore a test (assuming JUnit) you can then do the following:
+
+```java
+@Test
+public void some_test()
+{
+    assumeTrue(serverListening("localhost", 22));
+
+    // Rest of test...
+}
+```

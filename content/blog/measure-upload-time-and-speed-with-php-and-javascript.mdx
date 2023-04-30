@@ -1,0 +1,76 @@
+---
+title: Measure upload time and speed with PHP and Javascript
+published: '2011-11-20'
+permalinks:
+  - /2011/11/20/measure-upload-time-and-speed-with-php-and-javascript/
+  - /?p=1876
+categories:
+  - software-development
+tags:
+  - javascript
+  - jquery
+  - php
+  - timer
+  - upload
+---
+
+Stumbled upon <a href="http://stackoverflow.com/q/8181291/39321">a question on StackOverflow</a> the other day which got me curious. The question was about how to measure how long it takes to upload a file to a PHP script. This is what had been tried out:
+
+```php
+$upload_time = time() - $_SERVER['REQUEST_TIME'];
+```
+
+This pretty much always returns zero, even though the uploading actually took many seconds, because the request start time is <em>after</em> the server has received the post data. That we actually just get how long the script took to run, which of course is pretty close to zero seconds. So, what can we do?
+
+1. Right before data is posted, nudge the server with an AJAX call which stores the current timestamp in a session variable
+1. Post the data
+1. Compare current timestamp with the one stored in step 1
+
+Wasn't sure how it would work, but seems to work pretty well. There will of course be a very tiny difference since the AJAX request will be a bit part of the time, but compared to the upload time it shouldn't matter much. Anyways, here's how you could do it 🙂
+
+In your HTML you need your form, obviously:
+
+```html
+<form action="upload.php" method="post" enctype="multipart/form-data">
+  <input type="file" name="file" />
+  <input type="submit" value="Upload" />
+</form>
+```
+
+And then we need the Javascript which does the AJAX request (using <a href="http://api.jquery.com/jQuery.ajax/">jQuery</a>). Notice that this makes sure we have gotten a response from the timer script before we actually submit the form.
+
+```html
+<script type="text/javascript">
+  $(function () {
+    $('form').submit(function () {
+      $.ajax({
+        url: 'start-timer.php',
+        type: 'POST',
+        context: this,
+        success: function () {
+          this.submit()
+        },
+      })
+      return false
+    })
+  })
+</script>
+```
+
+The start timer simply stores a timestamp in a session variable.
+
+```php
+<?php session_start();
+$_SESSION['time'] = microtime(true);
+```
+
+Then in the upload script we simply need to compare that time with the current timestamp to figure out how long this took.
+
+```php
+<?php
+session_start();
+$upload_time = microtime(true) - $_SESSION['time'];
+// You should of course probably also check if the upload was OK and all that 😉
+```
+
+And that's pretty much all there is to it! Working sample at <a href="http://samples.geekality.net/upload-timer/">samples.geekality.net/upload-timer</a>.

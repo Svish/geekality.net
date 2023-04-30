@@ -1,0 +1,38 @@
+---
+title: Getting a GUI in Ubuntu Server
+published: '2011-08-12'
+permalinks:
+  - /2011/08/12/getting-a-gui-in-ubuntu-server/
+  - /?p=1777
+categories:
+  - technology
+tags:
+  - gui
+  - server
+  - ubuntu
+  - unix
+---
+
+Wanted to try out Ubuntu Server, but with a GUI. You can get a GUI by running:
+
+```bash
+$ sudo apt-get install ubuntu-desktop
+```
+
+However, then you will get the whole thing. This means it will also include all those applications and games that Ubuntu Desktop comes with. Don't want that. You can get a much slimmer version by running:
+
+```bash
+$ sudo aptitude install --without-recommends ubuntu-desktop
+```
+
+In both cases, reboot when it's done and it should boot into the regular desktop environment.
+
+### Administrator password
+
+For some reason, you won't be able to access the Synaptic Package Manager, or add package sources in the Software Center thing (or what it was called) until you have set a root password. When you open these it doesn't ask you for authorization like other administration stuff does, but for the administrator password. I don't know why this happens (can't recall it happening when using regular Ubuntu Desktop), but you can set the root password if you open up a terminal and run:
+
+```bash
+$ sudo passwd root
+```
+
+If someone has an explanation to why this happens in Ubuntu Server and not in Ubuntu Desktop, I would like to hear about it!

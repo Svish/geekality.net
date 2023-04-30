@@ -1,0 +1,34 @@
+---
+title: How to change or remove file extensions in Windows
+published: '2011-11-29'
+permalinks:
+  - /2011/11/29/how-to-change-or-remove-file-extensions-in-windows/
+  - /?p=1887
+categories:
+  - technology
+tags:
+  - command-line
+  - file-extensions
+  - files
+  - windows
+---
+
+Say you have a bunch of files and you want to quickly change or remove the file extension of all of them. Turns out that's very simple to do with the command-line in Windows. I had no idea...
+
+## Change
+
+```dos
+ren *.old *.new
+```
+
+Will change all files with <var>old</var> file extension to have the <var>new</var> file extension.
+
+## Remove
+
+```dos
+ren *.old *.
+```
+
+Will remove the <var>old</var> file extension.
+
+Simple!

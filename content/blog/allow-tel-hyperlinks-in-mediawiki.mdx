@@ -1,0 +1,32 @@
+---
+title: 'Allow tel: protocol hyperlinks in MediaWiki'
+published: '2013-06-17'
+permalinks:
+  - /2013/06/17/allow-tel-hyperlinks-in-mediawiki/
+  - /?p=2331
+categories:
+  - technology
+tags:
+  - mediawiki
+---
+
+In MediaWiki you can already make email hyperlinks (`[mailto:someone@example.com Mail someone]`), but telephone number hyperlinks aren't allowed for some reason by default (`[tel:0123456789 Call someone]`). Turns out to be an <a href="http://www.mediawiki.org/wiki/Help_talk:Links#Adding_tel:_link">easy fix</a> though.
+
+Simply add the following to <em>LocalSettings.php</em>.
+
+```php
+array_push($wgUrlProtocols, 'tel:');
+```
+
+## Make it prettier
+
+The links will get same icon as external links, which is a bit annoying, but that can be fixed as well. Find the main CSS file for your theme, in our case `/skins/monobook/main.css`, and look for a section which looks like the following.
+
+```php
+#bodyContent a.external[href^="mailto:"], .link-mailto {
+    background: url("mail_icon.gif") no-repeat scroll right center transparent;
+    padding: 0 18px;
+}
+```
+
+Simply make a copy of that section and replace all instances of 'mailto' with 'tel' and set the URL to the icon you want. The icon should of course be uploaded to the same location as the CSS for that to work 🙂

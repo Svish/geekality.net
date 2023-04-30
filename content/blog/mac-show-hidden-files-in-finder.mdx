@@ -1,0 +1,22 @@
+---
+title: 'Mac: Show hidden files in Finder'
+published: '2010-12-12'
+permalinks:
+  - /2010/12/12/mac-show-hidden-files-in-finder/
+  - /?p=1456
+categories:
+  - technology
+tags:
+  - finder
+  - mac
+  - snippet
+---
+
+If you want to make hidden files show up in Finder, you can open up a Terminal window and run these two commands:
+
+```bash
+defaults write com.apple.Finder AppleShowAllFiles TRUE
+killall Finder && open /System/Library/CoreServices/Finder.app
+```
+
+Swap `TRUE` with `FALSE` to hide them again. The second line kills and relaunches Finder.

@@ -1,0 +1,26 @@
+---
+title: 'Git: How to fully clean a working directory'
+published: '2018-10-03'
+permalinks:
+  - /2018/10/03/git-how-to-fully-clean-a-working-directory/
+  - /?p=3223
+categories:
+  - software-development
+tags:
+  - git
+---
+
+Just a note to self on how to fully clean a git working directory. Have some tricky projects where I'm currently located, and sometimes things gets messed up and IntelliJ doesn't know what to do with them anymore... The following will clear everything out, and allow for a clean re-import...
+
+```bash
+git clean -f -x -d
+```
+
+<dl>
+  <dt>`-f`</dt>
+  <dd>Force</dd>
+  <dt>`-x`</dt>
+  <dd>Also remove ignored files</dd>
+  <dt>`-d`</dt>
+  <dd>Also remove directories</dd>
+</dl>

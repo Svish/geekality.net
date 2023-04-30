@@ -1,0 +1,177 @@
+---
+title: 'PHP: How to easily provide JSON and JSONP'
+published: '2010-06-27'
+permalinks:
+  - /2010/06/27/php-how-to-easily-provide-json-and-jsonp/
+  - /?p=1021
+categories:
+  - software-development
+tags:
+  - cors
+  - javascript
+  - json
+  - jsonp
+  - php
+  - security
+  - snippet
+---
+
+Would you like to grab some server-side data through an AJAX call? For example by using the handy <a href="http://api.jquery.com/jQuery.ajax/">jQuery.ajax</a> method?
+
+A good data format to use then is <a href="http://en.wikipedia.org/wiki/JSON">JavaScript Object Notation</a>, more commonly known as JSON. Providing data in the JSON format with PHP is super duper simple 😎
+
+## JSON
+
+All you need to do on the server side is to set the `content-type` to `application/json`, encode your data using the <a href="http://php.net/json_encode">`json_encode`</a> function and output it.
+
+```php
+<?php header('content-type: application/json; charset=utf-8');
+
+$data = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+echo json_encode($data);
+```
+
+You can test it out for example in the <a href="http://getfirebug.com/">FireBug</a> console by running this line:
+
+```js
+$.ajax({ url: 'data.php' })
+// Response: [1,2,3,4,5,6,7,8,9]
+```
+
+You should see the request being done in the console and also in the Net tab. If it didn't work, you might be subject to the following:
+
+> Due to browser security restrictions, most "Ajax" requests are subject to the <a title="Same Origin Policy on Wikipedia" href="http://en.wikipedia.org/wiki/Same_origin_policy">same origin policy</a>; the request can not successfully retrieve data from a different domain, subdomain, or protocol.
+
+A nice and simple solution to that problem is JSON with padding, also known as JSONP.
+
+## JSONP
+
+As stated on <a href="http://en.wikipedia.org/wiki/JSON#JSONP">Wikipedia</a>,
+
+> JSONP or "JSON with padding" is a complement to the base JSON data format, a
+> usage pattern that allows a page to request and more meaningfully use JSON
+> from a server other than the primary server.
+
+I'm not sure I get everything about JSONP, but I have used it and I know that it works 😛 It's almost just as easy as plain JSON actually, and all that's needed is to wrap the JSON encoded data in a callback function provided as a GET parameter.
+
+```php
+<?php header('content-type: application/json; charset=utf-8');
+
+$data = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+echo $_GET['callback'] . '('.json_encode($data).')';
+```
+
+You can test it by running
+
+```js
+$.ajax({ url: 'data.php', dataType: 'jsonp' })
+// Response: jsonp1277656587731([1,2,3,4,5,6,7,8,9])
+```
+
+This time you won't see the call in the FireBug console though, but only in the Net tab. That's because the data is loaded in a script tag instead of through an actual AJAX call. Thankfully jQuery handles all of that for you behind the scenes, so you don't have to worry about it at all. You'll get the same JSON data in your response handler, ready to be used however you want to 🙂
+
+What if you'd like to provide both formats?
+
+## JSON and JSONP together
+
+Easy as cake actually. You just need to check if the callback parameter is set or not:
+
+```php
+<?php header('content-type: application/json; charset=utf-8');
+
+$data = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
+$json = json_encode($data);
+
+echo isset($_GET['callback'])
+    ? "{$_GET['callback']}($json)"
+    : $json;
+```
+
+And that's all! Although there are some additions you could do if you want:
+
+## Cross-Origin Resource Sharing (CORS)
+
+When testing this you might have noticed it will not work cross-domain. This is because of security stuff in your browser. So, if you want everyone to be able to get access to some JSON data of yours, you need to flag that this is OK. One way to do this, is through CORS:
+
+> Cross-Origin Resource Sharing (CORS) is a specification that enables a truly
+> open access across domain-boundaries. ... CORS defines how browsers and
+> servers communicate when accessing sources across origins using HTTP headers
+> to allow both the browser and the server to know enough about each other to
+> determine if the request or response should succeed or fail. -- <a href="http://enable-cors.org">enable-cors.org</a>
+
+You can read more about it on the <a href="http://enable-cors.org">enable-cors.org</a> website, but all you should need to do if you want your JSON data accessible from everywhere is to add a single header.
+
+```php
+<?php
+header('content-type: application/json; charset=utf-8');
+header("access-control-allow-origin: *");
+
+// Rest of script...
+```
+
+It should now be accessible from everywhere 🙂
+
+## Added security
+
+Since the sender can send whatever they want as a callback, you could potentially have someone injecting malicious code there. I'm not sure how likely this is to happen, but it is a possibility. Could for example be used to steal cookies. Not the baked kind... So, although it does make things a bit uglier, it's better to be safe than sorry I suppose? So I did <a href="/?p=1739">some research</a> and ended up with a function I could use to check that the callback is indeed a valid JavaScript identifier. Here's the code with the added security.
+
+```php
+<?php header('content-type: application/json; charset=utf-8');
+
+function is_valid_callback($subject)
+{
+    $identifier_syntax
+      = '/^[$_\p{L}][$_\p{L}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\x{200C}\x{200D}]*+$/u';
+
+    $reserved_words = array('break', 'do', 'instanceof', 'typeof', 'case',
+      'else', 'new', 'var', 'catch', 'finally', 'return', 'void', 'continue',
+      'for', 'switch', 'while', 'debugger', 'function', 'this', 'with',
+      'default', 'if', 'throw', 'delete', 'in', 'try', 'class', 'enum',
+      'extends', 'super', 'const', 'export', 'import', 'implements', 'let',
+      'private', 'public', 'yield', 'interface', 'package', 'protected',
+      'static', 'null', 'true', 'false');
+
+    return preg_match($identifier_syntax, $subject)
+        && ! in_array(mb_strtolower($subject, 'UTF-8'), $reserved_words);
+}
+
+$data = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
+$json = json_encode($data);
+
+# JSON if no callback
+if( ! isset($_GET['callback']))
+    exit($json);
+
+# JSONP if valid callback
+if(is_valid_callback($_GET['callback']))
+    exit("{$_GET['callback']}($json)");
+
+# Otherwise, bad request
+header('status: 400 Bad Request', true, 400);
+```
+
+Please comment if you have any feedback 🙂
+
+<ins dateTime="2010-12-11T06:28:34+00:00">
+  **Update 2010-12-11:** Added charset to the content-type header as recommended
+  in [an answer](http://stackoverflow.com/q/3128062/39321#3128948) to a question
+  I posted about this on StackOverflow.
+</ins>
+
+<ins dateTime="2011-08-03T15:14:15+00:00">
+  **Update 2011-08-03:** Added stuff about callback checking. Recommended in new
+  answers to [my question at
+  StackOverflow](http://stackoverflow.com/q/3128062/39321).
+</ins>
+
+<ins dateTime="2011-10-31T18:57:00+00:00">
+  **Update 2011-10-31:** Discovered an easy way to compress the JSON data!
+  [Blogged about it](/?p=1847) too 🙂
+</ins>
+
+<ins dateTime="2012-01-08T13:23:18+00:00">
+  **Update 2012-01-08:** Added some info about [cross-origin resource
+  sharing](http://enable-cors.org)
+</ins>

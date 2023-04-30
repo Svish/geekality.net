@@ -1,0 +1,28 @@
+---
+title: Automatic login for Windows Server 2012 R2
+published: '2014-08-26'
+permalinks:
+  - /2014/08/26/automatic-login-for-windows-server-2012-r2/
+  - /?p=2566
+categories:
+  - technology
+tags:
+  - authentication
+  - credentials
+  - laziness
+  - login
+  - windows-server
+---
+
+Installed Windows Server on a VM, and <a href="/?p=1443">the method I've used earlier</a> apparently isn't available in the server version of Windows. Found <a href="http://superuser.com/a/499726/62">you can still do it through the registry</a>. Either stick the following in a reg file, adjust and run, or just set the values manually through regedit.
+
+```text
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon]
+"AutoAdminLogon"=dword:00000001
+"DefaultUserName"="Administrator"
+"DefaultPassword"="ThePassword"
+```
+
+No longer need to login every time I boot up my virtual test server...

@@ -1,0 +1,226 @@
+---
+title: How to level a rectangular area with a ComputerCraft Mining Turtle
+published: '2012-09-16'
+permalinks:
+  - >-
+    /2012/09/16/how-to-level-a-rectangular-area-with-a-computercraft-mining-turtle/
+  - /?p=2059
+categories:
+  - software-development
+  - technology
+tags:
+  - computercraft
+  - games
+  - lua
+  - minecraft
+  - robot
+  - turtle
+---
+
+Last night I played around with <a href="http://www.technicpack.net/tekkit/">Tekkit</a> and the <a href="http://tekkitclassic.wikia.com/wiki/Mining_Turtle">Mining Turtle</a> which comes with it. The Turtle is part of the <a href="http://www.computercraft.info/">ComputerCraft</a> mod and can be programmed using <a href="http://en.wikipedia.org/wiki/Lua_(programming_language)">Lua</a> and the <a href="http://computercraft.info/wiki/index.php?title=Turtle_(API)">Turtle API</a>.
+
+For fun I wanted to level an area, and I specifically wanted to fill in annoying holes and messy open caves. I decided to divide this into separate problems. First is having the turtle cover a rectangular area. Second is to fill in the holes below each block in the area.
+
+I decided to create a function which takes a Lua table like the following:
+
+```lua
+{
+  size = {X=x, Y=y},
+  forward = function,
+  left = function,
+  right = function,
+  callback = function,
+}
+```
+
+The size is the width and length of the area. Forward, left and right are for moving the turtle and callback is the function to call for each point in the rectangle. This way the function is decoupled from turtle specifics and what I actually want to do.
+
+## Move in a rectangle
+
+Struggled embarrassingly long with this (so seems this was a useful exercise for my programming brain), but figured it out in the end 😛
+
+```lua
+-- Helper function for looping over a range
+function range(limit)
+    local function seq(state, 😆
+        if (x >= limit) then
+            return nil
+        else
+            return x + 1
+        end
+    end
+    return seq, nil, 0
+end
+-- The magic function
+function moveSpiral(w)
+    local X,Y = w.size.x,w.size.y
+
+    -- Prepare for first row
+    w.forward()
+    w.right()
+
+    -- Loop over each row
+    for y in range(Y) do
+        -- Loop over each column
+        for x in range(X) do
+            -- Do the callback for each point
+            w.callback()
+
+            -- Unless we have completed the row
+            if x ~= X then
+                -- Move forward
+                w.forward()
+            end
+        end
+
+        -- Unless we have completed all rows
+        if y ~= Y then
+            -- Move to next row
+            if y%2 == 1 then
+                w.left()
+                w.forward()
+                w.left()
+            else
+                w.right()
+                w.forward()
+                w.right()
+            end
+        end
+    end
+
+    -- Move back to starting point
+    if Y%2 == 1 then
+        w.left()
+        w.left()
+        for x in range(X-1) do w.forward() end
+    end
+    w.left()
+    for y in range(Y) do w.forward() end
+    w.right()
+    w.right()
+
+end
+
+```
+
+Please let me know if you have a better way to do it. Either way, now the callbacks handed to this function.
+
+## Moving the turtle
+
+As you saw, the function requires three callbacks for moving. For turning left and right we can just use the turtle API directly. However, since I wanted to level an area, we need to do some digging if we hit any obstructions.
+
+```lua
+function forward() while not turtle.forward() do sleep(0.5) turtle.dig() end
+end
+```
+
+This function will keep trying to move forward and whenever it fails it will wait for a short while and then try to dig in front of itself. This will usually only run once, but if you're standing in its way it will keep trying until you move. This way you being in the way won't mess it up 🙂
+
+## Filling the hole
+
+First of all I wanted to fill up whatever hole is below me. I also wanted to replace dirt with stone and have a single layer of dirt on top. This is what I ended up with.
+
+```lua
+
+-- Fill hole
+function fill()
+-- How far down we have gone
+local depth = 0
+
+    -- Make sure we have an empty slot for picking up junk
+    -- This is an attempt to not mess up the convention by
+    -- the blocks we dig that are picked up. Not 100%
+    -- reliable still...
+    turtle.select(9)
+    turtle.drop()
+
+    -- Move down to first block we can find
+    while not turtle.detectDown() and turtle.down() do
+        depth = depth + 1
+    end
+
+    -- Remove top block
+    turtle.digDown()
+    turtle.down()
+    depth = depth + 1
+
+    -- Dig down to first non-dirt block we can find
+    turtle.select(1)
+    while (turtle.compareDown() and turtle.digDown() and turtle.down()) or turtle.down() do
+        depth = depth + 1
+    end
+
+    -- Start filling
+    while depth > 0 do
+        -- Until we move up 1 successfully
+        while not turtle.up() do
+            -- Try dig upwards and wait a bit
+            turtle.digUp()
+            sleep(0.5)
+        end
+        depth = depth - 1
+
+        -- As long as we have something to place
+        if selectSource(depth) > 0 then
+            -- Place it below us
+            turtle.placeDown()
+        end
+    end
+
+end
+
+-- Returns the count of an appropriate slot
+function selectSource(depth)
+    -- If we're at the top
+    if depth==1 then
+        -- Select slot 1 and return its count
+        turtle.select(1)
+        return turtle.getItemCount(1)
+    -- Otherwise
+    else
+        -- Move through the rest of the slots
+        for i=2,9 do
+            turtle.select(i)
+            local count = turtle.getItemCount(i)
+            -- Until we find one with something in it
+            if count > 0 then
+                return count
+            end
+        end
+    end
+    return 0
+end
+
+```
+
+Works pretty well, but any advice on improvements are more than welcome 🙂
+
+## Running it
+
+Create a file on a Mining Turtle called for example "fill" and add the above functions together with the following snippet of code:
+
+```lua
+local arg = {...}
+if #arg == 2 then
+    moveSpiral({
+        size = {
+            x = tonumber(arg[1]),
+            y = tonumber(arg[2]),
+            },
+        forward = forward,
+        left = turtle.turnLeft,
+        right = turtle.turnRight,
+        callback = fill,
+    })
+else
+    print("Usage: fill x y")
+end
+```
+
+You should now be able to level an area by running the program on the Mining Turtle like this:
+
+```text
+> fill 10 15
+```
+
+It should then go ahead and level a 10 x 15 block area 🙂

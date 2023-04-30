@@ -1,0 +1,24 @@
+---
+title: 'Git: Recovering a lost commit'
+published: '2015-12-03'
+permalinks:
+  - /2015/12/03/git-recovering-a-lost-commit/
+  - /?p=2848
+categories:
+  - software-development
+tags:
+  - git
+---
+
+```bash
+# List head history and find the lost commit (should be among first ones)
+$ git reflog
+
+# Switch to the correct branch (if necessary?)
+$ git checkout master
+
+# Hard reset head to the lost commit
+git reset --hard 1dd3a55
+```
+
+<b>Source:</b> [Recovering Lost Commits with git reflog and reset](http://effectif.com/git/recovering-lost-git-commits)

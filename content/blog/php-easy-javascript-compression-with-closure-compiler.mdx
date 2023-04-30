@@ -1,0 +1,55 @@
+---
+title: 'PHP: Easy Javascript compression with closure compiler'
+published: '2016-01-05'
+permalinks:
+  - /2016/01/05/php-easy-javascript-compression-with-closure-compiler/
+  - /?p=2862
+categories:
+  - software-development
+tags:
+  - compression
+  - javascript
+  - minifying
+  - php
+---
+
+Here's how to fairly easily compress/minify Javascript by using the <a href="https://developers.google.com/closure/compiler/docs/api-tutorial1">Closure Compiler Service API</a>.
+
+More or less verbatim how I'm currently doing it over at <a href="http://bibelstudiet.no">bibelstudiet.no</a> in my <a href="https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/Controller/Javascript.php">script controller class</a>, and so far it's been working great. Just remember to cache the result on your server so that you're not calling the API more than necessary. In my case it's handled further up the chain by <a href="https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/CachedController.php">the parent class</a> 🙂
+
+```php
+<?php
+ob_start('ob_gzhandler');
+header('Content-Type: text/javascript; charset=utf-8');
+
+$files = ['foo.js', 'bar.js'];
+
+$js = array_map('file_get_contents', $files);
+$js = implode(PHP_EOL.PHP_EOL, $script);
+
+$c = curl_init();
+curl_setopt_array($ch, array
+(
+    CURLOPT_URL => 'https://closure-compiler.appspot.com/compile',
+    CURLOPT_POST => TRUE,
+    CURLOPT_POSTFIELDS => http_build_query([
+        'language' => 'ECMASCRIPT5',
+        'output_info' => 'compiled_code',
+        'output_format' => 'text',
+        'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
+        'js_code' => $js,
+    ]),
+));
+
+if(curl_exec($ch) === FALSE)
+    http_response_code(500) and exit("// ERROR: ".curl_error($c));
+
+if(curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD ) <= 1)
+    echo $js;
+
+curl_close($ch);
+```
+
+Note that if the compilation fails for any reason, the response will be empty. In that case I've chosen to output the original Javascript instead so the site doesn't suddenly break. To check what went wrong, you need to repeat the request, but `output_info` set to `errors` instead of `compiled_code`.
+
+See <a href="https://developers.google.com/closure/compiler/docs/api-ref">their API documentation</a> for more information about the parameters.

@@ -1,0 +1,85 @@
+---
+title: 'Javascript: In-browser export to CSV'
+published: '2018-11-21'
+permalinks:
+  - /2018/11/21/javascript-in-browser-export-to-csv/
+  - /?p=3250
+categories:
+  - software-development
+tags:
+  - csv
+  - excel
+  - function
+  - javascript
+  - typescript
+---
+
+This function will turn an array of data into a CSV file and get the browser to "download" it. It <em>should</em> also be wrapping and escaping values properly <em>and</em>, because of the BOM, be read correctly when opened in e.g. Excel.
+
+It's written in TypeScript (`"lib": ["ES2017", "DOM"]`), but should be easy to "downgrade" to regular JS if needed; just remove the types.
+
+```ts
+type GetValue<T> = <I extends T>(item: I) => any
+type FieldName<T> = keyof T
+
+export interface Columns<T> {
+  [header: string]: FieldName<T> | GetValue<T>
+}
+
+const COLUMN_SEPARATOR = ';'
+const ROW_SEPARATOR = '\r\n'
+const UNICODE_BOM = '\uFEFF'
+
+const wrapValue = (value: string) => `"${value}"`
+const escapeValue = (value: string) => (value || '').replace(/"/, '""')
+
+const makeHeaderLine = <T>(columns: Columns<T>) =>
+  Object.keys(columns).map(escapeValue).map(wrapValue).join(COLUMN_SEPARATOR)
+
+const makeItemLine = <T>(columns: Columns<T>, item: T) =>
+  Object.values(columns)
+    .map((field) => (typeof field === 'function' ? field(item) : item[field]))
+    .map(String)
+    .map(escapeValue)
+    .map(wrapValue)
+    .join(COLUMN_SEPARATOR)
+
+export const exportToCsv = function <T>(
+  data: T[],
+  columns: Columns<T>,
+  filename: string
+): void {
+  const rows = []
+
+  rows.push(makeHeaderLine(columns))
+
+  for (const item of data) {
+    rows.push(makeItemLine(columns, item))
+  }
+
+  const csv = UNICODE_BOM + rows.join(ROW_SEPARATOR)
+  const uri = `data:text/csv;charset=utf-8;header=present,${encodeURIComponent(
+    csv
+  )}`
+
+  const link = document.createElement('a')
+  link.setAttribute('href', uri)
+  link.setAttribute('download', filename)
+  link.addEventListener('click', () => link.parentNode.removeChild(link))
+  document.body.appendChild(link)
+
+  link.click()
+}
+```
+
+## Usage
+
+```ts
+const users: User[] = [{id: 1, name: 'Alice', isCool: true}, ...];
+const columns: Columns<User> = {
+  'Id': 'id',
+  'Name': 'name',
+  'Is cool': user => user.isCool ? 'Yes' : 'No',
+};
+exportToCsv(users, columns, 'users.csv');
+```

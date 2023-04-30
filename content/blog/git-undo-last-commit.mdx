@@ -1,0 +1,24 @@
+---
+title: 'Git: Undo last commit'
+published: '2019-08-19'
+permalinks:
+  - /2019/08/19/git-undo-last-commit/
+  - /?p=3365
+categories:
+  - software-development
+tags:
+  - git
+---
+
+Sometimes I forget to create a new feature branch, and accidentally commit to master. Keep having to look up how to fix it...
+
+```bash
+# From master, create new branch, which will include the accidental commits
+git branch feature/foobar
+
+# Move master HEAD back, which will remove the commits from there
+git reset --hard HEAD~1
+
+# Checkout feature branch, where the commits should still exist
+git checkout feature/foobar
+```

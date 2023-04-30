@@ -1,0 +1,24 @@
+---
+title: How to search for a table or column in a big Oracle database
+published: '2011-03-25'
+permalinks:
+  - /2011/03/25/oracle-how-to-search-for-a-table-or-column-in-a-big-database/
+  - /?p=1530
+categories:
+  - software-development
+tags:
+  - database
+  - oracle
+  - snippet
+  - sql
+---
+
+I needed to find columns containing a certain string. That is, the name of the column should contain that string. Actually not too difficult to do 🙂
+
+```sql
+SELECT owner, table_name, column_name
+FROM all_tab_columns
+WHERE column_name LIKE '%FOO_ID%';
+```
+
+That gives you a nice list of all columns containing `FOO_ID` and what tables you find them in. Fantastic! Now, back to work...

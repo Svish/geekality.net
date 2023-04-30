@@ -1,0 +1,34 @@
+---
+title: 'Java: Simple XSLT transformation without external libraries'
+published: '2012-10-08'
+permalinks:
+  - /2012/10/08/java-simple-xslt-transformation/
+  - /?p=2090
+categories:
+  - software-development
+tags:
+  - java
+  - xml
+  - xslt
+---
+
+Here's how to do a simple XSLT transformation using only classes in vanilla Java 1.5 (maybe even 1.4?), no external libraries or anything. The classes are found in the javax.xml.transform package.
+
+```java
+// Create a factory
+TransformerFactory tf = TransformerFactory.newInstance();
+if (!tf.getFeature(SAXTransformerFactory.FEATURE))
+    throw new RuntimeException("Did not find a SAX-compatible TransformerFactory.");
+SAXTransformerFactory stf = (SAXTransformerFactory) tf;
+
+// Create a reusable template for the XSLT
+Templates xslt = stf.newTemplates(new SourceStream(inputStreamWithXslt));
+
+// Use the template to transform some XML
+templates.newTransformer().transform(
+    new StreamSource(inputStreamWithXml),
+    new StreamResult(System.out)
+);
+```
+
+**Source:** [XML and XSLT Tips and Tricks for Java](http://blogger.ziesemer.com/2009/01/xml-and-xslt-tips-and-tricks-for-java.html)

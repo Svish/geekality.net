@@ -1,0 +1,90 @@
+---
+title: 'C#: Ordering by a list of ordered predicates'
+published: '2015-03-04'
+permalinks:
+  - /2015/03/04/c-ordering-by-a-list-of-ordered-predicates/
+  - /?p=2768
+categories:
+  - software-development
+tags:
+  - csharp
+  - pred
+  - sorting
+---
+
+In a project at work we were going to merge a bunch of PDfs and Word documents into a single PDF. The ordering irrelevant except that certain files had to be before all the others. Solved it initially like this:
+
+```csharp
+var filesInOrder = GetFiles()
+    .OrderByDescending(x => x.Filename.StartsWith("ProjectDescription_"))
+    .ThenByDescending(x => x.Filename.StartsWith("Budget_"))
+    .ThenByDescending(x => x.Filename.StartsWith("CV_"))
+    .ToArray();
+```
+
+Found it a bit ugly though, and decided to ask <a href="http://stackoverflow.com/q/28855758/39321">a question about other ways</a> on StackOverflow. Got several interesting answers and inspired by those and some further thinking I tried to make a generic solution myself, which I thought I could also blog here so I definitely know where to find it if I ever need it again...
+
+### My solution
+
+```csharp
+public class OrderedPredicateComparer<T> : IComparer<T>
+{
+    private readonly Func<T, bool>[] ordinals;
+    public OrderedPredicateComparer(IEnumerable<Func<T, bool>> predicates)
+    {
+        ordinals = predicates.ToArray();
+    }
+
+    public int Compare(T x, T y)
+    {
+        return GetOrdinal(x) - GetOrdinal(y);
+    }
+
+    private int GetOrdinal(T item)
+    {
+        for (int i = 0; i < ordinals.Length; i++)
+            if (ordinals[i](item))
+                return i - ordinals.Length;
+        return 0;
+    }
+}
+```
+
+One issue here might be that the predicates will be called several times per item, which could be bad if working on a huge list. Haven't really benchmarked it though so could be fine for all I know. For smaller uses it shouldn't matter much either way. <em>Very curious to know about ways to optimize this though, so do let me know in the comments below if you have any good ideas!</em>
+
+The nice thing about it being an IComparer is that you could push this into both OrderBy and ThenBy, and also use it in for example ordered dictionaries, priority queues, etc, and since it uses a list of fully generic predicates you could order things by pretty much anything with a yes/no answer 🙂
+
+### Usage
+
+```csharp
+var ordering = new Func<string, bool>[]
+    {
+        x => x.StartsWith("ProjectDescription_"),
+        x => x.StartsWith("Budget_"),
+        x => x.StartsWith("CV_"),
+    };
+
+var files = GetFiles()
+    .OrderBy(x => x.Filename, new OrderedPredicatesComparer<string>(ordering))
+    .ToArray();
+```
+
+To make the final code even cleaner the ordering could be encapsulated in a sublcass like following, which is what I did in my actual code too:
+
+```csharp
+public class MySpecificOrdering : OrderedPredicatesComparer<string>
+{
+    private static readonly Func<string, bool>[] order = new Func<string, bool>[]
+        {
+            x => x.StartsWith("ProjectDescription_"),
+            x => x.StartsWith("Budget_"),
+            x => x.StartsWith("CV_"),
+        };
+
+    public MySpecificOrdering() : base(order) {}
+}
+
+var files = GetFiles()
+    .OrderBy(x => x.Filename, new MySpecificOrdering())
+    .ToArray();
+```

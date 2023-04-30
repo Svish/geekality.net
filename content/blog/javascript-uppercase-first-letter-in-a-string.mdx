@@ -1,0 +1,48 @@
+---
+title: 'JavaScript: Uppercase first letter in a string'
+published: '2010-06-30'
+permalinks:
+  - /2010/06/30/javascript-uppercase-first-letter-in-a-string/
+  - /?p=1052
+categories:
+  - software-development
+tags:
+  - javascript
+  - snippet
+  - string
+---
+
+In PHP there is a very handy function called <a href="http://php.net/ucfirst">ucfirst</a> which
+
+> Returns a string with the first character of str capitalized, if that
+> character is alphabetic.
+
+Needed that in JavaScript, but discovered there was no such thing.
+
+Luckily, I quickly found <a href="http://stackoverflow.com/q/1026069/39321#1026087">a function</a> over at StackOverflow that I adjusted slightly and added to the string class:
+
+```js
+String.prototype.ucfirst = function () {
+  return this.charAt(0).toUpperCase() + this.substr(1)
+}
+```
+
+Can be used like so:
+
+```js
+alert('some text'.ucfirst()) // Alerts: Some text
+```
+
+## Alternative CSS method
+
+In many cases it might be good to just handle this with CSS instead. For example, to uppercase the first letter in all list items, you can do this:
+
+```cs
+li:first-letter
+{
+	text-transform: uppercase;
+}
+```
+
+Weeee ^\_^  
+Ok, back to work...

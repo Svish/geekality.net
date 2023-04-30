@@ -1,0 +1,19 @@
+---
+title: How to make FireFox trust what Windows trusts
+published: '2019-07-04'
+permalinks:
+  - /2019/07/04/how-to-make-firefox-trust-what-windows-trusts/
+  - /?p=3350
+categories:
+  - software-development
+tags:
+  - firefox
+  - https
+  - security
+---
+
+I like to use FireFox Developer Edition, and today I discovered that root certificates and such added to Windows (to trust self-signed certificates used with dev-servers, etc.) apparently are ignored by FireFox. At least by default:
+
+1. Go to [about:config](about:config)
+2. Find `security.enterprise_roots.enabled`
+3. Set it to `true`

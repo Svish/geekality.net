@@ -1,0 +1,122 @@
+---
+title: 'PHP: Get headers with actual HEAD request'
+published: '2017-02-06'
+permalinks:
+  - /2017/02/06/php-get-headers-with-actual-head-request/
+  - /?p=2990
+categories:
+  - software-development
+tags:
+  - http
+  - php
+---
+
+PHP has a function called [`get_headers`](http://php.net/manual/en/function.get-headers.php) which, as you'd guess, gives you the headers returned from an HTTP request. _However_ it actually uses a GET, rather than HEAD, request.
+
+Figured out you can change this by setting a stream context, so wrapped it in a function. And posting it here in case I need it again.
+
+Also added a cleanup of the returned array, as I found it a bit ugly when the request included redirects. See difference below code.
+
+**Note:** I silence the `get_headers` call because it throws several warnings, e.g. if the hostname fails lookup, and I'm not really interested in _why_ it fails.
+
+```php
+function get_head(string $url, array $opts = [])
+{
+    // Store previous default context
+    $prev = stream_context_get_options(stream_context_get_default());
+
+    // Set new one with head and a small timeout
+    stream_context_set_default(['http' => $opts +
+        [
+            'method' => 'HEAD',
+            'timeout' => 2,
+        ]]);
+
+    // Do the head request
+    $req = @get_headers($url, true);
+    if( ! $req)
+        return false;
+
+    // Make more sane response
+    foreach($req as $h => $v)
+    {
+        if(is_int($h))
+            $headers[$h]['Status'] = $v;
+        else
+        {
+            if(is_string($v))
+                $headers[0][$h] = $v;
+            else
+                foreach($v as $x => $y)
+                    $headers[$x][$h] = $y;
+        }
+
+    }
+
+    // Restore previous default context and return
+    stream_context_set_default($prev);
+    return $headers;
+}
+```
+
+## Example response:
+
+```php
+<?php get_head('http://geekality.net');
+```
+
+```text
+array (size=2)
+  0 =>
+    array (size=8)
+      'Status' => string 'HTTP/1.1 301 Moved Permanently' (length=30)
+      'Date' => string 'Mon, 06 Feb 2017 01:20:48 GMT' (length=29)
+      'Server' => string 'Apache' (length=6)
+      'Location' => string 'http://www.geekality.net/' (length=25)
+      'Vary' => string 'Accept-Encoding' (length=15)
+      'Connection' => string 'close' (length=5)
+      'Content-Type' => string 'text/html; charset=iso-8859-1' (length=29)
+      'Link' => string '<http://www.geekality.net/wp-json/>; rel="https://api.w.org/"' (length=61)
+  1 =>
+    array (size=6)
+      'Date' => string 'Mon, 06 Feb 2017 01:20:48 GMT' (length=29)
+      'Server' => string 'Apache' (length=6)
+      'Vary' => string 'Accept-Encoding' (length=15)
+      'Connection' => string 'close' (length=5)
+      'Content-Type' => string 'text/html; charset=UTF-8' (length=24)
+      'Status' => string 'HTTP/1.1 200 OK' (length=15)
+```
+
+## Example response without my cleanup:
+
+```php
+<?php get_head('http://geekality.net');
+```
+
+```text
+array (size=9)
+  0 => string 'HTTP/1.1 301 Moved Permanently' (length=30)
+  'Date' =>
+    array (size=2)
+      0 => string 'Mon, 06 Feb 2017 01:14:00 GMT' (length=29)
+      1 => string 'Mon, 06 Feb 2017 01:14:01 GMT' (length=29)
+  'Server' =>
+    array (size=2)
+      0 => string 'Apache' (length=6)
+      1 => string 'Apache' (length=6)
+  'Location' => string 'http://www.geekality.net/' (length=25)
+  'Vary' =>
+    array (size=2)
+      0 => string 'Accept-Encoding' (length=15)
+      1 => string 'Accept-Encoding' (length=15)
+  'Connection' =>
+    array (size=2)
+      0 => string 'close' (length=5)
+      1 => string 'close' (length=5)
+  'Content-Type' =>
+    array (size=2)
+      0 => string 'text/html; charset=iso-8859-1' (length=29)
+      1 => string 'text/html; charset=UTF-8' (length=24)
+  1 => string 'HTTP/1.1 200 OK' (length=15)
+  'Link' => string '<http://www.geekality.net/wp-json/>; rel="https://api.w.org/"' (length=61)
+```

@@ -1,0 +1,58 @@
+---
+title: 'How to set `JAVA_HOME` and where is whereis on Solaris?'
+published: '2011-02-02'
+permalinks:
+  - /2011/02/02/how-to-set-java_home-and-where-is-whereis-on-solaris/
+  - /?p=1466
+categories:
+  - software-development
+tags:
+  - java
+  - solaris
+  - unix
+---
+
+To set the `JAVA_HOME` environment variable you first need to find where your Java installation is located and then set it somehow.
+
+## How to find it
+
+```bash
+$ whereis java /usr/bin/java $ ls -l /usr/bin/java lrwxrwxrwx ...
+/usr/bin/java -> ../java/bin/java
+```
+
+First command figures out where the java command is located. We then use `ls -l` and finds that `/usr/bin/java` actually points to `../java/bin/java`. As an absolute path, that would be `/usr/java/bin/java`. This means our `JAVA_HOME` should be set to `/usr/java`.
+
+(I have assumed that Java actually is installed. If it isn't, you need to do that first)
+
+### But where is whereis?
+
+The above example is how it normally goes for me on for example Ubuntu (although the directory you get might be different). However, this is what happened when I did it on a machine running SunOS 5.10:
+
+```bash
+$ whereis java -bash: whereis: command not found
+```
+
+Turns out that command doesn't exist on Solaris. Luckily we can use a command called `which` instead, which gives you the same result.
+
+```bash
+$ which java /usr/bin/java
+```
+
+### But I want to use whereis!
+
+Well, turns out you can! Apparently the command actually <em>does</em> exist. It's just not in your path by default. This command (and some others) can be found in `/usr/ucb`, so we just need to add that to our `PATH` and we can use it like normal.
+
+## How to set it
+
+There are various ways of doing this, and in my case the simplest way was to add the lines below to a file called `~/.profile`.
+
+```bash
+JAVA_HOME=/usr/java
+export JAVA_HOME
+
+PATH=$PATH:/usr/ucb
+export PATH
+```
+
+The last two lines shows how to add `/usr/ucb` to your path, which you can skip if you don't feel a great need to use `whereis` later.

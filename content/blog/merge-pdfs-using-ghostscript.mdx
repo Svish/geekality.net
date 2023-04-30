@@ -1,0 +1,18 @@
+---
+title: Merge PDFs using Ghostscript
+published: '2019-06-24'
+permalinks:
+  - /2019/06/24/merge-pdfs-using-ghostscript/
+  - /?p=3346
+categories:
+  - technology
+tags:
+  - ghostscript
+  - pdf
+---
+
+Because I'm never ever going to remember this one-liner without noting it down somewhere...
+
+```bash
+gswin64c -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=Result.pdf Part1.pdf Part2.pdf
+```

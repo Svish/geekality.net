@@ -1,0 +1,54 @@
+---
+title: Installing Composer on Dreamhost
+published: '2013-02-01'
+permalinks:
+  - /2013/02/01/dreamhost-composer/
+  - /?p=2153
+categories:
+  - software-development
+tags:
+  - composer
+  - dreamhost
+  - phar
+  - php
+---
+
+How to enable <a href="http://php.net/manual/en/book.phar.php">Phar</a> and install <a href="https://getcomposer.org/">Composer</a> on <a href="https://www.dreamhost.com/">Dreamhost</a>.
+
+<hr classname="fix" />
+
+<ins dateTime="2013-04-22T22:54:14+00:00">
+  This should work with PHP 5.4 as well, just swap out instances of 5.3 with 5.4
+  🙂
+</ins>
+
+## Make PHP 5.3 default
+
+At Dreamhost there are two php binaries. 'php', which is version 5.2, and 'php-5.3' which is 5.3. We need to use 5.3 and Phar/Composer gets confused if the version of the 'php' command isn't actually version 5.3.
+
+```bash
+$ mkdir -p ~/bin $ ln -s /usr/local/bin/php-5.3 ~/bin/php $ echo "export
+PATH=~/bin/:\$PATH" >> ~/.bash_profile $ echo "export PATH=~/bin/:\$PATH" >>
+~/.bashrc
+```
+
+Here we make our own little bin directory and creates a symlink to 'php-5.3' called 'php'. We then add this directory to the beginning of the path so this directory is searched first when you try to run 'php'. So if you log in and out of the shell (to reload the .bash_profile), you should get 5.3 if you run `php --version`.
+
+## Enable Phar
+
+```bash
+$ mkdir -p ~/.php/5.3 $ echo "extension = phar.so" >> ~/.php/5.3/phprc $ echo
+"suhosin.executor.include.whitelist = phar" >> ~/.php/5.3/phprc $ php -m |
+grep Phar
+```
+
+Last step should output "Phar", if it all worked. If not, try the php.ini-way instead in <a href="http://blog.tretyakov.im/post/36063947129/add-phar-to-dreamhost">this guide</a> (which is where I found how to do this in the first place, but found it a bit unclear. Especially the last suhosin stuff).
+
+## Install Composer
+
+```bash
+$ curl -s https://getcomposer.org/installer | php -- --install-dir=~/bin $
+chmod u+x ~/bin/composer.phar $ composer.phar
+```
+
+That last step should then give you a bunch of info and no error messages. And Composer should be ready to go 🙂

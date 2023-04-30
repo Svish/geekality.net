@@ -1,0 +1,33 @@
+---
+title: Enabling query logging on MariaDB/MySQL
+published: '2017-02-05'
+permalinks:
+  - /2017/02/05/enabling-query-logging-on-mariadbmysql/
+  - /?p=2980
+categories:
+  - software-development
+tags:
+  - logging
+  - mariadb
+  - mysql
+  - sql
+---
+
+When developing it can sometimes be very useful to see exactly what queries are sent to the database.
+
+Found out there's something called a <a href="https://mariadb.com/kb/en/mariadb/general-query-log/">General Query Log</a>, and enabling it was really easy. Just add the following to your <b>my.\{ini,cnf\}</b> file:
+
+```ini
+[mysqld]
+general-log=1
+general-log-file=queries.log
+log-output=file
+```
+
+Restart the server and you should now find the log in your data directory (unless no queries done yet).
+
+If you don't know where your data directory is, just run this query:
+
+```sql
+SHOW VARIABLES WHERE variable_name = 'datadir'
+```

@@ -1,0 +1,23 @@
+---
+title: 'Bat: Change working directory to directory of script'
+published: '2014-05-12'
+permalinks:
+  - /2014/05/12/bat-change-working-directory-to-directory-of-script/
+  - /?p=2478
+categories:
+  - technology
+tags:
+  - batch-script
+  - windows
+---
+
+Sometimes you want a batch file to <em>always</em> run with the directory of the script as the working directory. Not whatever directory you ran it from.
+
+```dos
+@echo off
+pushd %~dp0
+do stuff
+popd
+```
+
+Here `pushd` changes the directory to `%~dp0`, which is the directory of the running batch script. `popd` returns to whatever it was when the script started running. Not sure if the last step is necessary, but there you go anyways 🙂

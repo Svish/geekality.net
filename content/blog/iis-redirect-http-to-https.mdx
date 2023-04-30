@@ -1,0 +1,43 @@
+---
+title: 'IIS: Redirect HTTP to HTTPS'
+published: '2015-08-31'
+permalinks:
+  - /2015/08/31/iis-redirect-http-to-https/
+  - /?p=2810
+categories:
+  - software-development
+tags:
+  - http
+  - https
+  - iis
+  - web-config
+---
+
+To cleanly redirect HTTP to HTTPS with IIS, first install the <a href="http://www.iis.net/downloads/microsoft/url-rewrite">URL Rewrite module</a>, and then add the following to your `web.config`. Also remember to have bindings defined for your site for both HTTPS(443) _and_ HTTP(80).
+
+```xml
+<configuration>
+  <system.webServer>
+    <rewrite>
+      <rules>
+        <rule name="HTTP to HTTPS redirect" stopProcessing="true">
+          <match url="(.*)" />
+          <conditions>
+            <add input="{HTTPS}" pattern="off" ignoreCase="true" />
+          </conditions>
+          <action
+            type="Redirect"
+            redirectType="Permanent"
+            url="https://{HTTP_HOST}/{R:1}"
+          />
+        </rule>
+      </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>
+```
+
+<i>
+  <b>Source:</b>{' '}
+  <a href="http://stackoverflow.com/a/7605311/39321">StackOverflow</a>
+</i>

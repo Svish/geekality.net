@@ -1,0 +1,29 @@
+---
+title: 'Apache: Redirect one domain to another'
+published: '2015-03-11'
+permalinks:
+  - /2015/03/11/apache-redirect-one-domain-to-another/
+  - /?p=2774
+categories:
+  - software-development
+tags:
+  - apache
+  - http
+---
+
+The following `.htaccess` redirects all traffic to a different domain and preserves the path.
+
+```apache
+RewriteEngine On
+RewriteRule (.*) http://example.com/$1 [R=301,L]
+```
+
+The following redirects non-www to www version, also preserving the path.
+
+```apache
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^example\.com
+RewriteRule (.*) http://www.example.com/$1 [R=301,L]
+```
+
+And hopefully I'll remember I put this here the next time I've forgotten how to do this...

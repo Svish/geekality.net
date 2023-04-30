@@ -1,0 +1,60 @@
+---
+title: Encoding and compressing video and audio
+published: '2012-05-21'
+permalinks:
+  - /2012/05/21/encoding-and-compressing-video-and-audio/
+  - /?p=2005
+categories:
+  - technology
+tags:
+  - audio
+  - compression
+  - encoding
+  - software
+  - video
+---
+
+This whole thing has been a huge pain to me for as long as I can remember. Especially video. But recently I've found some helpful tools that have taken most of that pain away.
+
+<hr classname="fix" />
+
+## Audio
+
+For encoding and compressing audio, some of the best and most popular tools are the <a href="http://lame.sourceforge.net/">LAME</a> MP3 encoder and the <a href="http://www.nero.com/enu/company/about-nero/nero-aac-codec.php">Nero</a> AAC encoder. Both very, very good, but they only come as libraries to be used by other programs and as command-line tools which works but are quite a pain to use on your own.
+
+Today I stumbled upon <a href="http://lamexp.sourceforge.net">LameXP</a>, which uses the previously mentioned libraries and gives you a nice and easy to use user interface. Free, can do many files at the same time and has just been fantastic so far 🙂
+
+<img
+  src="http://www.geekality.net/wp-content/uploads/2012/05/LameXP.png"
+  alt="LameXP screen shot"
+  title="LameXP"
+  width="540"
+  height="391"
+  class="aligncenter size-large wp-image-2006"
+/>
+
+## Video
+
+For video there is a whole bunch of crazy tools available, and in general you can't even just use one of them. You need a whole set. Reading DVD files, splitting, decoding, encoding, merging... not to mention various container formats, filtering (deinterlacing for example), et cetera... so many tools. It's a jungle I don't like to be in. But I've found two tools which are both free and pretty easy to use.
+
+The first tool I use is <a href="http://www.dvdshrink.org/what_en.php">DVD Shrink</a> which I use to DVDs to my hard drive as iso image files. The tool I use for encoding <em>can</em> read directly from the DVD, but this way I can copy a bunch of DVDs and then create encoding jobs for each of them in a queue and not having to swap DVDs between each job.
+
+<img
+  src="http://www.geekality.net/wp-content/uploads/2012/05/DVDShrink.png"
+  alt="DVD Shrink screen shot"
+  title="DVD Shrink"
+  width="540"
+  height="469"
+  class="aligncenter size-large wp-image-2009"
+/>
+
+The second tool is called <a href="https://handbrake.fr/">HandBrake</a>. Similarly to LameXP it's actually "just" a user interface which uses several other tools behind the scenes to do the job. It has very handy preset configurations for encoding video to certain formats (for example for Apple and Android devices) and it supports several different input and output formats. What I especially love about this program is that it supports encoding directly from DVDs and DVD images and provides a simple way to select what content (titles, chapters, etc) you want to do. It also has a queue where you can add several jobs. Encoding video takes quite a long time, so this is very handy as you can queue up a bunch and then leave it running over night.
+
+<img
+  src="http://www.geekality.net/wp-content/uploads/2012/05/HandBrake.png"
+  alt="HandBrake screen shot"
+  title="HandBrake"
+  width="540"
+  height="329"
+  class="aligncenter size-large wp-image-2008"
+/>

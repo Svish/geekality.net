@@ -1,0 +1,54 @@
+---
+title: 'AppleScript: Get name of files in a folder without extension'
+published: '2010-11-26'
+permalinks:
+  - /2010/11/26/applescript-get-name-of-files-in-a-folder-without-extension/
+  - /?p=1385
+categories:
+  - software-development
+tags:
+  - applescript
+  - snippet
+---
+
+Have been dipping my toes into some AppleScript today. Boy do I prefer languages that are not so wordy and English... And boy is some things not the easiest to do... Anyways, I wanted to get the names of all files in a certain folder. This is quite easy, but the twist is that I didn't want the file extension. This was not so easy...
+
+So, in case anyone else needs to do this, or if anyone would happen to have a better, or faster, or more robust way to do this, I share it here. Please comment if you do know of anything which can improve it.
+
+I asked <a href="http://stackoverflow.com/q/4278704/39321">a question</a> on <a href="http://stackoverflow.com">StackOverflow</a> and got some code that worked. I then rewrote it a bit and ended up with this:
+
+```applescript
+-- Gets a list of filenames from the
+on filenames from _folder
+
+  -- Get filenames and extensions
+  tell application "Finder"
+    set _filenames to name of every file of _folder
+    set _extensions to name extension of every file of _folder
+  end tell
+
+  -- Collect names (filename - dot and extension)
+  set _names to {}
+  repeat with n from 1 to count of _filenames
+
+    set _filename to item n of _filenames
+    set _extension to item n of _extensions
+
+    if _extension is not "" then
+      set _length to (count of _filename) - (count of _extension) - 1
+      set end of _names to text 1 thru _length of _filename
+    else
+      set end of _names to _filename
+    end if
+
+  end repeat
+
+  -- Done
+  return _names
+end filenames
+
+-- Example usage
+return filenames from (path to desktop)
+```
+
+Hope that can help someone! If you have any improvements, please post a comment below 🙂

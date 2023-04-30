@@ -1,0 +1,36 @@
+---
+title: Limit OneDrive and Windows Update bandwidth hogging
+published: '2016-07-14'
+permalinks:
+  - /2016/07/14/limit-onedrive-bandwidth-hogging/
+  - /?p=2816
+categories:
+  - technology
+tags:
+  - network
+  - onedrive
+  - qos
+  - windows
+---
+
+Have a really horrible internet connection currently, and whenever Windows Update and OneDrive starts downloading stuff, I can basically not do anything else because they're hogging <em>all</em> my bandwidth.
+
+## BITS
+
+1. Open <i>Local Group Policy Editor</i>.
+1. Go to <i>Computer Configuration / Administrative Templates / Network / Background Intelligent Transfer Service (BITS)</i>.
+1. Enable <i>Limit the maximum network bandwidth for BITS background transfers</i>, and optionally adjust the rate and hours.
+1. Reboot, possibly?
+
+**Source:** <a href="http://superuser.com/q/1039229/62">SuperUser.com</a>
+
+## QoS Policy
+
+1. Open <i>Local Group Policy Editor</i>.
+1. Go to <i>User Configuration / Windows Settings / Policy-based QoS</i>.
+1. Right-click and hit <i>Create new policy</i>.
+1. Set <i>DSCP Value</i> to <i>1</i> and/or <i>Outbound Throttle Rate</i> to something appropriate.
+1. Set QoS policy to apply to applications with executable name <i>onedrive.exe</i> (or <i>skydrive.exe</i>, check your process list).
+1. Reboot, possibly?
+
+**Source:** Don't remember...

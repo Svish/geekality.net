@@ -1,0 +1,37 @@
+---
+title: 'C#: Handy BCrypt class for hashing passwords'
+published: '2009-03-02'
+permalinks:
+  - /2009/03/02/a-nice-class-for-hashing/
+  - /?p=33
+categories:
+  - software-development
+tags:
+  - csharp
+  - hashing
+---
+
+I was working on an application where I needed to store user names and passwords in a database, as we often do. As we all (should) know we never (ever, ever) store passwords in plain text. If we do, we are setting ourselves up for big trouble if the database contents leaks out or someone hacks their way into it. So what should you do?
+
+You should [salt](<http://en.wikipedia.org/wiki/Salt_(cryptography)>) the passwords and you should [hash](http://en.wikipedia.org/wiki/Cryptographic_hash_function) them, and hash them good.
+
+> Using raw hash functions to authenticate passwords is as naive as using unsalted hash functions. Don’t. - [Thomas Ptacek](http://chargen.matasano.com/chargen/2007/9/7/enough-with-the-rainbow-tables-what-you-need-to-know-about-s.html)
+
+So, I was looking for a good implementation of a good hashing algorithm and found one written by [Derek Slager](http://derekslager.com/blog/) called [BCrypt.net](http://derekslager.com/blog/posts/2007/10/bcrypt-dotnet-strong-password-hashing-for-dotnet-and-mono.ashx). I really like it. It has a very clean interface and is super easy to use. So to make sure I don't lose it (if he would remove it or I would lose the link or something), I post it here. And if it helps someone else to discover it and to ease their day a little, that would be awesome too 🙂
+
+You use it like this:
+
+```csharp
+// Pass a logRounds parameter to GenerateSalt to explicitly specify the
+// amount of resources required to check the password. The work factor
+// increases exponentially, so each increment is twice as much work. If
+// omitted, a default of 10 is used.
+string hashed = BCrypt.HashPassword(password, BCrypt.GenerateSalt(12));
+
+
+// Check the password.
+bool matches = BCrypt.CheckPassword(candidate, hashed);
+
+```
+
+In case the source disappears, you can [find the BCrypt class in this gist](https://gist.github.com/Svish/6c31084a20702a196ae54dda296a6be5).

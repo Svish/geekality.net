@@ -1,0 +1,25 @@
+---
+title: 'PHP: Authorization header missing on Apache'
+published: '2015-11-18'
+permalinks:
+  - /2015/11/18/php-authorization-header-missing-on-apache/
+  - /?p=2833
+categories:
+  - software-development
+tags:
+  - apache
+  - http
+  - php
+---
+
+I'm using a simple PHP <a href="https://github.com/softius/php-cross-domain-proxy">cross-domain-proxy</a> to be able to do some Javascript requests towards an API on a different domain. Worked great, until I needed to do basic authentication. I set the appropriate header to be passed through, `'Authorization': 'Basic ' + btoa(username+':'+password)`, but in the proxy script, that header had vanished.
+
+Turns out it was Apache stripping it away. Don't know if it's because of security or because Apache thinks that, hey, I'm the one dealing with this stuff so no point sending it to the script. Anyways, seems you can get it back by doing the following in an .htaccess file:
+
+```apache
+RewriteEngine On
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+```
+
+Now the header is passed through to the API successfully and I'm no longer getting 401 Unauthorized back 🙂

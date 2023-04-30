@@ -1,0 +1,29 @@
+---
+title: How to add certificates to the Windows certificate store
+published: '2019-04-08'
+permalinks:
+  - /2019/04/08/how-to-add-certificates-to-the-windows-certificate-store/
+  - /?p=3320
+categories:
+  - technology
+tags:
+  - certificates
+  - certutil
+  - security
+  - windows
+---
+
+There's a command-line tool called <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/certutil">certutil</a> one can use to add (among other things) certificates to the certificate store in windows.
+
+Some examples:
+
+```dos
+REM Add pfx-file to Personal
+certutil -ent -p pfxpassword -importpfx my some.pfx
+
+REM Add pfx-file to Trusted Root Certification Authorities
+certutil -ent -p pfxpassword -importpfx root some.pfx
+
+REM Add cer-file to Trusted Root Certification Authorities
+certutil -ent -addstore root some.cer
+```

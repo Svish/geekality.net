@@ -1,0 +1,29 @@
+---
+title: How to repair broken user folders in Windows
+published: '2017-10-31'
+permalinks:
+  - /2017/10/31/how-to-repair-broken-user-folders-in-windows/
+  - /?p=3157
+categories:
+  - technology
+tags:
+  - fix
+  - windows
+---
+
+Tried moving my Documents/Desktop/Music/etc folders to a <a href="https://www.google.com/drive/download/">Google Drive</a> mounted via <a href="https://support.google.com/a/answer/7491144">Drive File Stream</a>. Seemed to work well at first, but after the first reboot Windows clearly wasn't happy and kept complaining about not finding the Desktop or the Documents...
+
+Possibly because that drive seems to be mounted a bit too slowly (i.e. happens a bit after one has logged in)? And/or because it's just mounted in a way Windows doesn't like?
+
+Either way, here's how to...
+
+## Fix
+
+1. Open up <b>`regedit`</b>
+1. Go to: `Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders`
+1. Update all incorrect values
+1. Reboot
+
+That seems to have fixed it for me anyways...
+
+**Source:** [scottiestech.info](https://scottiestech.info/2014/11/11/repair-missing-user-folders-in-windows-7/)

@@ -1,0 +1,25 @@
+---
+title: 'Javascript: Index of node within parent'
+published: '2017-10-31'
+permalinks:
+  - /2017/10/31/javascript-index-of-node-within-parent/
+  - /?p=3155
+categories:
+  - software-development
+tags:
+  - dom
+  - html
+  - javascript
+---
+
+Apparently there isn't any `node.index` property built-in, so here's how to find it, in case I (or someone else) need it again:
+
+```js
+function indexOf(node) {
+  let i = 0
+  while ((node = node.previousElementSibling)) i++
+  return i
+}
+```
+
+**Source:** <a href="https://stackoverflow.com/a/13657635/39321">StackOverflow</a>

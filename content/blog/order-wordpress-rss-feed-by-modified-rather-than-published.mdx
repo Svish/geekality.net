@@ -1,0 +1,29 @@
+---
+title: Order WordPress RSS feed by modified rather than published
+published: '2013-09-26'
+permalinks:
+  - /2013/09/26/order-wordpress-rss-feed-by-modified-rather-than-published/
+  - /?p=2389
+categories:
+  - software-development
+tags:
+  - php
+  - rss
+  - wordpress
+---
+
+Adding the following to the `functions.php` of your theme should make the posts in your WordPress RSS feed sort by when the post was last modified rather than when it was published. Useful in some cases when you for example want to push out updated posts as well.
+
+```php
+function wpse49312_alter_the_query( $request )
+{
+    $dummy_query = new WP_Query();
+    $dummy_query->parse_query($request);
+
+    if($dummy_query->is_feed())
+        $request['orderby'] = 'modified';
+
+    return $request;
+}
+add_filter('request', 'wpse49312_alter_the_query');
+```

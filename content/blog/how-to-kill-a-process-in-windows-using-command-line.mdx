@@ -1,0 +1,32 @@
+---
+title: How to kill a process in Windows using command line
+published: '2013-03-13'
+permalinks:
+  - /2013/03/13/how-to-kill-a-process-in-windows-using-command-line/
+  - /?p=2229
+categories:
+  - technology
+tags:
+  - command-line
+  - windows
+---
+
+Just a note to self in case I need this again.
+
+## Finding
+
+```dos
+tasklist
+```
+
+## Killing
+
+```dos
+taskkill /F /IM application.exe
+```
+
+or
+
+```dos
+taskkill /F /PID 77
+```

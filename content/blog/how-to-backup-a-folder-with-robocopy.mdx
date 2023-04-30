@@ -1,0 +1,75 @@
+---
+title: How to backup a folder with Robocopy
+published: '2010-11-15'
+permalinks:
+  - /2010/11/15/how-to-backup-a-folder-with-robocopy/
+  - /?p=1137
+categories:
+  - technology
+tags:
+  - backup
+  - robocopy
+  - tutorial
+  - windows
+---
+
+As a simple way to keep my computer backed up I copy all that I care about onto external
+hard drives twice a day. I mostly do this in case my internal hard drives would die
+or something like that, so I haven't cared too much about finding anything more fancy
+with incremental history and such. What I have is a simple [batch file](http://en.wikipedia.org/wiki/Batch_file) that I have set to run periodically using the Task Scheduler in Windows.
+
+The batch file simply looks like this:
+
+```dos
+@echo off
+
+robocopy D:\ X:\D /COPY:DAT /MIR /B /XJ /R:0 /NP /LOG:"X:\D.log"
+attrib -S -H X:\D
+```
+
+You can duplicate those two last lines for other folders you want to back up as well. I have one copying my D drive to external drive X, one copying my E drive to another external drive Y, and one copying some folders on my C drive to external drive Y.
+
+## Robocopy
+
+<a href="http://en.wikipedia.org/wiki/Robocopy">Robocopy</a> is of course the command
+that does the backing up. The options I use here are as follows:
+
+<ol>
+  <li>Source (directory we want to back up)</li>
+  <li>Destination (where we want the backup to be stored)</li>
+  <li>Copy Data, Attributes and Timestamps</li>
+  <li>
+    Mirror (Copy all subdirectories, even empty ones, and delete files no longer
+    in the source directory)
+  </li>
+  <li>
+    Copy files in Backup mode (assert the Windows NT "backup right" so an
+    administrator may copy an entire directory, including files denied
+    readability to the administrator)
+  </li>
+  <li>Exclude Junction points</li>
+  <li>
+    Retry zero times on failed copies (prevents spending lots of time on locked
+    files for example)
+  </li>
+  <li>Don't display any progress</li>
+  <li>
+    Log what happens to the given file instead of printing it out in the console
+  </li>
+</ol>
+
+### Don't get stuck in a loop!
+
+The robocopy switch, /XJ, is <strong>very</strong> important to remember if you copy for example your user directory. The reason is that some folders in Windows are something called junction points and some of these will cause robocopy to enter a never ending loop. The copying will basically never finish until the target device run out of space or something else happens. Happened to me. Not very fun to clean up 😛
+
+## Attrib
+
+In my case I am copying a whole drive, and the attributes on the resulting folder is a bit weird. So, to have the folder show up in Explorer without having to make it show system files and hidden files, I remove the system- and hidden-attribute from the folder.
+
+## How to run it
+
+You can either run this yourself in a Command Prompt or schedule it using the <a href="http://windows.microsoft.com/en-us/windows/schedule-task">Task Scheduler</a>. What is important to remember is that you should run this using Administrator rights.
+
+So, if you use a Command Prompt: Remember to use an <a href="/?p=1139">elevated Command Prompt</a>. And if you use the Task Scheduler, remember to select that the task should <em>Run with highest privileges</em> in the task properties.
+
+If you just want to run it in the command prompt and see the progress a bit easier, you can remove the /NP and /LOG options. You will then see what happens as it goes through your files 🙂

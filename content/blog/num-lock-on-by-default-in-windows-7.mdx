@@ -1,0 +1,35 @@
+---
+title: Num lock on by default in Windows 7
+published: '2012-07-23'
+permalinks:
+  - /2012/07/23/num-lock-on-by-default-in-windows-7/
+  - /?p=2029
+categories:
+  - technology
+tags:
+  - keyboard
+  - numlock
+  - regedit
+  - registry
+  - windows
+---
+
+I like my num lock to be on by default when I enter Windows. On my work laptop it for some reason never was. Here's how to fix it.
+
+1. Open <em>RegEdit</em> (Start, run, type <em>regedit</em>, hit enter)
+1. Select the top node, <em>Computer</em>
+1. Search for <em>InitialKeyboardIndicators</em> (Edit, Find or (<kbd>Ctrl</kbd>+<kbd>F</kbd>))
+1. If what you find has a numeric value, change it to one of the values below:
+   - 0 - Turn all indicators Off (NumLock, CapsLock, ScrollLock)
+   - 1 - Turn CapsLock On
+   - 2 - Turn NumLock On
+   - 3 - Turn CapsLock and NumLock On
+   - 4 - Turn ScrollLock On
+   - 5 - Turn CapsLock and ScrollLock On
+   - 6 - Turn NumLock and ScrollLock On
+   - 7 - Turn all indicators On (NumLock, CapsLock, ScrollLock)
+1. Keep searching (F3) until you've found all the numeric ones and changed them to the same value
+
+Below are the different values you can set. I set mine to `2`. Most of them already were, but some were some large number of several digits. Looked to be close to max int or something, so maybe a bug... either way, after rebooting my num lock key was now on 🙂
+
+**Source:** <a href="http://answers.microsoft.com/en-us/windows/forum/windows_7-hardware/want-to-set-num-lock-to-be-on-and-active-at/7b48ae6f-fa9c-4bc2-8359-81e0c5e5d6a2">Microsoft Answers</a>

@@ -1,0 +1,57 @@
+---
+title: 'Maven: Add 3rd party dependencies in project specific repository'
+published: '2013-09-16'
+permalinks:
+  - /2013/09/16/maven-add-3rd-party-dependencies-in-project-specific-repository/
+  - /?p=2376
+categories:
+  - software-development
+tags:
+  - dependencies
+  - java
+  - maven
+---
+
+Sometimes we need to use some commercial artifacts which are not available in the usual Maven repositories. These should of course be added to a repository hosted by your company or something like that, but sometimes it's just simpler to stick those jars in the project directly and check them in with the rest of the code.
+
+Found a nice way of doing that in the <a href="https://devcenter.heroku.com/articles/local-maven-dependencies">heroku devcenter</a> documentation, so noting it down here for future reference.
+
+## Create repository
+
+We'll start with deploying an artifact to a repo folder in our project by using the following command. I split it up so it's easier to read, but it should of course all be a single command.
+
+```dos
+mvn deploy:deploy-file -Durl=file:///dev/project/repo/ -Dfile=somelib-1.0.jar -DgroupId=com.example -DartifactId=somelib -Dpackaging=jar -Dversion=1.0
+```
+
+The group and artifact id you'd have to make up yourself of course. For example pull the artifact id from the library name and the group id from the main package used inside the library.
+
+Remember to add this folder to your version control.
+
+## Define repository
+
+Add the following to your pom.xml to let Maven know about the project repository we just created.
+
+```xml
+<repositories>
+  <repository>
+    <id>project.local</id>
+    <name>project</name>
+    <url>file:${project.basedir}/repo</url>
+  </repository>
+</repositories>
+```
+
+## Define dependency
+
+And finally just define the dependency in your pom.xml like you'd usually do.
+
+```xml
+<dependency>
+  <groupId>com.example</groupId>
+  <artifactId>somelib</artifactId>
+  <version>1.0</version>
+</dependency>
+```
+
+Clean and simple.

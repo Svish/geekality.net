@@ -1,0 +1,32 @@
+---
+title: Natural sort in Javascript
+published: '2019-10-06'
+permalinks:
+  - /2019/10/06/natural-sort-in-javascript/
+  - /?p=3376
+categories:
+  - software-development
+tags:
+  - javascript
+  - sorting
+---
+
+Sorting strings naturally/numerically in Javascript is very simple. You just need to remember the existence of the [`Intl.Collator`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator)... which I keep forgetting...
+
+You simply create one and use its compare function:
+
+```js
+const collator = new Intl.Collator(undefined, {
+  usage: 'sort',
+  numeric: true,
+})
+
+const simple = ['a1', 'a12', 'a2']
+simple.sort(collator.compare)
+// => ['a1', 'a2', 'a12']
+
+const objects = [{ id: 'a1' }, { id: 'a12' }, { id: 'a2' }]
+const by = (key) => (a, b) => collator.compare(a[key], b[key])
+objects.sort(by('id'))
+// => [{id: 'a1'}, {id: 'a2'}, {id: 'a12'}]
+```

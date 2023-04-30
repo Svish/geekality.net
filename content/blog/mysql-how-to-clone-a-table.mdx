@@ -1,0 +1,30 @@
+---
+title: 'MySQL: How to clone a table'
+published: '2011-03-04'
+permalinks:
+  - /2011/03/04/mysql-how-to-clone-a-table/
+  - /?p=1516
+categories:
+  - software-development
+tags:
+  - database
+  - mysql
+  - snippet
+  - sql
+---
+
+Ever wanted to, for some reason, clone a database table? Don't really want to export anything or figure out what statement was used to create that table? Turns out that's a lot easier to do than I thought it was.
+
+Stumbled over a blog post on how you can copy a MySQL table with schema and keys, and boy was it easy.
+
+```sql
+CREATE TABLE newtable LIKE oldtable;
+```
+
+And that's it! Want the data copied over as well?
+
+```sql
+INSERT INTO newtable SELECT * FROM oldtable;
+```
+
+Super easy! 🙃

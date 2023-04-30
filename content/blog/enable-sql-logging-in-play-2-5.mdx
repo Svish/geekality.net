@@ -1,0 +1,38 @@
+---
+title: Enable SQL logging in Play 2.5+
+published: '2018-12-20'
+permalinks:
+  - /2018/12/20/enable-sql-logging-in-play-2-5/
+  - /?p=3267
+categories:
+  - software-development
+tags:
+  - ebean
+  - intellij
+  - java
+  - jdbc
+  - logging
+  - play-framework
+  - sql
+---
+
+Just a note to self on how to get (in my case) IntelliJ to spit out all SQL statements happening during unit tests.
+
+1. Add the following to <b>application.conf</b>
+
+```ini
+db.default.logSql = true
+```
+
+2. Add the following to <b>logback.xml</b>
+
+```xml
+<logger name="org.jdbcdslog.ConnectionLogger" level="OFF"  />
+<logger name="org.jdbcdslog.StatementLogger"  level="INFO" />
+<logger name="org.jdbcdslog.ResultSetLogger"  level="OFF"  />
+```
+
+<i>
+  <b>Source:</b>{' '}
+  <a href="https://stackoverflow.com/a/38430421/39321">StackOverflow</a>
+</i>

@@ -1,0 +1,17 @@
+---
+title: Drop in use SQL Server database
+published: '2020-11-03'
+permalinks:
+  - /2020/11/03/drop-in-use-sql-server-database/
+  - /?p=3398
+categories:
+  - software-development
+tags:
+  - sql
+  - sql-server
+---
+
+```sql
+ALTER DATABASE name SET single_user WITH ROLLBACK immediate;
+DROP DATABASE name;
+```

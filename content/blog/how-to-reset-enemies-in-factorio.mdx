@@ -1,0 +1,29 @@
+---
+title: How to reset enemies in Factorio
+published: '2016-04-22'
+permalinks:
+  - /2016/04/22/how-to-reset-enemies-in-factorio/
+  - /?p=2926
+categories:
+  - gaming
+tags:
+  - factorio
+  - lua
+---
+
+Playing <a href="http://factorio.com">Factorio</a> and loving it! But I'm playing rather slowly, so even though I like that the <a href="https://wiki.factorio.com/index.php?title=Enemies">enemies</a> are aggressive (didn't select the peaceful option), they have <a href="https://wiki.factorio.com/index.php?title=Enemies#Evolution">evolved</a> much further than I'm comfortable with compared to my ability to deal with them at the moment...
+
+Found some <a href="https://wiki.factorio.com/index.php?title=Console">console commands</a> for resetting the <a href="https://wiki.factorio.com/index.php?title=Enemies#Spawn_chances_by_evolution_factor">evolution factor</a> (what gradually increases and makes the enemies more and more nasty), and for nuking already spawned enemies.
+
+Check your keyboard settings for how to toggle the console.
+
+```lua
+/c game.evolution_factor = 0
+/c game.forces["enemy"].kill_all_units()
+```
+
+To see the current evolution factor:
+
+```lua
+/c game.local_player.print(game.evolution_factor)
+```

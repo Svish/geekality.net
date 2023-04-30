@@ -1,0 +1,27 @@
+---
+title: Missing time zones in WAMP MySQL
+published: '2014-11-23'
+permalinks:
+  - /2014/11/23/missing-time-zones-in-wamp-mysql/
+  - /?p=2747
+categories:
+  - software-development
+tags:
+  - mysql
+  - time-zones
+  - wam
+  - wamp
+---
+
+If you try to run for example `SET time_zone = 'Europe/Oslo'` on the default MySQL database that comes with <a href="http://www.wampserver.com/en">WAMP</a> you might get an error saying the time zone doesn't exist.
+
+Apparently this is because the `time_zone` tables for some reason are empty.
+
+### How to fix
+
+1. Go to <b><a href="http://dev.mysql.com/downloads/timezones.html">dev.mysql.com/downloads/timezones.html</a></b>
+2. Download the <b>POSIX standard Time zone description tables, version 2011n</b> zip archive
+3. Extract the files and overwrite the ones in <b>`C:\wamp\bin\mysql\mysql5.6.17\data\mysql`</b>, or whatever your equivalent path would be
+4. Restart MySQL
+
+Setting the time zone should now work 🙂

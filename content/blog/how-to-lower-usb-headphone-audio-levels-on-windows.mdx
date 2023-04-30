@@ -1,0 +1,31 @@
+---
+title: How to lower USB headphone audio levels on Windows
+published: '2017-10-30'
+permalinks:
+  - /2017/10/30/how-to-lower-usb-headphone-audio-levels-on-windows/
+  - /?p=3146
+categories:
+  - technology
+tags:
+  - audio
+  - fix
+  - safety
+  - usb
+  - windows
+---
+
+When connecting my headphones via a simple USB-plug, the audio levels are often way, way, too loud. Today I had to turn the volume all the way down to 2% for the audio just to be OK'ish. That's not very usable, and also kind of scary...
+
+_Finally_ found something to fix it!
+
+1. Install [Equalizer APO](https://sourceforge.net/p/equalizerapo/)
+2. Open up "C:\Program Files\EqualizerAPO\config\config.txt"
+3. Replace its contents with:<br/>
+
+```text
+Preamp: -30 dB
+```
+
+4. And adjust that level as necessary...
+
+Now I can finally use the volume bar in Windows, and the volume media keys on my keyboard properly. And no longer do I need to be afraid of suddenly having my eardrums shattered if the audio were to move a percentage or two... or, even worse, reset to max...

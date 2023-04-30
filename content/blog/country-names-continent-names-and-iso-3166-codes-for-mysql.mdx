@@ -1,0 +1,26 @@
+---
+title: 'MySQL tables for continent names, country names and their ISO-3166 codes'
+published: '2011-08-21'
+permalinks:
+  - /2011/08/21/country-names-continent-names-and-iso-3166-codes-for-mysql/
+  - /?p=1182
+categories:
+  - software-development
+tags:
+  - countries
+  - iso-3166
+  - mysql
+  - snippet
+  - sql
+---
+
+Needed a MySQL table containing continent names, country names and their ISO-3166
+codes while ago, but the ones I found were either kind of lacking or kind of old. So, I made one myself by converting a <a href="http://en.wikipedia.org/wiki/List_of_soveriegn_states_and_dependent_territories_by_continent_(data_file)">datafile on Wikipedia</a> into the format I wanted with some regular expressions and manual corrections
+
+Aftwarwards I went through newsletters with <a href="http://www.iso.org/iso/country_codes/updates_on_iso_3166.htm">Updates on ISO 3166</a>, hopefully I got it all right, and hopefully it can save you and others some time as well.
+
+I have also subscribed to their updates and try to follow up when they change anything.
+
+## The data
+
+Created a <a href="https://github.com/Svish/iso-3166-country-codes/">project on GitHub</a> for some change tracking. The latest version of the SQL script is found at <a href="https://github.com/Svish/iso-3166-country-codes/blob/master/countries.sql">github.com/Svish/iso-3166-country-codes/blob/master/countries.sql</a>. If you find any mistakes or updates I've missed, please create a PR or an issue on that project. 🙃

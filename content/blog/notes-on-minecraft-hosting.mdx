@@ -1,0 +1,53 @@
+---
+title: Notes on Minecraft hosting
+published: '2014-08-05'
+permalinks:
+  - /2014/08/05/notes-on-minecraft-hosting/
+  - /?p=2553
+categories:
+  - gaming
+  - technology
+tags:
+  - hosting
+  - minecraft
+  - server
+---
+
+Just notes to self that I keep having to find in various documents and random Minecraft forums of varying quality of which there are a lot...
+
+## Screen stuff
+
+I have an unused laptop which I installed Ubuntu Server on, and this is what I use to run the Minecraft server so it's easy to manage and won't die when I disconnect.
+
+```bash
+# Run detached in screen using dir name as screen name
+screen -dmS ${PWD##*/} java -Xmx3G -XX:MaxPermSize=256M -jar server.jar nogui
+
+# List screens
+
+screen -ls
+
+# Reattach to specific
+
+screen -r name
+
+# Reattatch to whatever (handy if just one running)
+
+screen -raAd
+
+# Detach (important, since Ctrl+c would shut down the server)
+
+Ctrl+a, Ctrl+d
+```
+
+## Minecraft server stuff
+
+A bit cheaty, especially the last one, but sometimes you just want to play without worrying about losing what you spent way too many hours working on. I prefer a gravestone mod over the last one though, cause then dying is still an annoyance, but at least you have a chance of getting back that crazy expensive armor and the fifteen stacks of diamonds you just spent forever digging up.
+
+```bash
+# Prevent creepers and such from destroying stuff
+gamerule mobGriefing false
+
+# Don't lose stuff when dying
+gamerule keepInventory true
+```

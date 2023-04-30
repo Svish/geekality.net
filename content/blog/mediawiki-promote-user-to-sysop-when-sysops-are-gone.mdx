@@ -1,0 +1,48 @@
+---
+title: Promoting a user to sysop when all sysops are gone on a MediaWiki installation
+published: '2013-05-21'
+permalinks:
+  - /2013/05/21/mediawiki-promote-user-to-sysop-when-sysops-are-gone/
+  - /?p=2308
+categories:
+  - technology
+tags:
+  - mediawiki
+  - mysql
+---
+
+Working for a client who has documentation on a <a href="http://www.mediawiki.org/wiki/MediaWiki">MediaWiki</a> installation which was set up before we got there. Was able to create users for ourselves through the regular site, but certain things like deleting pages can only be done by sysops. None of our newly registered users are of course sysops and the only existing sysop user is from whoever installed the wiki to begin with.
+
+Here's how to promote a user to sysop the hackish way, directly in the database.
+
+## Find database details
+
+<div class="note">
+  **Note:** This can of course be skipped if you already know how to access your
+  mediawiki database, but I didn't 🙂
+</div>
+
+1. SSH into the system where MediaWiki is installed and find its location. It was `/var/www/html/foowiki` in our case.
+2. Open `LocalSettings.php` and everything should be under the heading `## Database settings`
+
+## Promote user
+
+1. Connect with a mysql client.
+
+```dos
+mysql -h localhost -u wikiuser -p wikidb
+```
+
+2. Find the user id.
+
+```sql
+select user_id, convert(user_name using utf8) from `user`;
+```
+
+3. Add user id to sysop (and bureaucrat) group.
+
+```sql
+insert into `user_groups` values (uid, 'sysop'),(uid, 'bureaucrat');
+```
+
+The user should now be sysop, which can be double checked on the `Special:ListUsers` wiki page.

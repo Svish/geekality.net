@@ -1,0 +1,55 @@
+---
+title: 'PHP: Catch all exceptions and errors in a normalized and consistent matter'
+published: '2013-06-04'
+permalinks:
+  - /2013/06/04/php-catching-all-exceptions-and-errors-in-a-normalized-and-consistent-matter/
+  - /?p=2326
+categories:
+  - software-development
+tags:
+  - errors
+  - php
+---
+
+For my small website <a href="https://github.com/Svish/myhymnal">myhymnal.net</a> I wanted a nice error handler that caught <em>all</em> errors and presented them as nice error pages. The problem is that you have at least three kinds of errors which you have to handle in PHP. Uncaught exceptions, regular errors and fatal errors. After some experimenting I think I've found a way to catch them all in a close to consistent matter so that they are easy to deal with.
+
+```php
+error_reporting(ENV === 'dev' ? E_ALL : 0);
+
+set_error_handler("error_handler");
+set_exception_handler("error_handler");
+register_shutdown_function("error_handler");
+
+function error_handler()
+{
+    // Check for unhandled errors (fatal shutdown)
+    $e = error_get_last();
+
+    // If none, check function args (error handler)
+    if($e === null)
+        $e = func_get_args();
+
+    // Return if no error
+    if(empty($e))
+        return;
+
+    // "Normalize" exceptions (exception handler)
+    if($e[0] instanceof Exception)
+    {
+        call_user_func_array(__FUNCTION__, array(
+            $e[0]->getCode(),
+            $e[0]->getMessage(),
+            $e[0]->getFile(),
+            $e[0]->getLine(),
+            $e[0]));
+        return;
+    }
+
+    $e = array_combine(array('number', 'message', 'file', 'line', 'context'), array_pad($e, 5, null));
+
+    var_dump($e);
+    exit;
+}
+```
+
+This way the only irregularity should be the last property, context. In cases of errors this will be an array with variables in the context where the error occurred, while for exceptions I'm setting it to the Exception itself. Normally you'd then pass `$e` to something that would format the information nicely to the user, do some logging or whatever.

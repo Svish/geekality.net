@@ -1,0 +1,37 @@
+---
+title: 'CSS: Super simple design guides'
+published: '2016-02-18'
+permalinks:
+  - /2016/02/18/css-super-simple-design-guides/
+  - /?p=2899
+categories:
+  - software-development
+tags:
+  - css
+  - web-design
+---
+
+Needed to see if I had lined some stuff up correctly on a website I'm making. Came up with this simple CSS to add two guides to the page that I can move around with the browser developer console (just nudge their position around to where I need them).
+
+There's useful browser extensions around, but didn't have one, and just came up with this super simple workaround instead for now...
+
+```css
+html::after {
+  content: '';
+  height: 1px;
+  width: 100%;
+  background: red;
+  position: fixed;
+  left: 0;
+  bottom: 5px; /* Change this to move the guide horizontally */
+}
+html::before {
+  content: '';
+  height: 100%;
+  width: 1px;
+  background: red;
+  position: fixed;
+  top: 0;
+  right: 5px; /* Change this to move the guide vertically */
+}
+```

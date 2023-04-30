@@ -1,0 +1,81 @@
+---
+title: 'Java: String with XML to DOM Document to String with XML'
+published: '2012-11-08'
+permalinks:
+  - /2012/11/08/java-string-with-xml-to-dom-document-to-string-with-xml/
+  - /?p=2121
+categories:
+  - software-development
+tags:
+  - dom
+  - java
+  - xml
+  - xslt
+---
+
+Here's how to convert a Java string containing XML into a <a href="http://docs.oracle.com/javase/1.5.0/docs/api/org/w3c/dom/Document.html">Document</a> and back using only Java 1.5 built-in classes.
+
+## String to Document
+
+```java
+public static Document parse(String subject) throws Exception
+{
+    DocumentBuilderFactory factory = DocumentBuilderFactory
+        .newInstance();
+    factory.setNamespaceAware(true);
+
+    return factory
+        .newDocumentBuilder()
+        .parse(new InputSource(new StringReader(subject)));
+}
+```
+
+Fairly straight forward when you just know what classes to use.
+
+If you do this more than seldom you should avoid creating new instances of the <a href="http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/parsers/DocumentBuilderFactory.html">DocumentBuilderFactory</a> unless you have to. The <a href="http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/parsers/DocumentBuilder.html">DocumentBuilder</a> can also be reused if you call the reset method between uses, but not across threads 🙂
+
+## Document (or any Node really) to String
+
+```java
+public static String toString(Node subject, boolean omitXmlDeclaration, boolean indent) throws Exception
+{
+    Transformer t = TransformerFactory
+        .newInstance()
+        .newTransformer();
+    t.setOutputProperty(OutputKeys.INDENT, indent ? "yes" : "no");
+    t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, omitXmlDeclaration ? "yes" : "no");
+
+    StringWriter writer = new StringWriter();
+    t.transform(new DOMSource(subject), new StreamResult(writer));
+    return writer.toString();
+
+}
+
+```
+
+Here we take advantage of the <a href="http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/TransformerFactory.html#newTransformer()">newTransformer()</a> method which returns a <a href="http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/Transformer.html">Transformer</a> which does a simple copy of source to result (<a href="http://en.wikipedia.org/wiki/Identity_transform">identity transform</a>). So to get the string representation of the xml we just feed the transformation result into a StringWriter and voilà 🙂
+
+Here, like when parsing, you should avoid recreating the <a href="http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/TransformerFactory.html">TransformerFactory</a> instance unless absolutely necessary. The Transformer itself can also be reused, but not across threads.
+
+<div class="note">
+  **Note:** I have ignored all exceptions in both examples here for less
+  clutter, but in real code you should of course deal with those a bit more
+  wisely 😉
+</div>
+
+## Simple usage test
+
+```java
+public static void main(String[] args) throws Exception
+{
+    String xml = "<foo>bar</foo>";
+    Node node = parse(xml);
+    out.println(toString(node, true, true));
+
+}
+
+```
+
+Easy peasy. You might want to stick these methods in a helper class or something, and maybe even add some more versions of the methods. If you for example take a look at the API of the DocumentBuilder.parse method you'll find that it can take files, streams, uris, et cetera, so there are good alternatives if your XML isn't in a string 🙂
+
+Either way, have fun! And if you sit there, stuck with Java 1.5, hating dealing with XML and the ugly Java API in general, unable to use 3rd party libraries... at least you can know that you're not alone 😉

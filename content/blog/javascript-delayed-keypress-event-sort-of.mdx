@@ -1,0 +1,36 @@
+---
+title: 'Javascript: Delayed keypress event (sort of)'
+published: '2012-02-05'
+permalinks:
+  - /2012/02/05/javascript-delayed-keypress-event-sort-of/
+  - /?p=1935
+categories:
+  - software-development
+tags:
+  - ajax
+  - javascript
+---
+
+Wanted to do an AJAX call whenever the content of a field was changed. This can be done simply with the onchange event, but the problem is that you have to tab out of the field to make it fire. You can also do it with the keypress event, but then you'll get one AJAX call for each and every keypress, which is just silly.
+
+Found a <a href="http://www.openjs.com/scripts/events/check_after_typing.php">nice and easy solution</a>, and here it is slightly simplified.
+
+```js
+var key_press_counter = 0
+
+function check(n) {
+  // Do something
+  if (n == key_press_counter) {
+    // Check field, do an ajax call, whatever
+  }
+}
+
+$(function () {
+  check(0)
+  $('#input').keypress(function () {
+    setTimeout(check, 1000, ++key_press_counter)
+  })
+})
+```
+
+It's a bit sneaky, but you should be able to deduce how it works :wink: Working sample over at <a href="http://samples.geekality.net/delay-check/">samples.geekality.net/delay-check</a>.

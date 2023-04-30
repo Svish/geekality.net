@@ -1,0 +1,24 @@
+---
+title: 'Git: How to amend'
+published: '2019-02-28'
+permalinks:
+  - /2019/02/28/how-to-git-amend/
+  - /?p=3277
+categories:
+  - software-development
+tags:
+  - git
+---
+
+Keep forgetting how to do this...
+
+```bash
+# To amend previous commit
+git commit --amend --no-edit
+
+# To amend previous commit and change message
+git commit --amend -m "Changed message"
+
+# To push afterwards (but don't do this unless on own branch/repo)
+git push --force
+```

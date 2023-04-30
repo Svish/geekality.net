@@ -1,0 +1,75 @@
+---
+title: 'PHP: cURL SSL Verification'
+published: '2010-12-07'
+permalinks:
+  - /2010/12/07/php-curl-ssl-verification/
+  - /?p=1413
+categories:
+  - software-development
+tags:
+  - curl
+  - php
+  - ssl
+---
+
+While trying to figure out of <a href="/?p=1210">PayPal Payment Data Transfers</a> I came over an issue that caused my <a href="http://php.net/manual/en/book.curl.php">cURL</a> requests to fail.
+
+These were the <a href="http://php.net/manual/en/function.curl-setopt.php">cURL options</a> I used:
+
+```php
+curl_setopt_array($request, array
+(
+    CURLOPT_URL => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+    CURLOPT_POST => TRUE,
+    CURLOPT_POSTFIELDS => http_build_query(array
+    (
+        'cmd' => '_notify-synch',
+        'tx' => $tx,
+        'at' => $your_pdt_identity_token,
+    )),
+    CURLOPT_RETURNTRANSFER => TRUE,
+    CURLOPT_HEADER => FALSE
+));
+```
+
+Worked great on my web host, but locally didn't get any response. Turned out I was getting an error, <b>SSL certificate problem: unable to get local issuer certificate</b>, and here are two ways to fix it.
+
+### Globally via `php.ini`
+
+1. Go to <a href="http://curl.haxx.se/docs/caextract.html">curl.haxx.se/docs/caextract.html</a>
+2. Download the <a href="http://curl.haxx.se/ca/cacert.pem">cacert.pem</a> and put it somwhere, for example `C:\wamp\cacert.pem`
+3. Edit the curl.cainfo property in the curl section:
+
+```ini
+[curl]
+; A default value for the CURLOPT_CAINFO option. This is required to be an
+; absolute path.
+curl.cainfo = C:\wamp\cacert.pem
+```
+
+4. Restart the web server
+
+### Locally via `curl` option
+
+1. Go to <a href="http://curl.haxx.se/docs/caextract.html">curl.haxx.se/docs/caextract.html</a>
+2. Download the <a href="http://curl.haxx.se/ca/cacert.pem">cacert.pem</a> and put it for example next to your script.
+3. Set the `CURLTOPT_SSL_VERIFYPEER` and CURLOPT_CAINFO options when you're executing a curl request
+
+```php
+curl_setopt_array($request, array
+(
+    // Other options...
+    CURLOPT_SSL_VERIFYPEER => TRUE, // Verify peers
+    CURLOPT_CAINFO => 'cacert.pem' // Path to file with certificates
+));
+```
+
+## Why?
+
+Since we are using the <a href="http://en.wikipedia.org/wiki/Https">HTTPS</a> protocol we need to somehow verify the one we are talking to. Your browser does this by checking their certificate against several built-in certificate stores from trusted certificate suppliers, like for example VeriSign.
+
+cURL does this verification automatically as well, except on my local machine PHP wasn't configured with a default store to use.
+
+Solution was as you can read above, to find one, and let PHP know about it, either through php.ini or through curl options.
+
+Voila!

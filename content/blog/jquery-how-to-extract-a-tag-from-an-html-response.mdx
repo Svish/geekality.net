@@ -1,0 +1,54 @@
+---
+title: 'jQuery: How to extract a tag from an HTML response'
+published: '2017-02-11'
+permalinks:
+  - /2017/02/11/jquery-how-to-extract-a-tag-from-an-html-response/
+  - /?p=3012
+categories:
+  - software-development
+tags:
+  - html
+  - javascript
+  - jquery
+---
+
+Making a website, and using ajax for some things. Sometimes things fail and return custom error pages. I made them to be helpful, but since you can only see them in the browser developer console, they were a bit of a hassle to look at.
+
+To see what the error was much easier, I figured I could just parse the returned HTML, extract the message I knew was there, and insert it into the page that way.
+
+And you'd think the following would work fine:
+
+```js
+$(document).ajaxError(function (event, jqxhr, settings, error) {
+  // Find the message in the response HTML
+  var m = $(jqxhr.responseText).find('#message')
+
+  // Except .find() doesn't find anything
+
+  // And we replace our DOM with nothing
+  $('#content').replaceWith(m)
+})
+```
+
+But... no... apparently, since the response was a complete HTML page, i.e. including html, head and body tags, jQuery was getting a bit tricked up when trying to parse it. Actually not sure if it's jQuery or native browser parsing behind that's causing it, but where there's a will, there's a way:
+
+```js
+$(document).ajaxError(function (event, jqxhr, settings, error) {
+  // Find the inner HTML of the body tag
+  var body = /<body.*>([\s\S]+)<\/body>/.exec(jqxhr.responseText)
+
+  // Parse the HTML
+  body = $.parseHTML(body[1])
+
+  // Append the HTML to a non-special root tag
+  body = $('<output>').append(body)
+
+  // And *now* we can finally find our message
+  var message = body.find('#message')
+
+  // And add it to our DOM
+  $('#content').replaceWith(m)
+})
+```
+
+🤷‍♂️

@@ -1,0 +1,79 @@
+---
+title: 'C#: Generics and checking for null'
+published: '2009-11-13'
+permalinks:
+  - /2009/11/13/generics-and-checking-for-null/
+  - /?p=788
+categories:
+  - software-development
+tags:
+  - csharp
+  - 'null'
+  - snippet
+---
+
+When writing C#, in Visual Studio, using generics... have you ever tried checking for null? I have always found that a bit of a hassle.
+
+Say we have this method which returns the subject if it is not null, and the result of a `createNew()` function if it _is_ null.
+
+```csharp
+public static T NewIfNull<T>(this T subject, Func<T> createNew)
+{
+    if (subject == null)
+        return createNew();
+    return subject;
+}
+```
+
+Not claiming this is a very useful method, but it was the simplest thing I could come up with 😛 Anyways, in Visual Studio you will now probably have a blue (is blue here at least) squiggly line under the <a href="http://msdn.microsoft.com/en-us/library/53k8ybth.aspx">equality operator</a>. It states you are doing a <cite>Possible compare of value type with 'null'</cite>, which of course is reasonable and correct. We <em>could</em> just ignore it and move on... but we don't really like squiggly lines, do we? I sure don't... so lets get rid of it.
+
+## Faulty solution
+
+ReSharper suggests that I use <a href="http://msdn.microsoft.com/en-us/library/xwth0h0d(VS.80).aspx">default(T)</a> instead of null, like this:
+
+```csharp
+public static T NewIfNull<T>(T subject, Func<T> createNew)
+{
+    if (subject == default(T))
+        return createNew();
+    return subject;
+}
+```
+
+Now, this won't do at all. First of all, we don't really want to check for <a href="http://msdn.microsoft.com/en-us/library/xwth0h0d(VS.80).aspx">default(T)</a>, we want to check for null. And second of all, we now have a long red squiggly line under the whole equality statement! It says that it <cite>Cannot apply operator '==' to operands of type 'T' and 'T'</cite>. That messages doesn't really make much sense to me, to be honest, but I trust that it is true. Either way, we have to get rid of it.
+
+## Good solution
+
+[ReferenceEquals](<http://msdn.microsoft.com/en-us/library/system.object.referenceequals(VS.80).aspx>) to the rescue! We can use that method, instead of the equality operator, and
+compare with null like we intended! 😄
+
+```csharp
+public static T NewIfNull<T>(T subject, Func<T> createNew)
+{
+    if (ReferenceEquals(subject, null))
+        return createNew();
+    return subject;
+}
+```
+
+That is kind of ugly though... And it is <em>so</em> much longer to type. <em>And</em>, most importantly, it kind of makes the code a bit unreadable... At least if you have a bunch of things you have to check for null, like I did today.
+
+But fear not! Today I came up with a tiny, but brilliant extension method which makes things a lot better:
+
+```csharp
+public static bool IsNull<T>(this T subject)
+{
+    return ReferenceEquals(subject, null);
+}
+
+public static T NewIfNull<T>(T subject, Func<T> createNew)
+{
+    if (subject.IsNull())
+    return createNew();
+    return subject;
+}
+```
+
+Doesn't that just look <em>a lot</em> cleaner? I think so 😄
+
+And yes, I know this isn't really a big issue. And I realize you have probably all come up with something similar already. Yes, I am slow 😛 But hey, I figured it might be worth sharing this anyways, just in case you hadn't thought about it before. I sure hadn't! And I really do think that tiny snippet of code made a huge difference in code readability. And we all want that, don't we? Yes, yes we do...

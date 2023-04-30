@@ -1,0 +1,133 @@
+---
+title: 'PHP: Generating transparent PNG fillers'
+published: '2010-06-13'
+permalinks:
+  - /2010/06/13/php-generating-transparent-png-fillers/
+  - /?p=1003
+categories:
+  - software-development
+tags:
+  - gd
+  - php
+  - snippet
+  - tools
+  - tutorial
+---
+
+So, I was fooling around the other day with an HTML table and wanted to make the odd rows slightly darker. Figured I could use for example an 80% transparent black PNG to do that (or could have just assigned a darker color, but where's the fun in that?). Either way, ended up making a little something that I thought I could share just for the fun of it. I learned a few things, so maybe someone else can too 🙂
+
+So, here's how to make a small transparent PNG filler image on-the-fly using PHP 🙂
+
+I called the script `fill.php`, and the first line looks like this:
+
+```php
+<?php header('Content-type: image/png');
+```
+
+This starts the php script and sets the content-type to image/png which means the web browser will that we are an image and not an html file which usually is the default.
+
+Next up we get the parameters from the user:
+
+```php
+$p = $_GET + array
+(
+    'r' => 0,
+    'g' => 0,
+    'b' => 0,
+    'a' => 0,
+);
+```
+
+Here I create an array with default values and merge it with the `$_GET` array so that values from the user will override the default values. This means we are sure we have all the values we need and that the user only have to specify the ones he want to.
+
+The r, g and b values should be a number between 0 and 255 and the alpha value should be between 0 and 127. So, next up we need to make sure that that is the case so we don't use some other bogus we might have gotten:
+
+```php
+array_walk($p, function (&$item, $key)
+    {
+        $item = min(max(0, $item), $key == 'a' ? 127 : 255);
+    });
+```
+
+This goes through each parameter and makes sure it is a number between 0 and 255 (or 127 for the alpha).
+
+Since we have what we need now, we can start with creating our image:
+
+```php
+$img = @imagecreatetruecolor(15, 15)
+    or die('Cannot Initialize new GD image stream');
+```
+
+We also need to set a flag that we want to use full alpha channel information (as opposed to single-color transparency) in this image:
+
+```php
+imagesavealpha($img, true);
+```
+
+We are now ready to fill our image with the color we are asked for:
+
+```php
+$color = imagecolorallocatealpha($img,
+    $p['r'],
+    $p['g'],
+    $p['b'],
+    $p['a']);
+imagefill($img, 0, 0, $color);
+```
+
+And finally output the result and destroy the image resource we have been working with:
+
+```php
+imagepng($img, null, 9);
+imagedestroy($img);
+```
+
+And that's actually all there is to it!
+
+The complete code looks like this:
+
+```php
+<?php header('Content-type: image/png');
+
+
+// Replace default parameters with user input
+$p = $_GET + array
+(
+    'r' => 0,
+    'g' => 0,
+    'b' => 0,
+    'a' => 0,
+);
+
+// Make sure they are within limits
+// (colors: 0-255, alpha: 0-127)
+array_walk($p, function (&$val, $key)
+    {
+        $val = min(max(0, $val), $key == 'a' ? 127 : 255);
+    });
+
+
+// Create image
+$img = @imagecreatetruecolor(15, 15)
+    or die('Cannot Initialize new GD image stream');
+
+// Use full alpha channel information
+imagesavealpha($img, true);
+
+// Fill image
+$color = imagecolorallocatealpha($img,
+    $p['r'],
+    $p['g'],
+    $p['b'],
+    $p['a']);
+imagefill($img, 0, 0, $color);
+
+
+// Output result
+imagepng($img, null, 9);
+imagedestroy($img);
+```
+
+If you want to check out a working demo version of this, you can try a little tool I created while having fun with this at <a href="http://samples.geekality.net/filling-factory/">samples.geekality.net/filling-factory</a>.
+
+Let me know what you think! And as usual, please let me know if you see something that is wrong or could be improved or anything like that 🙂

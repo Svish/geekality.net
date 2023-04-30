@@ -1,0 +1,30 @@
+---
+title: Change network profile name and type in Windows 8
+published: '2014-05-26'
+permalinks:
+  - /2014/05/26/change-network-profile-name-and-type-in-windows-8/
+  - /?p=2505
+categories:
+  - technology
+tags:
+  - network
+  - regedit
+  - registry
+  - windows
+---
+
+The Network and Sharing Center in Windows 8 is kind of useless in many ways. There is for example no way to change the name, so you might be stuck with a dumb "Network 3" identity. There's also no way to change between the Public and Private types if you want to change what you selected when you initially connected to the network.
+
+So, on your own responsibility, here's where to find those profiles in the Registry Editor:
+
+```text
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles
+```
+
+Of particular note is the <i>ProfileName</i> and the <i>Category</i>. The last one can have the following values:
+
+| Category | Description |
+| -------- | ----------- |
+| 0        | Public      |
+| 1        | Private     |
+| 2        | Domain      |

@@ -1,0 +1,43 @@
+---
+title: 'How to ignore "find: cannot read dir /foo: Permission denied"'
+published: '2011-02-02'
+permalinks:
+  - /2011/02/02/how-to-ignore-find-cannot-read-dir-foo-permission-denied/
+  - /?p=1477
+categories:
+  - technology
+tags:
+  - errors
+  - find
+  - pipelining
+  - unix
+---
+
+If you run the following command on a Unix system, depending on your permissions and other stuff, you might see a lot of errors.
+
+```bash
+$ find / -name "tar"
+```
+
+In my case I got 8 regular findings and 63 lines of "find: cannot read dir /foo: Permission denied". Quite a lot of noise I really don't care about. Using my new knowledge about streams it is easy to get rid of all that though. Just pipe stderr into `/dev/null`.
+
+```bash
+$ find / -name "tar" 2>/dev/null
+```
+
+Voila. Clean output.
+
+<div class="note">
+  ⚠ Remember that when you do this <em>all</em> errors will be sent to nowhere.
+  So if there was any other errors, they would also be gone. In this case I
+  don't care, but in other instances you might want to do something else. For
+  example direct it to a log file rather than to oblivion.
+</div>
+
+## Alternative
+
+If you do care about other error messages, you could do as suggested by Richard in the comments. Redirect stderr to stdout and then use grep to filter out what you don't want to see.
+
+```bash
+$ find / -name "tar" 2>&1 | grep -v "Permission denied"
+```

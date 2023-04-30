@@ -1,0 +1,82 @@
+---
+title: 'Maven: Sources and javadocs for Eclipse'
+published: '2013-03-20'
+permalinks:
+  - /2013/03/20/download-sources-and-javadocs-for-eclipse-through-maven/
+  - /?p=2234
+categories:
+  - software-development
+tags:
+  - eclipse
+  - java
+  - javadoc
+  - maven
+---
+
+Had a Maven project here which used Hibernate for database stuff. I'm kind of a newb when it comes to Hibernate and other Java libraries so I rely quite a bit on learning and discovery through the auto-completion and inline documentation in Eclipse. Problem was that when I edited this project, this auto-completion and documentation was very unhelpful. No documentation at all and parameter names of methods were just series of arg0, arg1, and so on. Quite annoying.
+
+## Download sources and javadocs
+
+Turns out you need to tell maven to download this stuff in the pom.xml.
+
+```xml
+<build>
+  <plugins>
+    ...
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-eclipse-plugin</artifactId>
+      <version>2.9</version>
+      <configuration>
+        ...
+        <downloadSources>true</downloadSources>
+        <downloadJavadocs>true</downloadJavadocs>
+        ...
+      </configuration>
+    </plugin>
+    ...
+  </plugins>
+```
+
+Then you just need to rebuild the Eclipse project files.
+
+```bash
+mvn eclipse:clean eclipse:eclipse
+```
+
+After a refresh of the project in Eclipse you should now have a much more helpful auto-complete and inline java documentation 🙂
+
+## Generate sources and javadocs
+
+Now if you have your own Maven repository with your own artifacts, the above steps will solve nothing since there (by default) won't be any sources or javadocs to download. For your own artifacts that is. This requires telling Maven to actually generate these things for your artifact and then uploading those together with the regular jar file. This is how you do that:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-source-plugin</artifactId>
+  <version>2.2.1</version>
+  <executions>
+    <execution>
+      <id>attach-sources</id>
+      <goals>
+        <goal>jar</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-javadoc-plugin</artifactId>
+  <version>2.9</version>
+  <executions>
+    <execution>
+      <id>attach-javadocs</id>
+      <goals>
+        <goal>jar</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+```
+
+When you now run `mvn package` you should get your regular artifact <em>and</em> two more. One with the sources and one with the javadocs. Upload the regular artifact and attach those other two as well. When you then use the downloading config thing I mentioned first, you should now get javadocs and sources for your own artifacts as well.

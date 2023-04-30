@@ -1,0 +1,33 @@
+---
+title: Ignoring files and folders in Sublime Text
+published: '2015-03-13'
+permalinks:
+  - /2015/03/13/ignoring-files-and-folders-in-sublime-text/
+  - /?p=2776
+categories:
+  - software-development
+tags:
+  - sublime-text
+---
+
+I love the file search (<kbd>ctrl</kbd>+<kbd>shift</kbd>+<kbd>f</kbd>) and quick navigate (<kbd>ctrl</kbd>+<kbd>p</kbd>) in Sublime Text. What can be annoying however is when these present you with library code in your project, files related to source control, binary files or minified files.
+
+Since I keep forgetting how to clean that up, here's a note to self (and others) on how to clean that up. Easy peasy.
+
+1. Save as project (if you haven't already)
+1. Edit project file
+1. Add `file_exclude_patterns` and/or `folder_exclude_patterns` to the `folders` section.
+
+Below is an example from one of my current projects which excludes the git repo folder, a cache folder, minified files and some binary files.
+
+```json
+{
+  "folders": [
+    {
+      "file_exclude_patterns": ["*.mp3", "*.ogg", "*.pdf", "*.min.*"],
+      "folder_exclude_patterns": [".git", ".cache"],
+      "path": "/D/dev/www/sdaweb-ssl"
+    }
+  ]
+}
+```

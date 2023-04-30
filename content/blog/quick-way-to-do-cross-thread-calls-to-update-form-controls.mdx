@@ -1,0 +1,33 @@
+---
+title: 'C#: Quick way to do cross-thread calls to update form controls'
+published: '2008-12-27'
+permalinks:
+  - /2008/12/27/quick-way-to-do-cross-thread-calls-to-update-form-controls/
+  - /?p=64
+categories:
+  - software-development
+tags:
+  - csharp
+  - threading
+  - winforms
+---
+
+When doing background work you often want to call back to a user interface and let the user know that you are not dead. However, this is can be a bit difficult some times because windows forms can only be updated by code running on the same thread as the forms are. So, to get around this you can for example use a method called `Invoke` on the control or form you need to update.
+
+```csharp
+private void SomeEventHandler(object sender, SomeEventArgs e)
+{
+    // Check if invoke is required
+    if (InvokeRequired)
+    {
+        // And if it is, call Invoke on the form with a delegate to this same method and return.
+        Invoke(new Action<object, SomeEventArgs>(SomeEventHandler),
+            new[] { sender, e });
+        return;
+    }
+
+    // Second time around, InvokeRequired will be false and it will skip
+    // here where you can update the controls you need to update
+
+}
+```

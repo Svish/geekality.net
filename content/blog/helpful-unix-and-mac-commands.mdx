@@ -1,0 +1,51 @@
+---
+title: Helpful Unix and Mac commands
+published: '2008-12-27'
+permalinks:
+  - /2008/12/27/helpful-unix-and-mac-commands/
+  - /?p=77
+categories:
+  - technology
+tags:
+  - command-line
+  - mac
+  - tools
+  - unix
+---
+
+I am for the most part a Windows user. I was <em>kind</em> of moving towards Linux, Ubuntu in particular, but that ship pretty much sailed when I got my hands on Windows 7. Awesome, awesome operating system. But, I still have to use some Unix and Mac systems once in a while. And then there are certain commands that I often use, but always forget since it usually goes a bit of time between times I do it. So, what follows is basically just a list of commands that I keep forgetting, but keep having to look up again.
+
+## Remove .DS_Store files
+
+Removes all those <del dateTime="2010-03-09T15:21:10+00:00">stupid</del>annoying DS_Store files that Mac litters around wherever it goes. Works in the current directory and downwards.
+
+```bash
+find . -name *DS_Store -delete
+```
+
+## Recursivly download a whole website
+
+```bash
+wget -T 5 -t 0 -m -np -w 5 --random-wait -E -k -p -P output/dir http://website
+```
+
+## Compress and decompress files
+
+```bash
+# Compress
+tar czvf archive.tar.gz filedir filedir
+tar cjvf archive.tar.bz2 filedir filedir
+
+# List
+tar tvf archive.tar
+
+# Decompress
+tar xzvf archive.tar.gz
+tar xjvf archive.tar.bz2
+```
+
+## Find open files
+
+```bash
+lsof filename
+```

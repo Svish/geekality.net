@@ -1,0 +1,54 @@
+---
+title: Heroku deploy sub-directory
+published: '2019-03-13'
+permalinks:
+  - /2019/03/13/heroku-deploy-sub-directory/
+  - /?p=3283
+categories:
+  - software-development
+tags:
+  - command-line
+  - deployment
+  - git
+  - heroku
+---
+
+Going through a couple of <a href="https://www.udemy.com">Udemy</a> courses, and figured it was nice to keep all the code I wrote while doing them in <a href="https://github.com/Svish/udemy">a single github repository</a>.
+
+Was working nicely until I started the <a href="https://www.udemy.com/node-with-react-fullstack-web-development/">Node with React</a> where part of the course is to deploy the app to <a href="https://www.heroku.com/home">Heroku</a> which wants a full repository pushed to a certain git repo it creates for deployment. But in my case the app I want to deploy is of course a sub-directory...
+
+Turns out there's a git command called <b>subtree</b> one can use here:
+
+```bash
+# Setup
+heroku login
+heroku create
+
+git remote add heroku/some-name https://git.heroku.com/{created-heroku-app-id}.git
+
+# Deploy
+git subtree push --force --prefix path/to/app heroku/some-name master
+```
+
+The subtree command needs to be run from the top-level directory of the git repository, but one can add a script command to the apps package.json, for example like this:
+
+```json
+{
+  "scripts": {
+    "deploy": "cd ../../.. && git subtree push --prefix path/to/app heroku/some-name master"
+  }
+}
+```
+
+Unfortunately, subtree push doesn't support `--force`, but a workaround for that is running it nested like this:
+
+```bash
+git push heroku/some-name `git subtree split --prefix path/to/app master`:master --force
+```
+
+Which unfortunately doesn't work on Windows... but you can do it in two steps instead:
+
+```bash
+git subtree split --prefix path/to/app master
+git push heroku/some-name {id-from-previous-command}:master --force
+```

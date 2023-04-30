@@ -1,0 +1,22 @@
+---
+title: How to disable administrative shares in Windows
+published: '2012-10-15'
+permalinks:
+  - /2012/10/15/how-to-disable-administrative-shares-in-windows/
+  - /?p=2097
+categories:
+  - technology
+tags:
+  - windows
+---
+
+You can remove <a href="http://en.wikipedia.org/wiki/Administrative_share">administrative shares</a> by running for example `net share c$ /delete`, however the shares will be recreated when you reboot. To fully disable them, delete them, stick the following in a new reg file (for example <em>disable_admin_shares.reg</em>) and run it. When you reboot now they shouldn't come back 🙂
+
+```text
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\LanmanServer\Parameters]
+"AutoShareWks"=dword:00000000
+```
+
+You can also do it manually by running regedit and setting that key yourself, but who wants that...

@@ -1,0 +1,26 @@
+---
+title: 'Minecraft: Remove invisible Roots 2 mob spawner'
+published: '2018-11-14'
+permalinks:
+  - /2018/11/14/minecraft-remove-invisible-roots-2-mob-spawner/
+  - /?p=3245
+categories:
+  - gaming
+tags:
+  - command
+  - fix
+  - minecraft
+---
+
+Playing <a href="https://minecraft.curseforge.com/projects/enigmatica2">Enigmatica 2</a> and found a <a href="https://minecraft.curseforge.com/projects/roots">Roots 2</a> hovel, half into the ground, thatch roof, chests and monsters inside. Cleaned it out, filled it with dirt. Thought it was gone. But monsters kept spawning... Inside the dirt... Opened it back up... Monsters kept spawning... No spawners in sight...
+
+Turns out, there was an invisible entity doing the spawning... Was able to fix it by standing close by and running the following command:
+
+```text
+/kill @e[type=!Player,r=10]
+Killed entity.barrow.name
+```
+
+After that, no mobs... weird stuff...
+
+**Source:** <a href="https://forum.feed-the-beast.com/threads/ftb-revelations-roots-mob-spawning.275568/">forum.feed-the-beast.com</a>

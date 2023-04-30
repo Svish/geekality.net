@@ -1,0 +1,20 @@
+---
+title: Fix IntelliJ Alt Gr not working
+published: '2018-10-09'
+permalinks:
+  - /2018/10/09/fix-intellij-alt-gr-not-working/
+  - /?p=3230
+categories:
+  - software-development
+tags:
+  - bug
+  - intellij
+---
+
+I've several times had the <kbd>Alt Gr</kbd> key stop working while using IntelliJ. On norwegian keyboards, this key is essential in typing e.g. the brackets \{\} and \[\], so it not working is extremely annoying. And what increases the annoyance even more, is that, when this happens, the key for some reason stops working in _other_ programs too.
+
+Anyways, this seemed to fix it, on my machine at least, for now:
+
+- Go to Help \ Edit Custom Properties
+- Paste in this line: `actionSystem.force.alt.gr=true`
+- Restart IntelliJ

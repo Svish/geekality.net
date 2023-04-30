@@ -1,0 +1,47 @@
+---
+title: 'C#: Getting started with Saxon-HE XSLT transformation'
+published: '2012-09-24'
+permalinks:
+  - /2012/09/24/c-getting-started-with-saxon-he-xslt-transformation/
+  - /?p=2075
+categories:
+  - software-development
+tags:
+  - csharp
+  - saxon
+  - xml
+  - xslt
+---
+
+The <a href="http://msdn.microsoft.com/en-us/library/system.xml.xsl.xslcompiledtransform.aspx">XslCompiledTransform</a> class of .NET only supports XSLT 1.0 for some annoying reason. I needed support for version 2.0 and for that I found the free <a href="http://www.saxonica.com">Saxon-HE</a> library through <a href="http://www.nuget.org/packages/Saxon-HE">NuGet</a>.
+
+Their API documentation is OK I suppose, although I wish the API was more .NET targeted. Also can't say I'm impressed by their documentation on how to get started using this stuff.
+
+Either way, here are the steps to do a simple XSLT transformation of an XML document.
+
+```csharp
+using Saxon.Api;
+
+var xslt = new FileInfo(@"C:\path\to\stylesheet.xslt");
+var input = new FileInfo(@"C:\path\to\data.xml");
+var output = new FileInfo(@"C:\path\to\result.xml");
+
+// Compile stylesheet
+var processor = new Processor();
+var compiler = processor.NewXsltCompiler();
+var executable = compiler.Compile(new Uri(xslt.FullName));
+
+// Do transformation to a destination
+var destination = new DomDestination();
+using(var inputStream = input.OpenRead())
+{
+    var transformer = executable.Load();
+    transformer.SetInputStream(inputStream, new Uri(input.DirectoryName));
+    transformer.Run(destination);
+}
+
+// Save result to a file (or whatever else you wanna do)
+destination.XmlDocument.Save(output.FullName);
+```
+
+Sure are a lot more steps than I feel necessary here, but oh well... that's how you do it anyways 🤷‍♂️

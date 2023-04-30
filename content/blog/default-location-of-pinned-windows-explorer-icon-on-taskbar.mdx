@@ -1,0 +1,27 @@
+---
+title: Default location of pinned Windows Explorer icon on taskbar
+published: '2013-02-25'
+permalinks:
+  - /2013/02/25/default-location-of-pinned-windows-explorer-icon-on-taskbar/
+  - /?p=2212
+categories:
+  - technology
+tags:
+  - taskbar
+  - windows
+  - windows-explorer
+---
+
+On Windows 7 and Windows 8 there is by default a Windows Explorer icon pinned on the taskbar. By default, when you click this, it opens up an Explorer window showing you your Libraries.
+
+I don't care much about Libraries, and when I do I just access them in the sidebar anyways. I want Computer to be default and found a way to do that at leonmeijer.nl.
+
+1. Right-click the pinned <b>Windows Explorer</b> icon
+1. Right-click the <b>Windows Explorer</b> item
+1. Select the <b>Properties</b> item
+1. Select the <b>Shortcut</b> tab
+1. Replace the contents of <b>Target</b> with<br/>
+   `%windir%\explorer.exe ::{20D04FE0-3AEA-1069-A2D8-08002B30309D}`
+1. Click <b>OK</b>
+
+The <a href="http://en.wikipedia.org/wiki/GUID">GUID</a> is the <a href="http://www.autohotkey.com/docs/misc/CLSID-List.htm">Windows Class identifier (CLSID)</a> for <i>My Computer</i>.

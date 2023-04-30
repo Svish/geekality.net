@@ -1,0 +1,37 @@
+---
+title: Finding all constraints and their affected columns in an Oracle database
+published: '2012-01-12'
+permalinks:
+  - /2012/01/12/oracle-finding-all-constraints-and-their-affected-columns/
+  - /?p=1899
+categories:
+  - software-development
+tags:
+  - database
+  - foreign-keys
+  - oracle
+  - rdms
+  - search
+  - sql
+---
+
+Found <a href="http://blog.mclaughlinsoftware.com/2009/03/05/validating-foreign-keys/">an SQL script</a> to list all constraints in an Oracle database together with affected columns. Putting it here in case I need it again... Took a while to run, but sure beats having to look through all the table definitions to find what exactly is preventing me from deleting a row...
+
+```sql
+SELECT UC.OWNER
+,      UC.CONSTRAINT_NAME
+,      UCC1.TABLE_NAME||'.'||UCC1.COLUMN_NAME "CONSTRAINT_SOURCE"
+,      'REFERENCES'
+,      UCC2.TABLE_NAME||'.'||UCC2.COLUMN_NAME "REFERENCES_COLUMN"
+FROM USER_CONSTRAINTS uc
+,    USER_CONS_COLUMNS ucc1
+,    USER_CONS_COLUMNS ucc2
+WHERE UC.CONSTRAINT_NAME = UCC1.CONSTRAINT_NAME
+  AND UC.R_CONSTRAINT_NAME = UCC2.CONSTRAINT_NAME
+  AND UCC1.POSITION = UCC2.POSITION -- Correction for multiple column primary keys.
+  AND UC.CONSTRAINT_TYPE = 'R'
+ORDER BY UCC1.TABLE_NAME
+,        UC.CONSTRAINT_NAME;
+```
+
+If you're just looking for one particular constraint you can of course also add `and UC.CONSTRAINT_NAME = 'SOME NAME'` 🙂

@@ -1,0 +1,57 @@
+---
+title: External tool definitions for mRemoteNG
+published: '2013-05-23'
+permalinks:
+  - /2013/05/23/external-tool-definitions-for-mremoteng/
+  - /?p=2315
+categories:
+  - technology
+tags:
+  - mremoteng
+  - rdp
+  - sftp
+  - ssh
+---
+
+Here are some external tool definitions I have defined in <a href="http://www.mremoteng.org">mRemoteNG</a>.
+
+## WinSCP
+
+<dl>
+  <dt>Display name</dt>
+  <dd>WinSCP (sftp)</dd>
+  <dt>Filename</dt>
+  <dd>C:\Program Files (x86)\WinSCP\WinSCP.exe</dd>
+  <dt>Arguments</dt>
+  <dd>sftp://%username%:%password%@%hostname%:%port%/</dd>
+</dl>
+
+## Ping
+
+<dl>
+  <dt>Display name</dt>
+  <dd>Ping</dd>
+  <dt>Filename</dt>
+  <dd>cmd</dd>
+  <dt>Arguments</dt>
+  <dd>/c ping -t %HostName%</dd>
+</dl>
+
+## Traceroute
+
+<dl>
+  <dt>Display name</dt>
+  <dd>Ping</dd>
+  <dt>Filename</dt>
+  <dd>cmd</dd>
+  <dt>Arguments</dt>
+  <dd>/c set /P = | tracert %HostName%</dd>
+</dl>
+
+More can be found at the <a href="http://forum.mremoteng.org/viewtopic.php?f=3&t=82">mRemoteNG forum</a>.
+
+<div class="note">
+  If you haven't tried mRemoteNG, you should. It's very handy if you're on
+  Windows and need to connect to various servers through for example SSH and
+  RDP. Sure beats plain PuTTY at least...
+</div>

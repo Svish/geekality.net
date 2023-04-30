@@ -1,0 +1,56 @@
+---
+title: How to install software on SunOS
+published: '2013-04-08'
+permalinks:
+  - /2013/04/08/how-to-install-software-on-sunos/
+  - /?p=2250
+categories:
+  - technology
+tags:
+  - curl
+  - opencsw
+  - package-management
+  - solaris
+  - sunos
+---
+
+Solaris is a major pain and unfortunately several servers I have to deal with runs on it. Why is it a pain? Because for some reason it seems all Solaris machines are set up differently. Different sets of installed binaries, different places things are configured, and so on. Probably all caused by lazy sysadmins and/or developers.
+
+Anyways, today I found out that curl wasn't installed in a server where i needed to test a SOAP request. After some hours of digging I finally managed to get a working curl installed, and figured I should document the procedure here in case I need it again, which I probably will...
+
+Turns out there is a handy package manager called <a href="http://www.opencsw.org">OpenCSW</a> which luckily isn't too difficult to install. So from a mess to a mess with curl installed, here's what I did.
+
+## Setup OpenCSW
+
+```bash
+su -
+  pkgadd -d http://get.opencsw.org/now
+  exit
+echo "export PATH=/opt/csw/bin:\$PATH" >> ~/.profile
+echo "export MANPATH=/opt/csw/share/man:\$MANPATH" >> ~/.profile
+exit
+```
+
+## Install software
+
+```bash
+su -
+  pkgutil -a curl
+  pkgutil -y -i curl
+  exit
+curl --version
+```
+
+## Explanation
+
+1. Connect to server
+1. Switch to root user
+1. Install OpenCSW
+1. Switch back to regular user
+1. Update $PATH with OpenCSW paths
+1. Reconnect to server to get the new $PATH
+1. Switch to root user, hopefully taking our $PATH with us
+1. List packages named curl (also to make sure OpenCSW was installed OK)
+1. Install curl
+1. Switch back to regular user
+1. Check if curl was installed OK

@@ -1,0 +1,62 @@
+---
+title: Edit composer dependencies "inline" while developing
+published: '2017-07-30'
+permalinks:
+  - /2017/07/30/edit-composer-dependencies-inline-while-developing/
+  - /?p=3031
+categories:
+  - software-development
+tags:
+  - composer
+  - git
+  - github
+  - php
+---
+
+Have a PHP project, and want to re-use some classes in a new project. Moving them to their own repository and turning them into a <a href="https://getcomposer.org">Composer</a> dependency is a clean way to do that. If hosted on GitHub/BitBucket, it's even quite simple to publish the package on <a href="https://packagist.org">Packagist</a> with <a href="https://packagist.org/about#how-to-update-packages">automatic updates based on git tags</a>. However, if still heavily developing both the project and the dependency, the round trip through repo/packagist is a pain.
+
+But today I discovered there's an option called <a href="https://getcomposer.org/doc/03-cli.md#update">`--prefer-source`</a> which seems to solve most of this pain. And here's a basic note-to-self on how to get that to work...
+
+## 0. Make sure dependency is a composer dependency
+
+```json
+// Dependency composer.json
+{
+  "name": "my/package",
+  "autoload": {
+    "psr-4": { "": "src/" }
+  }
+}
+```
+
+## 1. Add dependency repo and package to root project
+
+```json
+// Root project composer.json
+{
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/username/my-project" }
+  ],
+  "require": {
+    "my/project": "dev-master"
+  }
+}
+```
+
+## 2. Run update with --prefer-source
+
+```bash
+$ composer require my/package dev-master --prefer-source
+```
+
+We should now have the package downloaded and, more importantly, if you check <b>./vendor/my/package</b> it should have the <b>.git</b> directory, meaning you can make immediately working changes there directly, and commit when you're happy... Our other root project(s) depending on it should then get the update from the source repository after an easy composer update. 👍
+
+<hr />
+
+**Note:** I'm a bit fuzzy on what composer does to keep track on whatever
+different happens through `--prefer-source`, and it's an option for both
+`composer install` and `composer update`. For example, at first attempt, I
+tried to use `composer update --prefer-source` on a dependency that had
+already been downloaded, and the .git directory did not turn up, but if I just
+deleted the vendor directory for that package and then re-ran the command,
+then the .git was there. So, feel free to comment if you have some light on that topic 😛🤓

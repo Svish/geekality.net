@@ -1,0 +1,31 @@
+---
+title: 'Composer: Replace package with own fork'
+published: '2015-11-27'
+permalinks:
+  - /2015/11/27/composer-replace-package-with-own-fork/
+  - /?p=2840
+categories:
+  - software-development
+tags:
+  - composer
+  - github
+  - php
+---
+
+Note to self...
+
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/me/ToroPHP"
+    }
+  ],
+  "require": {
+    "torophp/torophp": "dev-master"
+  }
+}
+```
+
+_**Source:** [Composer: Using your own fork for a package](http://snippets.khromov.se/composer-use-your-own-fork-for-a-package/)_

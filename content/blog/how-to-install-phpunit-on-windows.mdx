@@ -1,0 +1,67 @@
+---
+title: How to install PHPUnit on Windows
+published: '2013-04-28'
+permalinks:
+  - /2013/04/28/how-to-install-phpunit-on-windows/
+  - /?p=2276
+categories:
+  - software-development
+tags:
+  - pear
+  - php
+  - phpunit
+---
+
+Note to self in case I need to do this again...
+
+Commands assumes the PHP install is in `C:\wamp\bin\php\php5.3.13` and that this path is already added to the PATH environment variable.
+
+## Install PEAR
+
+1. Download [`go-pear.phar`](http://pear.php.net/go-pear.phar) and Save it as `C:\wamp\bin\php\php5.3.13\pear\go-pear.phar`.
+2. Open an elevated command prompt.
+3. Go to the PHP directory.
+
+```dos
+cd \wamp\bin\php\php5.3.13
+```
+
+4. Install PEAR, pressing enter to accept defaults and Y to alter php.ini.
+
+```dos
+php .\pear\go-pear.phar
+```
+
+5. Add environment variables.
+
+```dos
+start PEAR_ENV.reg
+```
+
+## Install PhpUnit
+
+1. Make sure pear is fully up to date (should be if we just installed it)
+
+```dos
+pear upgrade-all
+```
+
+2. Add pear channels.
+
+```dos
+pear channel-discover components.ez.no
+pear channel-discover pear.phpunit.de
+pear channel-discover pear.symfony.com
+```
+
+3. Install PHPUnit with all dependencies.
+
+```dos
+pear install --alldeps phpunit/PHPUnit
+```
+
+4. Verify installation by checking version.
+
+```dos
+phpunit --version
+```

@@ -1,0 +1,26 @@
+---
+title: Hardlinks on Windows
+published: '2017-07-30'
+permalinks:
+  - /2017/07/30/hardlinks-on-windows/
+  - /?p=3040
+categories:
+  - technology
+tags:
+  - hard-links
+  - windows
+---
+
+Just a note to self... and you'll need an <a href="/?p=1139">elevated command prompt</a> to do this...
+
+## Creating
+
+```dos
+mklink /H new-file some-file
+```
+
+## Finding
+
+```dos
+fsutil hardlink list some-file
+```

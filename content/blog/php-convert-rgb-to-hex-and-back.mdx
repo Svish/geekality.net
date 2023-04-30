@@ -1,0 +1,50 @@
+---
+title: 'PHP: Convert RGB to hex and back'
+published: '2017-02-05'
+permalinks:
+  - /2017/02/05/php-convert-rgb-to-hex-and-back/
+  - /?p=2986
+categories:
+  - software-development
+tags:
+  - color
+  - php
+  - snippet
+---
+
+Just another note to self, in case I need it again:
+
+```php
+/**
+ * #rrggbb or #rgb to [r, g, b]
+ */
+function hex2rgb(string $hex): array
+{
+    $hex = ltrim($hex, '#');
+
+    if(strlen($hex) == 3)
+        return [
+            hexdec($hex[0].$hex[0]),
+            hexdec($hex[1].$hex[1]),
+            hexdec($hex[2].$hex[2]),
+        ];
+    else
+        return [
+            hexdec($hex[0].$hex[1]),
+            hexdec($hex[2].$hex[3]),
+            hexdec($hex[4].$hex[5]),
+        ];
+}
+
+
+/**
+ * [r, g, b] to #rrggbb
+ */
+function rgb2hex(array $rgb): string
+{
+    return '#'
+        . sprintf('%02x', $rgb[0])
+        . sprintf('%02x', $rgb[1])
+        . sprintf('%02x', $rgb[2]);
+}
+```

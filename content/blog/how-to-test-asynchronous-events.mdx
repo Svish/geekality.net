@@ -1,0 +1,92 @@
+---
+title: 'C#: How to test asynchronous events'
+published: '2009-11-26'
+permalinks:
+  - /2009/11/26/how-to-test-asynchronous-events/
+  - /?p=826
+categories:
+  - software-development
+tags:
+  - async
+  - csharp
+  - events
+  - nunit
+  - tdd
+---
+
+The other day I had to test that an event was raised after some asynchronous work had been done. And since I currently am a total test newbie, this was a new thing for me. Say we have this simple shell of a class:
+
+```csharp
+public class Worker
+{
+    public event EventHandler<EventArgs> Done;
+
+    public void Start()
+    {
+        // ...
+    }
+
+}
+```
+
+Let's just assume it does some work, and is supposed to raise the `Done` event when it is... well... done.
+
+## Synchronous worker
+
+If the Worker class works synchronously, it would be no problem at all to test it. For example:
+
+```csharp
+[TestFixture]
+public class WorkerTests
+{
+    [Test]
+    public void Start_WhenFinished_DoneEventIsRaised()
+    {
+        var worker = new Worker();
+
+        var eventWasRaised = false;
+        worker.Done += (s, e) => eventWasRaised = true;
+
+        worker.Start();
+
+        Assert.That(eventWasRaised);
+    }
+
+}
+```
+
+We simply add an event handler which sets a boolean flag when called, start the worker and then check if the flag was set or not. Easy peasy.
+
+## Asynchronous worker
+
+What now if the Start method just sends the work to a new thread and returns immediately? Our current test can not be trusted at all in that case. It might pass and it might fail. Most likely fail. All depending on if it managed to finish its work and raise the event before we check the flag. And that would be unlikely to happen. Highly unlikely.
+
+So what do we do? We use a <a href="http://msdn.microsoft.com/en-us/library/system.threading.manualresetevent.aspx">ManualResetEvent</a> instead of the boolean flag:
+
+```csharp
+[TestFixture]
+public class WorkerTests
+{
+    [Test]
+    public void Start_WhenFinished_DoneEventIsRaised()
+    {
+        var worker = new Worker();
+
+        var eventWasRaised = new ManualResetEvent(false);
+        worker.Done += (s, e) => eventWasRaised.Set();
+
+        worker.Start();
+
+        Assert.That(eventWasRaised.WaitOne(500));
+    }
+
+}
+```
+
+Instead of checking that a flag has been set, we check that the event handler gives us a signal within a certain period of time. If it doesn't give us that signal we can assume that the event was never raised or that the work simply took longer than we expected. Either case could probably be of interest 🙂
+
+Brilliant, simple and readable. Just how we like it 😎
+
+## Credits
+
+I am still a total testing newbie at the moment and didn't have a clue what to do, so after some failing google-fu I asked <a href="https://stackoverflow.com/q/1770830/39321">a question</a> about it at <a href="http://stackoverflow.com">StackOverflow</a>. My solution is based on <a href="https://stackoverflow.com/a/1770862/39321">one of the answers</a> I got there 🙂

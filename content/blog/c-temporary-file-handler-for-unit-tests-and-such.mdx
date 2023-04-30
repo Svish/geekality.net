@@ -1,0 +1,89 @@
+---
+title: 'C#: Temporary file handler for unit tests and such'
+published: '2012-09-24'
+permalinks:
+  - /2012/09/24/c-temporary-file-handler-for-unit-tests-and-such/
+  - /?p=2064
+categories:
+  - software-development
+tags:
+  - csharp
+  - class
+  - idisposable
+  - temporary-files
+---
+
+Wrote a class that worked with files and needed to unit test its methods. Created a simple TemporaryFile class to easily create and dispose of the files I used in those tests. Here it is:
+
+```csharp
+using System;
+using System.IO;
+
+namespace Geekality.IO
+{
+    public sealed class TemporaryFile : IDisposable
+    {
+        private readonly FileInfo file;
+        public FileInfo FileInfo { get { return file; } }
+
+        public TemporaryFile() : this(Path.GetTempFileName()) { }
+        public TemporaryFile(string fileName) : this(new FileInfo(fileName)) { }
+        public TemporaryFile(FileInfo temporaryFile)
+        {
+            file = temporaryFile;
+        }
+        public TemporaryFile(Stream initialFileContents) : this()
+        {
+            using (var file = new FileStream(this, FileMode.Open))
+                initialFileContents.CopyTo(file);
+        }
+
+        public static implicit operator FileInfo(TemporaryFile temporaryFile)
+        {
+            return temporaryFile.file;
+        }
+        public static implicit operator string(TemporaryFile temporaryFile)
+        {
+            return temporaryFile.file.FullName;
+        }
+        public static explicit operator TemporaryFile(FileInfo temporaryFile)
+        {
+            return new TemporaryFile(temporaryFile);
+        }
+
+        private volatile bool disposed;
+        public void Dispose()
+        {
+            try
+            {
+                file.Delete();
+                disposed = true;
+            }
+            catch (Exception) { } // Ignore
+        }
+        ~TemporaryFile()
+        {
+            if (!disposed) Dispose();
+        }
+    }
+}
+```
+
+This class will create a temporary file and delete it on dispose (or when the finalizer is called). It also supports implicit casting to the FileInfo object it contains and to its full path string. This makes it easy to use with methods taking those types of parameters. For example:
+
+```csharp
+using(var file = new TemporaryFile())
+{
+    Assume.That(file.FileInfo.Length, Is.EqualTo(0))
+
+    File.WriteAllText(file, "some text");
+
+    file.FileInfo.Refresh();
+    Assert.That(file.FileInfo.Length, Is.GreaterThan(0));
+}
+```
+
+For fun I also created a <a href="http://www.nuget.org/">Nuget</a> package for this, so that it's easy to add to projects when I need it. Works pretty perfectly, if I may say so myself 🙂 Feedback is welcome!
+
+Source: <a href="https://github.com/Svish/geekality.io">github.com/Svish/geekality.io</a><br/>
+Nuget: <a href="https://www.nuget.org/packages/Geekality.IO">nuget.org/packages/Geekality.IO</a>
