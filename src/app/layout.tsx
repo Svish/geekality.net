@@ -1,3 +1,5 @@
+import '@/styles/globals.css'
+
 import Link from 'next/link'
 
 export const metadata = {
@@ -8,6 +10,9 @@ export const metadata = {
   description: 'My website',
 }
 
+// TODO: Move katex CSS to slug page
+// https://github.com/vercel/next.js/discussions/49014
+
 export default function RootLayout({
   children,
 }: {
@@ -15,6 +20,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+          integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body style={{ margin: 0, background: 'hsl(120 0% 95%)' }}>
         <header
           style={{

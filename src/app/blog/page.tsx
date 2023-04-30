@@ -7,8 +7,9 @@ export const metadata = {
 }
 
 export default async function BlogPage() {
-  const posts = [...allBlogPosts].sort(byStringValue((p) => p.title))
+  const posts = [...allBlogPosts].sort(byStringValue((p) => p.title)).reverse()
 
+  // TODO: Sort by `published`
   // TODO: Create list of cards instead with a bit more info (date, tags, category, etc.)
 
   return (

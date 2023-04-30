@@ -1,5 +1,6 @@
 /* TODO: Include in layout.tsx */
 
+/*
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -26,4 +27,31 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+*/
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+th,
+td {
+  vertical-align: top;
+  text-align: left;
+  border: 1px solid #aaa;
+  padding: 0.25rem 0.5rem;
+}
+
+dt {
+  font-weight: bold;
+}
+dd {
+  margin-left: 1em;
+}
+
+ins {
+  display: inline-block;
+  text-decoration: none;
+  background-color: #fff9c0;
 }
