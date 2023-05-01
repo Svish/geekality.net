@@ -1,35 +1,13 @@
-/* TODO: Include in layout.tsx */
-
-/*
-@tailwind base;
+/*@tailwind base;*/
+body {
+  margin: 0;
+}
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+html {
+  font-family: sans-serif;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-*/
 
 table {
   border-collapse: collapse;
@@ -41,6 +19,15 @@ td {
   text-align: left;
   border: 1px solid #aaa;
   padding: 0.25rem 0.5rem;
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/margin-trim */
+}
+th > *:first-child,
+td > *:first-child {
+  margin-top: 0;
+}
+th > *:last-child,
+td > *:last-child {
+  margin-bottom: 0;
 }
 
 dt {
@@ -54,4 +41,32 @@ ins {
   display: inline-block;
   text-decoration: none;
   background-color: #fff9c0;
+}
+
+kbd {
+  font: inherit;
+  background: #0001;
+  border: 1px outset #0008;
+  padding: 0.05em 0.25em;
+  border-radius: 0.2em;
+}
+
+.project-euler-problem-11 {
+  td {
+    text-align: center;
+    padding: 0.125rem 0.25rem;
+
+    &.highlight {
+      color: hsl(0, 100%, 25%);
+      background-color: hsl(0, 50%, 92%);
+
+      &.main {
+        background-color: hsl(0, 50%, 82%);
+      }
+    }
+
+    strong {
+      color: inherit;
+    }
+  }
 }

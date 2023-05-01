@@ -9,6 +9,7 @@ import apache from 'highlight.js/lib/languages/apache'
 import applescript from 'highlight.js/lib/languages/applescript'
 import bash from 'highlight.js/lib/languages/bash'
 import dos from 'highlight.js/lib/languages/dos'
+import http from 'highlight.js/lib/languages/http'
 import ini from 'highlight.js/lib/languages/ini'
 import lua from 'highlight.js/lib/languages/lua'
 import powershell from 'highlight.js/lib/languages/powershell'
@@ -68,6 +69,7 @@ export default makeSource({
             applescript,
             bash,
             dos,
+            http,
             ini,
             lua,
             powershell,

@@ -1,4 +1,5 @@
 import { handlePermalink } from '@/wordpress'
+import H1 from '@/components/H1'
 
 interface Props {
   searchParams: { p?: string }
@@ -12,7 +13,7 @@ export default function HomePage({ searchParams }: Props) {
 
   return (
     <>
-      <h1>Home</h1>
+      <H1>Home</H1>
     </>
   )
 }

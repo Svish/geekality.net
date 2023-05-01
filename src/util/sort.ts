@@ -9,9 +9,8 @@ export function byString(): CompareFn<string> {
     numeric: true, // 2 before 10, etc.
   })
 
-  return (x, y) => {
-    return x === y ? 0 : x == null ? 1 : y == null ? -1 : collator.compare(x, y)
-  }
+  return (x, y) =>
+    x === y ? 0 : x == null ? 1 : y == null ? -1 : collator.compare(x, y)
 }
 export function byStringValue<T>(getValue: ValueFn<T, string>): CompareFn<T> {
   const compare = byString()

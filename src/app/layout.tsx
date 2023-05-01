@@ -1,6 +1,9 @@
 import '@/styles/globals.css'
 
-import Link from 'next/link'
+import Header from './Header'
+
+// TODO: Move katex CSS to slug page
+// https://github.com/vercel/next.js/discussions/49014
 
 export const metadata = {
   title: {
@@ -9,9 +12,6 @@ export const metadata = {
   },
   description: 'My website',
 }
-
-// TODO: Move katex CSS to slug page
-// https://github.com/vercel/next.js/discussions/49014
 
 export default function RootLayout({
   children,
@@ -28,23 +28,8 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body style={{ margin: 0, background: 'hsl(120 0% 95%)' }}>
-        <header
-          style={{
-            background: 'hsl(120 0% 75%)',
-            padding: '1rem 1.5rem',
-            display: 'flex',
-            alignItems: 'baseline',
-            gap: '1.5rem',
-          }}
-        >
-          <Link href="/" style={{ fontSize: '3rem' }}>
-            Geekality
-          </Link>
-          <Link href="/blog" style={{ fontSize: '1.25rem' }}>
-            Blog
-          </Link>
-        </header>
+      <body>
+        <Header />
         <main
           style={{
             padding: '1rem 1.5rem',
