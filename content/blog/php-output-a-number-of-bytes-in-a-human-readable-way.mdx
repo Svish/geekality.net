@@ -1,0 +1,51 @@
+---
+title: 'PHP: Output a number of bytes in human readable form'
+published: '2010-11-17'
+permalinks:
+  - /2010/11/17/php-output-a-number-of-bytes-in-a-human-readable-way/
+  - /?p=1371
+categories:
+  - software-development
+tags:
+  - php
+  - snippet
+---
+
+Would you be able to say how much `167892598784` bytes are without spending quite some time thinking about it first? Large amounts of bytes are rarely very readable to people. Not for me anyways.
+
+Just stumbled over a handy function to make that number of bytes a bit more readable for us humans. I found it in <a href="http://php.net/manual/en/function.disk-total-space.php">a comment in the PHP manual</a> and figured I could note it down here so I don't lose it and in case someone else could need it. A function like that is just bound to come in handy some day...
+
+Let me know if you have a better name for it, but here it is 🙂
+
+<ins dateTime="2013-04-11T21:10:45+00:00">
+  **2013-04-11** Added zero check (prevents crash if `$bytes` is zero) and abs
+  call (prevents crash when `$bytes` is negative)
+</ins>
+
+```php
+function make_pretty($bytes)
+{
+    $symbols = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB');
+
+    if($bytes == 0)
+        return sprintf('%.2f '.$symbols[0], 0);
+
+    $exp = floor(log(abs($bytes)) / log(1024));
+
+    return sprintf('%.2f '.$symbols[$exp], $bytes/pow(1024, floor($exp)));
+}
+```
+
+## Usage example
+
+```php
+echo make_pretty(167892598784); //  156.36 GiB
+echo make_pretty(719267016);    //  685.95 MiB
+echo make_pretty(114893);       //  112.20 KiB
+echo make_pretty(6218);         //  6.07 KiB
+echo make_pretty(42);           //  42.00 B
+echo make_pretty(0);            //  0.00 B
+echo make_pretty(-50);          // -50.00 B
+```
+
+That was it for now 🙂

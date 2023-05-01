@@ -1,0 +1,44 @@
+---
+title: What's keeping my Windows computer awake?
+published: '2014-04-28'
+permalinks:
+  - /2014/04/28/whats-keeping-my-windows-computer-awake/
+  - /?p=2472
+categories:
+  - technology
+tags:
+  - power-management
+  - windows
+---
+
+Just discovered a way to find what's keeping my Windows computer awake or my screen from going black.
+
+1. Open up an <a href="/?p=1139">elevated command prompt</a>.
+2. Run the following command
+
+```dos
+> powercfg -requests
+```
+
+While playing a video in Windows Media Player I get this output:
+
+```text
+DISPLAY:
+[PROCESS] \Device\HarddiskVolume2\Program Files (x86)\Windows Media Player\wmplayer.exe
+
+SYSTEM:
+[DRIVER] High Definition Audio Device (HDAUDIO\FUNC_01&VEN_10EC&DEV_0888&SUBSYS_1458A102&REV_1000\4&1454c4ac&0&0001)
+An audio stream is currently in use.
+[PROCESS] \Device\HarddiskVolume2\Program Files (x86)\Windows Media Player\wmplayer.exe
+
+AWAYMODE:
+None.
+
+EXECUTION:
+None.
+
+PERFBOOST:
+None.
+```
+
+Simple and clear!

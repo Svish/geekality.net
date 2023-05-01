@@ -1,0 +1,97 @@
+---
+title: The Sieve of Atkin in C#
+published: '2009-10-19'
+permalinks:
+  - /2009/10/19/the-sieve-of-atkin-in-c/
+  - /?p=674
+categories:
+  - software-development
+tags:
+  - algorithm
+  - csharp
+  - primes
+  - sieve-of-atkin
+---
+
+I have previously written about the <a href="/?p=626">Sieve of Eratosthenes</a>, which is an algorithm for finding primes. This algorithm worked very well for most of the prime related Euler Problems. However, for one of them it just didn't do it. Well, it did it, but it did it kind of slow. <a href="/?p=543" title="Problem 10">The problem</a> was to calculate the sum of all the primes below two million, and with that algorithm this took close to 2 seconds on my machine. Not too long you might think, but compared to my other solutions it is ages and ages. So I started to see if I could find a more efficient algorithm to use for that problem.
+
+I quickly found one called the <a href="http://en.wikipedia.org/wiki/Sieve_of_Atkin">Sieve of Atkin</a>. The Atkin algorithm works similarly to the original Eratosthenes one, but has a more fancy way of sieving out numbers which means it can work a lot faster. However, this also means that it needs to work towards an upper limit and that it have to find all the primes up to that limit in advance. In other words it cannot work incrementally and <a href="http://en.wikipedia.org/wiki/Lazy_loading">lazily</a> like my Eratosthenes implementation.
+
+Anyways, without further ado, here is my C# implementation of the Sieve of Atkin:
+
+```csharp
+public class Atkin : IEnumerable<ulong>
+{
+  private readonly List<ulong> primes;
+  private readonly ulong limit;
+
+  public Atkin(ulong limit)
+  {
+      this.limit = limit;
+      primes = new List<ulong>();
+  }
+
+  public IEnumerator<ulong> GetEnumerator()
+  {
+    if (!primes.Any())
+        FindPrimes();
+
+      foreach (var p in primes)
+          yield return p;
+  }
+
+  IEnumerator IEnumerable.GetEnumerator()
+  {
+      return GetEnumerator();
+  }
+
+  private void FindPrimes()
+  {
+      var isPrime = new bool[limit + 1];
+      var sqrt = Math.Sqrt(limit);
+
+      for (ulong x = 1; x <= sqrt; x++)
+          for (ulong y = 1; y <= sqrt; y++)
+          {
+              var n = 4 * x * x + y * y;
+              if (n <= limit && (n % 12 == 1 || n % 12 == 5))
+                  isPrime[n] ^= true;
+
+              n = 3 * x * x + y * y;
+              if (n <= limit && n % 12 == 7)
+                  isPrime[n] ^= true;
+
+              n = 3 * x * x - y * y;
+              if (x > y && n <= limit && n % 12 == 11)
+                  isPrime[n] ^= true;
+          }
+
+      for (ulong n = 5; n <= sqrt; n++)
+          if (isPrime[n])
+          {
+              var s = n * n;
+              for (ulong k = s; k <= limit; k += s)
+                  isPrime[k] = false;
+          }
+
+      primes.Add(2);
+      primes.Add(3);
+      for (ulong n = 5; n <= limit; n+=2)
+          if (isPrime[n])
+              primes.Add(n);
+  }
+}
+```
+
+I am not going to explain my code. Instead I will just tell you to look at the <a href="http://en.wikipedia.org/wiki/Sieve_of_Atkin#Algorithm">algorithm at Wikipedia</a> and look at my code while reading the pseudocode provided there. Why? Because it is pretty much a direct copy of it, just translated into C# 🙂
+
+As a usage example, we can sum up all the primes below a 1000 like so:
+
+```csharp
+var sum = new Atkin(1000)
+  .Aggregate((sum, x) => sum + x);
+```
+
+Fantastic huh? The even more fantastic part is that when I used this class instead of the Eratosthenes class to solve the problem I mentioned in the beginning, my solution went from taking almost 2 seconds down to around 160 milliseconds 😄
+
+This is just a very straight forward implementation though, so if you have any suggestions to how it can be improved, made faster, cleaner, more efficient, et cetera, please let me know by leaving a comment!

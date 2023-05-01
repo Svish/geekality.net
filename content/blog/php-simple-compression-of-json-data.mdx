@@ -1,0 +1,55 @@
+---
+title: 'PHP: Simple compression of JSON data'
+published: '2011-10-31'
+permalinks:
+  - /2011/10/31/php-simple-compression-of-json-data/
+  - /?p=1847
+categories:
+  - software-development
+tags:
+  - compression
+  - gz
+  - json
+  - php
+---
+
+Just discovered how super simple it was to add some gz compression when for example <a href="/?p=1021" title="How to easily provide JSON and JSONP">providing JSON data</a> from PHP.
+
+All you need is regular output buffering with the <a href="http://php.net/manual/en/function.ob-gzhandler.php">ob_gzhandler</a> as output callback.
+
+```php
+// Fetch some data
+$data = get_data();
+
+// Turn on output buffering with the gzhandler
+ob_start('ob_gzhandler');
+
+// Output as normal
+echo json_encode($data);
+```
+
+The cool thing is that it actually looks at what the browser accepts before doing anything.
+
+> Before `ob_gzhandler()` actually sends compressed data, it determines what type
+> of content encoding the browser will accept ("gzip", "deflate" or none at all)
+> and will return its output accordingly. All browsers are supported since it's
+> up to the browser to send the correct header saying that it accepts compressed
+> web pages.
+
+Tried adding it for a text field with timezone auto-completing for example, and without this handler:
+
+```text
+Content-Length:    5517
+Content-Type:      application/json
+```
+
+With this handler:
+
+```text
+Content-Encoding:  gzip
+Vary:              Accept-Encoding
+Content-Length:    1775
+Content-Type:      application/json
+```
+
+Do like! 😊

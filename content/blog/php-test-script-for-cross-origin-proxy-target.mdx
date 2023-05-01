@@ -1,0 +1,33 @@
+---
+title: 'PHP: Test script for cross origin proxy target'
+published: '2016-01-05'
+permalinks:
+  - /2016/01/05/php-test-script-for-cross-origin-proxy-target/
+  - /?p=2868
+categories:
+  - software-development
+tags:
+  - cors
+  - php
+---
+
+Just a script I used as target during some testing of a <a href="https://github.com/Svish/php-cross-domain-proxy">cross origin proxy</a> to make sure whatever I thought should go through actually went through.
+
+It basically just gathers all the information it can get about the request and outputs it as JSON.
+
+```php
+<?php // test.php
+$info = [
+    'method' => $_SERVER['REQUEST_METHOD'],
+    'cookie' => $_COOKIE,
+    'get' => $_GET,
+    'post' => $_POST,
+    'input' => file_get_contents('php://input'),
+    'headers' => getallheaders(),
+];
+
+ob_start('ob_gzhandler');
+header('Content-Type: application/json; charset=utf-8');
+header('X-SomeHeader: Some value');
+echo json_encode($info, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK | JSON_FORCE_OBJECT);
+```

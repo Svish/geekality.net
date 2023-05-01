@@ -1,0 +1,39 @@
+---
+title: 'Unix: Managing users and groups'
+published: '2013-08-27'
+permalinks:
+  - /2013/08/27/unix-users-and-groups/
+  - /?p=2369
+categories:
+  - technology
+tags:
+  - administration
+  - groups
+  - unix
+  - users
+---
+
+Just a note to self on how to administer users and groups on Unix systems, and some related tasks.
+
+```bash
+# Add group (replace 42 with desired GID)
+groupadd -g 42 foobar
+
+# Add user
+useradd -G foobar -d /path/to/home -m -s /usr/bin/bash alice
+
+# Add user to group
+user -G foobar -a alice
+
+# Change user home
+usermod -d /path/to/new/home -m alice
+
+# Change default group of user
+usermod -g foobar alice
+
+# Change password of user
+passwd alice
+
+# Change ownership
+chown -R alice:foobar /path/to/target
+```

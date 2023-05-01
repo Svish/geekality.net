@@ -1,0 +1,31 @@
+---
+title: Make taskbar thumbnails show up quicker in Windows 7
+published: '2010-12-12'
+permalinks:
+  - /2010/12/12/win7-how-to-get-taskbar-thumbnails-to-show-up-quicker/
+  - /?p=1439
+categories:
+  - technology
+tags:
+  - registry
+  - snippet
+  - windows
+---
+
+Do you love the taskbar thumbnails in Windows 7, but think they show up a bit too slow? I did, so I did some research and found a way to change the delay.
+
+It requires a change in your registry, which you can do by creating a file with the following text:
+
+```text
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Control Panel\Mouse]
+"MouseHoverTime"="0"
+```
+
+Save it as for example `MouseHoverTime.reg`, and then run it by double-clicking on it.
+
+If you want other hover times I think you can just change the number 0 to something else. I think the number is the amount of milliseconds between you hover over it and the thumbnail pops up.
+
+📝 **Note:** As usual, you do stuff like this on your own
+responsibility. If you break things, don't blame me 😉

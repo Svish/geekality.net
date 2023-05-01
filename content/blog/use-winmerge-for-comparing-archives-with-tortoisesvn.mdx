@@ -1,0 +1,38 @@
+---
+title: Use WinMerge for comparing archives with TortoiseSVN
+published: '2014-05-20'
+permalinks:
+  - /2014/05/20/use-winmerge-for-comparing-archives-with-tortoisesvn/
+  - /?p=2497
+categories:
+  - software-development
+tags:
+  - diff
+  - subversion
+  - tortoisesvn
+  - winmerge
+---
+
+I really like the Diff Viewer that comes with TortoiseSVN, but from what I can gather it doesn't seem to support anything but text files, which is fair enough, but I need to compare archives as well. Zip and Jar files in particular.
+
+WinMerge supports that, and <em>can</em> be integrated with TortoiseSVN very easily right through its installer. But I prefer the diff viewer that comes with TortoiseSVN and the archive diff isn't recursive by default, so I decided to set it up manually.
+
+1. Install <a href="http://winmerge.org/">WinMerge</a>
+   - Deselect <i>Automagic TortoiseSVN integration</i>
+2. Install the <a href="http://winmerge.org/downloads/plugins.php">WinMerge 7-zip plugin</a>
+   - Select <i>Application specific installation</i>
+   - Browse to WinMerge executable
+   - Enable <i>Enable standalone operation</i>
+3. Open <i>WinMerge</i> and go to <i>Edit, Options, Archive Support</i>
+   - Enable <i>Detect archive type from file signature</i>
+   - Switch to <i>Use local 7-Zip from WinMerge folder</i>
+4. Open <i>TortoiseSVN Settings</i> and go to <i>Diff Viewer, Advanced</i>
+   - Add rows with extension set to .zip, .jar and whatever archives you want WinMerge to handle and set external program to the following:
+
+```dos
+C:\Program Files (x86)\WinMerge\WinMergeU.exe /r /x /e /u /dl %bname /dr %yname %base %mine
+```
+
+If I now for example ask TortoiseSVN for a <i>Diff with previous version</i> of a jar file, I get WinMerge with a recursive comparison of the archive contents.
+
+**Note:** When you're diffing archives in WinMerge, deselecting _Show Identical Items_ under _View_ makes actual differences much easier to see.

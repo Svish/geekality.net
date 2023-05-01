@@ -1,0 +1,51 @@
+---
+title: 'Unix: Command history search'
+published: '2013-08-07'
+permalinks:
+  - /2013/08/07/unix-command-search/
+  - /?p=2361
+categories:
+  - technology
+tags:
+  - command-line
+  - search
+  - unix
+---
+
+In a Unix Bash shell we can scroll through previous commands by using the up and down arrow keys, but we can also search for previous commands. I keep forgetting how, so time to write it down 😛
+
+<table>
+  <tr>
+    <th scope="row">
+      <kbd>Ctrl</kbd>+<kbd>r</kbd>
+    </th>
+    <td>Start a command search</td>
+  </tr>
+  <tr>
+    <th scope="row">
+      <kbd>⏎</kbd>
+    </th>
+    <td>Run the command directly</td>
+  </tr>
+  <tr>
+    <th scope="row">
+      <kbd>Ctrl</kbd>+<kbd>e</kbd> or <kbd>Ctrl</kbd>+<kbd>a</kbd>
+    </th>
+    <td>Exit search and jump to the end or beginning of command.</td>
+  </tr>
+  <tr>
+    <th scope="row">
+      <kbd>←</kbd> or <kbd>→</kbd>
+    </th>
+    <td>Exit search and move through command as usual</td>
+  </tr>
+  <tr>
+    <th scope="row">
+      <kbd>Ctrl</kbd>+<kbd>k</kbd>
+    </th>
+    <td>
+      Remove everything after the current cursor position and to the end of the
+      command
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,76 @@
+---
+title: Using SSH keys with GitHub / BitBucket / Azure DevOps on Windows
+published: '2017-12-06'
+permalinks:
+  - /2017/12/06/using-ssh-keys-with-bitbucket-github-on-windows/
+  - /?p=3187
+categories:
+  - software-development
+tags:
+  - authentication
+  - azure-devops
+  - bitbucket
+  - git
+  - github
+  - ssh
+  - windows
+---
+
+Couldn't get this to work, but now it does, so... time for another "note to self". 🙂
+
+## Prerequisites
+
+- [Git](https://git-scm.com/downloads), obviously...
+- [PuTTY](http://www.putty.org), with `puttygen`, `plink` and `pageant`, to be exact...
+
+## Setup
+
+1. Open <b>`puttygen`</b>.
+2. Either <b>Load</b> an existing private key, or <b>Generate</b> a new one.
+3. Copy the <b>public key</b> ("Public key for pasting ...") and add it to the git provider settings:
+   - https://<b>github.com</b>/settings/keys
+   - https://<b>bitbucket.org</b>/account/user/[username]/ssh-keys/
+   - https://<b>dev.azure.com</b>/[organization]/\_usersSettings/keys
+4. Open <b>`pageant`</b>.
+5. Load your <b>private key</b>.
+6. Check that the key authentication works with <b>`plink`</b>:
+
+```dos
+plink -v git@github.com
+plink -v git@bitbucket.org
+plink -v git@ssh.dev.azure.com
+```
+
+7. Set the <b>`GIT_SSH`</b> environment variable to <code>C:\Program Files\PuTTY\plink.exe</code>  
+   ⬆ This is the detail that <em>so</em> many StackOverflow answers and blog/forum
+   posts <em>didn't</em> mention. Without this, <var>plink</var> worked fine,
+   but <var>git</var> commands still failed with authentication errors.
+8. (optional) Add a shortcut to the private key file to your startup folder.
+   This way `pageant` will be automatically started, with your key,
+   ready to go, whenever Windows boots up.
+
+```dos
+start shell:startup
+```
+
+## Usage
+
+_Now_, as long as `pageant` is running _with_ your
+private key loaded, it should work to clone, pull, push, etc., both to and from,
+both private and public git repositories. E.g. like this:
+
+```dos
+git clone git@github.com:example/some-private-repo.git
+```
+
+📝 **Note:** If you're asked to accept/store/cache a key, but pressing `y` doesn't
+work, connect using `putty` first, which should give you a dialog with the same question
+which _does_ work. Putty will complain/crash because there's not actually
+an ssh shell to connect to, but that's fine. After the key has been saved by putty,
+git should work fine. E.g. like this:
+
+```dos
+putty -ssh git@github.com
+```
+
+**Sources:** <a href="https://makandracards.com/makandra/1303-how-to-use-git-on-windows-with-putty">makandracards.com</a>, <a href="https://vladmihalcea.com/tutorials/git/windows-git-ssh-authentication-to-github/">vladmihalcea.com</a>

@@ -1,0 +1,43 @@
+---
+title: 'PowerShell: Write stuff to an XML file'
+published: '2014-05-06'
+permalinks:
+  - /2014/05/06/powershell-write-stuff-to-an-xml-file/
+  - /?p=2476
+categories:
+  - software-development
+tags:
+  - powershell
+---
+
+Needed to recursively list all the files of a certain type and save them as an XML file. Turns out this was <a href="https://www.rogerdelph.com/creating-xml-documents-from-powershell/">pretty easy</a> using PowerShell.
+
+```powershell
+# Make a regular .Net XmlTextWriter
+$output = "processes.xml";
+$xml = New-Object System.Xml.XmlTextWriter($output, $Null);
+$xml.Formatting = "Indented"
+$xml.IndentChar = " ";
+$xml.Indentation = "1";
+
+# Start writing
+$xml.WriteStartDocument();
+$xml.WriteStartElement("root");
+
+# Do the listing and keep outputting XML
+Get-ChildItem .. -Recurse -include *.esbp |
+foreach {
+    $name = $_.BaseName;
+    $path = Resolve-Path $_ -relative;
+
+    $xml.WriteStartElement("process");
+    $xml.WriteAttributeString("id", $name);
+    $xml.WriteString($path);
+    $xml.WriteEndElement();
+}
+
+# Close the writer, which also closes the root element and document for us
+$xml.Close();
+```
+
+Easy peasy!

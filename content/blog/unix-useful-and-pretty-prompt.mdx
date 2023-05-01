@@ -1,0 +1,26 @@
+---
+title: 'Unix: Useful and pretty prompt'
+published: '2013-07-02'
+permalinks:
+  - /2013/07/02/unix-useful-and-pretty-prompt/
+  - /?p=2342
+categories:
+  - technology
+tags:
+  - bash
+  - command-line
+  - prompt
+  - solaris
+  - terminal
+  - unix
+---
+
+Some servers at work has varying degrees of useful prompts when I connect to them through SSH. Usually they are quite annoying and for example showing the shell type and version, which I frankly don't care much about. Here's how to make it show the current user, hostname and working directory. In addition the hostname is made more visible, which is a nice effect.
+
+```bash
+$ bold=$(tput bold)
+$ reset=$(tput sgr0)
+$ export PS1="\u@\[$bold\]\h\[$reset\]:\w\$ "
+```
+
+Stick it in your `.profile`, `.bash_profile` or whatever else you've got going on to make it more permanent.

@@ -1,0 +1,18 @@
+---
+title: 'XSLT: Conditional variable select and castable as'
+published: '2013-10-02'
+permalinks:
+  - /2013/10/02/xslt-conditional-variable-select-and-castable-as/
+  - /?p=2414
+categories:
+  - software-development
+tags:
+  - xslt
+  - xslt-2-0
+---
+
+Quick simple conditional select when creating a variable in XSLT 2.0. Also shows the `castable as` check.
+
+```xml
+<variable name="id" select="if(id castable as xs:integer) then id else 0" />
+```

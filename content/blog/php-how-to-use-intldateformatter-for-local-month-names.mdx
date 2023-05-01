@@ -1,0 +1,37 @@
+---
+title: 'PHP: How to use IntlDateFormatter for local month names'
+published: '2013-08-03'
+permalinks:
+  - /2013/08/03/php-how-to-use-intldateformatter-for-local-month-names/
+  - /?p=2356
+categories:
+  - software-development
+tags:
+  - date
+  - i18n
+  - l10n
+  - php
+---
+
+Here's how to get PHP to output a date with a full local month name.
+
+```php
+setlocale(LC_ALL, 'no_NB.utf-8', 'nor'); // For other stuff
+Locale::setDefault('no_NB.utf-8'); // For IntlDateFormatter
+
+$f = new IntlDateFormatter(null, null, null, null, null, 'd. MMMM y');
+echo $f->format(new DateTime("2013-01-01"));
+
+// Outputs: 1. januar 2013
+```
+
+In this case I just use a hardcoded norwegian long date format, but check out the <a href="http://php.net/manual/en/intldateformatter.create.php">IntlDateFormatter constructor</a> and you will find various date and time constants for various formats.
+
+<div className="note">
+  **Note:** Requires PHP version >= 5.3 and the intl.so extension active. If on
+  Dreamhost you can do this by adding the following to your `~/.php/5.3/phprc`
+</div>
+
+```ini
+extension = intl.so
+```

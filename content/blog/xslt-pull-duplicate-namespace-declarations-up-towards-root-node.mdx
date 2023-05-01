@@ -1,0 +1,98 @@
+---
+title: 'XSLT: Pull duplicate namespace declarations up towards root node'
+published: '2013-12-09'
+permalinks:
+  - /2013/12/09/xslt-pull-duplicate-namespace-declarations-up-towards-root-node/
+  - /?p=2429
+categories:
+  - software-development
+tags:
+  - xml
+  - xslt
+---
+
+Sometimes XML becomes a bit weird with namespace declarations all over the place. This XSLT cleans that up. Stumbled upon in a StackOverflow answer I don't find anymore and put here so I know where to find it in the future.
+
+```xml
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:template match="@* | text() | processing-instruction() | comment()">
+    <xsl:copy/>
+  </xsl:template>
+
+  <xsl:template match="*">
+    <xsl:copy copy-namespaces="no">
+      <xsl:for-each-group group-by="local-name()" select="descendant-or-self::*/namespace::*">
+        <xsl:copy-of select="."/>
+      </xsl:for-each-group>
+      <xsl:apply-templates select="@* , node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+</xsl:stylesheet>
+```
+
+## Example
+
+### Input
+
+```xml
+<soap:Envelope
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+>
+  <soap:Header>
+    <wsa:MessageID soap:mustUnderstand="0">
+      uuid:7fa12310-5db4-11e3-ae24-a3c913f2629d
+    </wsa:MessageID>
+    <wsa:To soap:mustUnderstand="0">
+      http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous/
+    </wsa:To>
+  </soap:Header>
+  <soap:Body>
+    <ns1:getTicket xmlns:ns1="http://api.example.com/some-webservice">
+      <cus:msisdn
+        xmlns:cus="http://api.example.com/some-webservice"
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      >
+        00000000
+      </cus:msisdn>
+      <cus:ticket
+        xmlns:cus="http://api.example.com/some-webservice"
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      >
+        171
+      </cus:ticket>
+    </ns1:getTicket>
+  </soap:Body>
+</soap:Envelope>
+```
+
+### Output
+
+```xml
+<soap:Envelope
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:ns1="http://api.example.com/some-webservice"
+  xmlns:cus="http://api.example.com/some-webservice"
+  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+>
+  <soap:Header>
+    <wsa:MessageID soap:mustUnderstand="0">
+      uuid:7fa12310-5db4-11e3-ae24-a3c913f2629d
+    </wsa:MessageID>
+    <wsa:To soap:mustUnderstand="0">
+      http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous/
+    </wsa:To>
+  </soap:Header>
+  <soap:Body>
+    <ns1:getTicket>
+      <cus:msisdn>00000000</cus:msisdn>
+      <cus:ticket>171</cus:ticket>
+    </ns1:getTicket>
+  </soap:Body>
+</soap:Envelope>
+```
+
+If anyone know how to adjust it to also merge the duplicated prefixes ns1 and cus, do let me know 🙂

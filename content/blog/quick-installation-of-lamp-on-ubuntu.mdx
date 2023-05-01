@@ -1,0 +1,62 @@
+---
+title: Quick installation of LAMP for Kohana on Ubuntu
+published: '2011-09-18'
+permalinks:
+  - /2011/09/18/quick-installation-of-lamp-on-ubuntu/
+  - /?p=1836
+categories:
+  - software-development
+  - technology
+tags:
+  - apache
+  - mysql
+  - php
+  - ubuntu
+---
+
+Needed to get a <a href="http://en.wikipedia.org/wiki/LAMP_%28software_bundle%29">LAMP</a> environment up and running for some <a href="http://kohanaframework.org/">Kohana</a> development. Starting with a more or less fresh install of Ubuntu, here's what I did.
+
+## Install LAMP
+
+```bash
+$ sudo apt-get update
+$ sudo apt-get install lamp-server^
+```
+
+## Install PHP modules used by Kohana
+
+```bash
+$ sudo apt-get install php5-curl php5-gd php5-mcrypt
+```
+
+## Enable rewrite module
+
+```bash
+$ sudo a2enmod rewrite
+```
+
+## Allow for .htaccess overrides
+
+```bash
+$ sudo vim /etc/apache2/sites-available/default
+```
+
+Find the part about the /var/www directory and set AllowOverride from None to All. Then save the file.
+
+## Remove annoying Apache warning
+
+If you restart Apache now, you'll get a warning like this:
+
+> apache2: Could not reliably determine the server’s fully qualified domain name, using `127.0.1.1` for ServerName
+
+To prevent that, add a line with "ServerName localhost" to the httpd.conf file.
+
+```bash
+$ sudo vim /etc/apache2/httpd.conf
+```
+
+## Restart Apache
+
+```bash
+$ sudo /etc/init.d/apache2 restart
+```

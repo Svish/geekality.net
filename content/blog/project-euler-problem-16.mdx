@@ -1,0 +1,64 @@
+---
+title: 'Project Euler: Problem 16'
+published: '2009-11-05'
+permalinks:
+  - /2009/11/05/project-euler-problem-16/
+  - /?p=740
+categories:
+  - project-euler
+  - software-development
+tags:
+  - big-int
+  - csharp
+---
+
+> $2^{15} = 32\,768$ and the sum of its digits is $3 + 2 + 7 + 6 + 8 = 26$
+>
+> What is the sum of the digits of the number $2^{1000}$
+>
+> – [Project Euler Problem 16](https://projecteuler.net/problem=16)
+
+## Solution
+
+With the big integer type [`IntX`](https://www.nuget.org/packages/IntX) (which I added to my project to solve an earlier problem) this one is pretty much as easy as you'd think.
+
+```csharp
+var answer = IntX
+    .Pow(2, 1000)
+    .ToString()
+    .Select(x => x - '0')
+    .Sum();
+```
+
+It first does the calculation and then gets the string representation of the result. And in case you were wondering, that would be:
+
+```text
+10715086071862673209484250490600018105614048117
+05533607443750388370351051124936122493198378815
+69585812759467291755314682518714528569231404359
+84577574698574803934567774824230985421074605062
+37114187795418215304647498358194126739876755916
+55439460770629145711964776865421676604298316526
+24386837205668069376
+```
+
+And as a comparison, here is the largest number that can be represented using built-in .net types. `decimal.MaxValue`.
+
+```text
+79228162514264337593543950335
+```
+
+As you can see, the first number is kind of bigger than the second 😛 Aaaanyways, the next bit might be a bit cryptic. But fear not, it is actually quite simple:
+
+- A string is an array of characters.
+- All characters have a <a href="http://en.wikipedia.org/wiki/Character_code">character code</a> (a numeric value).
+- The character codes for the numeric characters (`'0'`, `'1'`, and so on) comes
+  after each other, which means that for example `'1'` has a character code
+  value which is 1 larger than the character code of `'0'`.
+- If we take a character code and subtracts it from itself, we get zero. <cite>(Thank you captain obvious...)</cite>
+- This means that if we subtract `'0'` from `'0'`, we get 0. And if we subtract
+  `'0'` from `'5'`, we get 5. <cite>(Oh, right, clever!)</cite>
+
+So, the last two lines in my code simply converts all the characters in the string into actual numbers and then sums them together. Which would get us the answer! Tadaa 🤯
+
+How did you do? Have you found a more interesting solution? Please do share 🙂

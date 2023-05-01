@@ -1,0 +1,25 @@
+---
+title: 'PowerShell: Parse, sort, filter and add to a CSV'
+published: '2014-06-25'
+permalinks:
+  - /2014/06/25/powershell-parse-sort-filter-and-add-to-a-csv/
+  - /?p=2528
+categories:
+  - technology
+tags:
+  - csv
+  - powershell
+---
+
+Made an export from <a href="http://www.splunk.com">Splunk</a> containing all IP addresses who had called a method on a companies ESB servers. This gave me a large CSV with two columns, Method and IP, which I then needed to filter to remove duplicate rows. Additionally I wanted to try a reverse lookup of the address to identify what system in our environment was actually doing the call us.
+
+```powershell
+Import-Csv .\requests.csv |
+sort Method,IP -Unique |
+select *,@{Name="Host";Expression={[Net.Dns]::GetHostEntry($_.IP).HostName}}
+Export-Csv .\requests-filtered.csv
+```
+
+Most lines should be self-explanatory, but the neat bit is the select statement. I use the `*` to select all existing properties, and then I use a nutty syntax I learned today to add a calculated property.
+
+Pretty neat. Worked great, with the exception that every IP was resolvable, but's the fault of the DNS server at the company... 🙂

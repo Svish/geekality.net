@@ -1,0 +1,41 @@
+---
+title: 'PHP: Simple directory recursion'
+published: '2014-04-20'
+permalinks:
+  - /2014/04/20/php-simple-directory-recursion/
+  - /?p=2465
+categories:
+  - software-development
+tags:
+  - files
+  - php
+  - recursion
+---
+
+Keep running into scenarios where I need to scan through a file system and it's actually pretty simple if you just know what classes to use. So... note to self and others:
+
+```php
+// This should return false if there is something you want excluded
+function filter($file, $key, $iterator)
+{
+    $exclude = array('.git');
+    return ! in_array($file->getFilename(), $exclude);
+}
+
+// Recursive directory iterator for current directory, ignoring dots
+$it = new RecursiveDirectoryIterator('.', FilesystemIterator::SKIP_DOTS);
+// Wrapped by a filtering iterator with our filter function
+$it = new RecursiveCallbackFilterIterator($it, 'filter');
+// Wrapped by an iterator which automatically traverses children for us
+$it = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::SELF_FIRST);
+
+// And then just loop :)
+foreach($it as $file)
+{
+    echo str_repeat("\t", $it->getDepth())
+        . $file->getRealPath()
+        . PHP_EOL;
+}
+```
+
+This skips the annoying dots, properly excludes directories you don't want and pretty much works the way it should.

@@ -1,0 +1,43 @@
+---
+title: 'Unix: How to redirect stderr to stdout'
+published: '2011-02-02'
+permalinks:
+  - /2011/02/02/unix-how-to-redirect-stderr-to-stdout/
+  - /?p=1473
+categories:
+  - technology
+tags:
+  - command
+  - tutorial
+  - unix
+---
+
+Today I ran a Java application in a Unix console. It printed out some messages before it crashed with an exception and a loong stack trace. Too long to see the top of. So, I figured I'd just <a href="http://en.wikipedia.org/wiki/Pipeline_(Unix)">pipeline</a> it into the lovely `less` like this:
+
+```bash
+$ java -jar foobar.jar | less
+```
+
+The result was not what I expected however. All I got to see was the messages that had been printed out. No exception or stack trace to be seen.
+
+The reason for this is quite simply that a Unix process has three different <a href="http://en.wikipedia.org/wiki/Standard_streams">streams</a>: `stdin(0)`, `stdout(1)` and `stderr(2)`. When we pipe output from one process into another we sort of connect stdout of the first one to stdin of the second.
+
+So, to be able to see my giant stack trace, we can for example redirect `stderr` to `stdout`. This way we will get both streams into `stdin` of the next process.
+
+```bash
+$ java -jar foobar.jar 2>&1 | less
+```
+
+Fancy, huh? We can also direct these streams into files, which might come in handy.
+
+```bash
+$ java -jar foobar.jar 1>out.log 2>err.log
+```
+
+If you want the output to be appended to the log files instead of replacing them, you can do adjust the command to this:
+
+```bash
+$ java -jar foobar.jar 1>>out.log 2>>err.log
+```
+
+🙂

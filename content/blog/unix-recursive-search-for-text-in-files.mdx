@@ -1,0 +1,26 @@
+---
+title: 'Unix: Recursive search for text in files'
+published: '2011-04-12'
+permalinks:
+  - /2011/04/12/unix-recursive-search-for-text-in-files/
+  - /?p=1547
+categories:
+  - technology
+tags:
+  - command-line
+  - grep
+  - search
+  - unix
+---
+
+Keep forgetting how to do this, so here it is. How to do a quick and simple, recursive search for text using `grep`. Hint: It's very simple.
+
+```bash
+$ grep -rl "some text" .
+```
+
+That's all there is to it! `grep` is the command, `r` makes the search recursive (i.e. in the target folder and all its sub-folders), `l` means it will list the name of all the files where it finds the text, `"some text"` is the string to search for, and finally, the dot at the end means to start the search in the current directory. And just to clarify, this searches for text _inside_ of files, in the content of the files; not the filenames.
+
+There, now I know where to find it when I forget it next time. And perhaps I have helped someone else too 🙂
+
+Good night!

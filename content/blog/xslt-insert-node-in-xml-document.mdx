@@ -1,0 +1,39 @@
+---
+title: 'XSLT: Insert node in XML document'
+published: '2012-09-27'
+permalinks:
+  - /2012/09/27/xslt-insert-node-in-xml-document/
+  - /?p=2077
+categories:
+  - software-development
+tags:
+  - xml
+  - xslt
+---
+
+This is how you can insert a new node somewhere in an XML document using XSLT.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+    <!-- Identity template, copies everything as is -->
+    <xsl:template match="@*|node()">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
+
+    <!-- Override for target element -->
+    <xsl:template match="targetNode">
+        <!-- Copy the element -->
+        <xsl:copy>
+            <!-- And everything inside it -->
+            <xsl:apply-templates select="@* | *"/>
+            <!-- Add new node (or whatever else you wanna do) -->
+            <xsl:element name="newNode"/>
+        </xsl:copy>
+    </xsl:template>
+
+</xsl:stylesheet>
+```

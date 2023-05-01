@@ -1,0 +1,48 @@
+---
+title: 'PowerShell: Run command for each directory'
+published: '2012-11-05'
+permalinks:
+  - /2012/11/05/powershell-run-command-for-each-directory/
+  - /?p=2106
+categories:
+  - software-development
+tags:
+  - powershell
+  - subversion
+---
+
+I wanted to run the `svn update` command for each directory in my Eclipse workspace. Could be done like this:
+
+```powershell
+PS C:\workspace> Get-ChildItem |
+where {$_.PsIsContainer} |
+foreach {svn update $_.name}
+```
+
+This gets all child items (files and directories) in the workspace folder, filters out only directories and finally runs the wanted command for each one.
+
+But what if not all directories were subversion working copies?
+
+## Filter based on directory contents
+
+A subversion working copy is a directory with a hidden .svn folder inside.
+
+```powershell
+PS C:\workspace> Get-ChildItem -force */* |
+where {$_.name -eq ".svn"} |
+foreach {svn update $_.parent}
+```
+
+This lists all children one level down (-force is to include hidden stuff), filters out only those named .svn and then runs the update on its parent folder.
+
+If we needed to look for a file instead (which doesn't have a parent property) we could do something like this:
+
+```powershell
+PS C:\workspace> Get-ChildItem */* |
+where {$_.name -eq "pom.xml"} |
+foreach { cd $_.DirectoryName; mvn clean compile; cd ..}
+```
+
+Here we do basically the same thing except that we use the DirectoryName property instead of parent. We also actually go into each directory to run the command there rather than just passing the path to a command like in the svn example.
+
+Gotta say, PowerShell is kind of neat 🙂

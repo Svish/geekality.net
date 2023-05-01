@@ -1,0 +1,94 @@
+---
+title: 'Project Euler: Problem 5'
+published: '2009-09-21'
+permalinks:
+  - /2009/09/21/project-euler-problem-5/
+  - /?p=411
+categories:
+  - project-euler
+  - software-development
+tags:
+  - csharp
+  - factorization
+---
+
+> 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+>
+> What is the smallest number that is evenly divisible by all of the numbers from 1 to 20?
+>
+> – [Project Euler Problem 5](https://projecteuler.net/problem=5)
+
+## Solution
+
+This one I solved fairly quickly. That is, I wrote a solution to it fairly quickly. However, that solution _itself_ was _not_ a quick one. It was a pure brute-force without much cleverness behind, and it took between 30 and 100 seconds, if I remember correctly, to run. Not good. It basically just took the numbers, one by one, and tried to divide them by all the dividers. If the number was not evenly divisible by a divisor, it skipped to the next number and so on until it found the one that was divisible by all of them.
+
+However, with some reading around I found a better and faster solution.
+
+It apparently uses something called Folding, but I haven't quite managed to grasp what that means, so I will just give you my own explanation (which I think and hope is correct 😛 ).
+
+What we are looking for here is something called the <a href="http://en.wikipedia.org/wiki/Least_common_multiple">Lowest Common Multiple</a> (LCM). The LCM of all the divisors, 1 to 20, is the answer to this problem. To calculate the LCM of all those numbers we first need two methods.
+
+The first is one that finds the LCM of two numbers. The formula for that, however, is based on another method which finds the <a href="http://en.wikipedia.org/wiki/Greatest_common_divisor">Greatest Common Divisor</a> (GCD) of two numbers. In other words we need to make that method first.
+
+I implemented the GCD method using the <a href="http://en.wikipedia.org/wiki/Euclidean_algorithm">Euclidean algorithm</a>, and it goes like this:
+
+```csharp
+public static ulong GetGreatestCommonDivisor(ulong a, ulong b)
+{
+    while (b != 0)
+    {
+        ulong t = b;
+        b = a%b;
+        a = t;
+    }
+    return a;
+}
+```
+
+Now we can find the LCM.
+
+```csharp
+public static ulong GetLowestCommonMultiple(ulong a, ulong b)
+{
+    return a / GetGreatestCommonDivisor(a, b) * b;
+}
+```
+
+With those two in place, we can then create a simple "expanded" version of that which can take an arbitrary number of divisors using a smart method called Aggregate.
+
+```csharp
+public static ulong GetLowestCommonMultiple(ulong[] divisors)
+{
+    return divisors.Aggregate(1UL, (lcm, n) => GetLowestCommonMultiple(lcm, n));
+}
+```
+
+It goes like this: It starts with 1 as the LCM and finds the LCM of 1 and the first divisor, n, and stores it in lcm. It then goes to the next divisor, and finds the LCM of that and the stored lcm, which is again stored in lcm. This is repeated until there are no more divisors, and we have the answer. As it turns out this method can also be simplified a bit because we can just give the LCM method to aggregate as a method group, instead of creating a lambda. So we end up with this:
+
+```csharp
+public static ulong GetLowestCommonMultiple(ulong[] divisors)
+{
+    return divisors.Aggregate(1UL, GetLowestCommonMultiple);
+}
+```
+
+Quite a simple method, and we can now use that to find the answer to our original problem.
+
+```csharp
+var answer = GetLowestCommonMultiple(new ulong[] { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
+```
+
+Notice that I skip the numbers 1 to 10, since they are already "covered" in the numbers 11 to 20. With this solution it doesn't really make much difference in the time taken though.
+
+According to the `StopWatch`, this solution takes 0 milliseconds, or 522 ticks. Quite an improvement from over 30 seconds! 😳
+
+While writing this post I also discovered that I, of course, could get rid of that first LCM method all together by doing the LCM of two numbers inline, and marking the parameter as params. So, the resulting LCM method becomes this:
+
+```csharp
+public static ulong GetLowestCommonMultiple(params ulong[] divisors)
+{
+    return divisors.Aggregate(1UL, (a, b) => a / GetGreatestCommonDivisor(a, b) * b);
+}
+```
+
+And that method does the work of both. All my test cases still run. Love it 😎

@@ -1,0 +1,26 @@
+---
+title: 'jQuery: How to get scroll percentage'
+published: '2015-11-27'
+permalinks:
+  - /2015/11/27/scroll-percentage-through-jquery/
+  - /?p=2838
+categories:
+  - software-development
+tags:
+  - javascript
+  - jquery
+---
+
+```js
+$(function()
+{
+    $(window).scroll(onWindowScroll);
+}
+
+function onWindowScroll()
+{
+    var scrollPercentage = ($(window).height() + $(document).scrollTop())
+        / $(document).height();
+    console.info(scrollPercentage);
+}
+```

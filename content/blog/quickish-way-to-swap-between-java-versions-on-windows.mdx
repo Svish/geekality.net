@@ -1,0 +1,82 @@
+---
+title: Quick'ish way to swap between Java versions on Windows
+published: '2013-04-22'
+permalinks:
+  - /2013/04/22/quickish-way-to-swap-between-java-versions-on-windows/
+  - /?p=2265
+categories:
+  - software-development
+tags:
+  - command-line
+  - environment
+  - java
+  - windows
+---
+
+Here's a sort of quick way to swap between Java versions on Windows without having to change any environment variables and restarting your console window and such. The short version is to create symlinks to your java versions and then a single symlink called for example 'active' which points to the one you want. In your environment variables java_home and path you'd then point to this 'active' symlink instead of the actual installation. You can then fairly quickly swap out the target of the 'active' symlink and, tadaa'ish, you have a different version.
+
+## Setup
+
+1. Open up an <a href="/?p=1139">elevated command prompt</a>.
+2. Go/Make somewhere you want this.
+
+```dos
+> c:
+> mkdir \dev\java
+> cd \dev\java
+```
+
+3. Set up the symlinks
+
+```dos
+> mklink /d 1.5 "c:\Program Files\Java\jdk1.5.0_22"
+> mklink /d 1.7 "c:\Program Files\Java\jdk1.7.0"
+> mklink /d 1.6 "c:\Program Files\Java\jdk1.6.0_27"
+> mklink /d active 1.7
+```
+
+4. Set your `JAVA_HOME` and `PATH` environment variables. \*
+
+```dos
+setx JAVA_HOME "C:\dev\java\active" /m
+setx PATH "%JAVA_HOME%\bin;%PATH%" /m
+```
+
+<div className="note">
+  ⚠ The second command assumes you don't have Java in your PATH already. If you
+  do, you should edit it the usual way instead. Also note that if `JAVA_HOME` is
+  already set, it will be expanded in the second command.
+</div>
+
+Now open up a new regular command prompt and run the following.
+
+```dos
+> java -version
+> mvn --version
+```
+
+Both (skip `mvn` if you don't have maven installed) should report Java version 1.7.
+
+## Swapping
+
+So, let's say we want to change to java 1.5, we just need to run the following in an elevated command prompt.
+
+```dos
+> cd \dev\java
+> rmdir active && mklink /d active 1.5
+```
+
+If you now repeat the version checks we did in our regular command prompt they should both report version 1.5 instead of 1.7. And we didn't even have to restart the command prompt.
+
+### Shortcut
+
+To prevent us from having to do this manually we could also create a simple bat file. I made one I called swap.bat which I put in the same directory as the symlinks with the following contents.
+
+```dos
+@echo off
+cd \dev\java && rmdir active && mklink /d active %~1
+```
+
+You could then create a short cut to for example `c:\dev\java\swap.bat 1.5`, set it to run as administrator, and you'd have a two click solution to change the Java version to 1.5. I created one shortcut for each version.
+
+If you have a better way, please leave a comment though. Always on the lookout for things and techniques that can make my developer life simpler 🙂

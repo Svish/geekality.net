@@ -1,0 +1,26 @@
+---
+title: Touching files in Windows
+published: '2014-10-06'
+permalinks:
+  - /2014/10/06/touching-files-in-windows/
+  - /?p=2606
+categories:
+  - technology
+tags:
+  - command-line
+  - windows
+---
+
+In Unix you have the touch command which you can use to update a files timestamp. No such thing in Windows. But instead, apparently, one can do this:
+
+```dos
+REM Updates the timestamp of the file
+copy /b filename.ext +,,
+
+REM Creates a new empty file
+echo $null >> filename.ext
+```
+
+If you need it more than seldom there are also some more tricks in the StackOverflow sources below.
+
+**Sources:** <a href="http://superuser.com/a/764721/62">Windows equivalent of the Linux command 'touch'?</a> <a href="http://superuser.com/q/502374/62">Equivalent of Linux `touch` to create an empty file with PowerShell?</a>

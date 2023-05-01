@@ -1,0 +1,40 @@
+---
+title: 'PHP: Unset all defined variables'
+published: '2017-08-10'
+permalinks:
+  - /2017/08/10/php-unset-all-defined-variables/
+  - /?p=3065
+categories:
+  - software-development
+tags:
+  - php
+---
+
+```php
+foreach(get_defined_vars() as $k => $v)
+    unset($$k);
+unset($k, $v);
+```
+
+For example handy in this setting:
+
+```php
+foreach($iterable as $item)
+{
+    extract($item);
+    unset($item);
+
+    // Define another variable, for only some of the items
+    if($foo == 'bar')
+        $x = 2;
+
+    // Yield all defined vars
+    yield get_defined_vars();
+
+    // Cleanup, to prevent $x and other variables from
+    // sticking around to the next iteration
+    foreach(get_defined_vars() as $k => $v)
+        unset($$k);
+    unset($k, $v);
+}
+```

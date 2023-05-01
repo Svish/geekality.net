@@ -1,0 +1,92 @@
+---
+title: 'XSLT: Change order of apply-templates to process some elements before others'
+published: '2012-10-29'
+permalinks:
+  - >-
+    /2012/10/29/xslt-change-order-of-apply-templates-to-process-some-elements-before-others/
+  - /?p=2100
+categories:
+  - software-development
+tags:
+  - xslt
+  - xslt-2-0
+---
+
+I had some XML given to me where the elements in a rather random order. I then needed to convert those to a different format, using XSLT 2.0. A couple of these elements should become attributes, one should become a special first element and the rest should become generic key value elements after that special first one. So:
+
+```xml
+<Metadata>
+  <id>11</id>
+  <type>Boolean</type>
+  <value>true</value>
+  <name>foobar</name>
+  <label>Foobar</label>
+  <hidden>false</hidden>
+</Metadata>
+```
+
+Should become:
+
+```xml
+<Option id="11" name="foobar">
+  <Value>true</Value>
+  <Meta name="type">Boolean</Meta>
+  <Meta name="label">Foobar</Meta>
+  <Meta name="hidden">false</Meta>
+</Metadata>
+```
+
+## A failing first draft
+
+This is roughly what I tried first:
+
+```xml
+<template match="Metadata">
+  <element name="Option">
+    <apply-templates mode="option" />
+  </element>
+</template>
+
+<template match="id|name" mode="option">
+  <attribute name="{local-name()}" select="." />
+</template>
+
+<template match="value" mode="option">
+  <element name="Value">
+    <value-of select="." />
+  </element>
+</template>
+
+<template match="*" mode="option">
+  <element name="Meta">
+    <attribute name="name" select="local-name()" />
+    <value-of select="." />
+  </element>
+</template>
+```
+
+The order of the elements is the problem here since the input order is random. The `Value` element won't be the first in the output, and the whole transformation will actually crash because it'll try to add attributes to the `Option` node <em>after</em> child nodes has been added, which is not allowed.
+
+So we need to process the id and name nodes first, then the value node and finally the rest. You could use several apply-templates to first do 'id', then 'name' and so on, but the last would be a bit annoying as that would have to be 'not id and not name' and so on. So I found a different way to do it.
+
+## Solution
+
+You can tell apply-templates to go through the elements in a different order by giving it some sorting instructions. Here's how I took advantage of that:
+
+```xml
+<template match="Metadata">
+  <element name="cm:Option">
+    <apply-templates mode="option">
+      <sort
+        data-type="number"
+        order="descending"
+        select=" 3 * number(local-name()='id')
+               + 2 * number(local-name()='name')
+               + 1 * number(local-name()='value')"
+      />
+    </apply-templates>
+  </element>
+</template>
+```
+
+I check the name of the node, take advantage of the numeric value of booleans (`true=1`, `false=0`) and multiply with a constant. Those not mentioned will get the value 0. With data-type set to 'number' and order to 'descending', we then end up with elements being processed in the order we want first and those we don't care about after that. Pretty neat, if I may say so myself 🙂

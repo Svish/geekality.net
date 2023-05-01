@@ -1,0 +1,31 @@
+---
+title: 'Unix: Remove lines from a file based on regular expression'
+published: '2014-01-27'
+permalinks:
+  - /2014/01/27/unix-remove-lines-from-a-file-based-on-regular-expression/
+  - /?p=2451
+categories:
+  - technology
+tags:
+  - command-line
+  - gnu
+  - sed
+  - unix
+---
+
+Just a note to self. Useful for trimming away useless information from a log file for example.
+
+```bash
+# Output result
+$ sed "/pattern/d" file.log
+
+# Overwrite file
+$ sed "/pattern/d" file.log > file.log
+
+# Inplace deletion (requires GNU sed)
+$ sed -i "/pattern/d" file.log
+```
+
+In the pattern, things like capturing groups and alternations needs to be escaped with a slash, `\`. If you have <a href="http://www.regexbuddy.com">RegexBuddy</a> you can use the <a href="http://www.regexbuddy.com/gnu.html">GNU BRE</a> flavor to help you construct the pattern.
+
+**Source:** <a href="http://stackoverflow.com/a/5410784/39321">StackOverflow</a>

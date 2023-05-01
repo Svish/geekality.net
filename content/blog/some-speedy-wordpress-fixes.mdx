@@ -1,0 +1,68 @@
+---
+title: Some speedy WordPress fixes
+published: '2011-06-03'
+permalinks:
+  - /2011/06/03/some-speedy-wordpress-fixes/
+  - /?p=1706
+categories:
+  - technology
+tags:
+  - htaccess
+  - blogging
+  - compression
+  - optimization
+  - search
+  - speed
+  - wordpress
+---
+
+Used <a href="http://code.google.com/speed/page-speed/docs/using_firefox.html">Page Speed</a> for FireFox the other day to analyze my blog. Found a couple of issues and a couple were very simple to fix. If these will work for you, depends a bit on where your WordPress site is hosted and what your web server does already. So, be brave and analyze your own site. Look through the results and see if you can fix some of it without too much hassle 🙂
+
+<hr className="fix" />
+
+## Missing expiration date and unnecessary `ETag`
+
+The browser caches stuff, and to do that it needs some information. When we have stuff that doesn't change very often (if ever) we should tell the browser that, once you've downloaded this, you don't really need to check back for a new version for a while. To do this we add an expiration date. In addition you have two headers called Last-Modified and one called `ETag`. you can read more about that and all the rest of this in the link earlier in this paragraph, but the short story is you should have one. Having both is just not necessary. When I checked the headers sent with my images, I found that both were sent. So I decided to turn off the `FileETag`. To do all of this, for images, javascript files and stylesheets, I added the following lines to the <a href="http://en.wikipedia.org/wiki/.htaccess">`.htaccess`</a> file in the root of my WordPress blog:
+
+```apache
+<FilesMatch "\.(ico|jpg|jpeg|png|gif|js|css)$">
+  ExpiresActive On
+  ExpiresDefault "access plus 2 weeks"
+  FileETag none
+</FilesMatch>
+```
+
+<a href="http://code.google.com/speed/page-speed/docs/caching.html#LeverageBrowserCaching">
+  More info
+</a>
+
+## Enable Compression
+
+Compressing stuff means less data has to go across the wire between the browser and the web server. Which is generally a nice thing. And as long as the web server supports it, enabling it is pretty simple. Just add the following line to your <a href="http://en.wikipedia.org/wiki/.htaccess">.htaccess</a> file.
+
+```apache
+AddOutputFilterByType DEFLATE text/html text/plain text/xml text/javascript text/css application/javascript
+```
+
+<a href="http://code.google.com/speed/page-speed/docs/payload.html#GzipCompression">
+  More info
+</a>
+
+## Don't touch the default stuff
+
+Just to make it less likely that someone messes up their WordPress installation after reading this: Make sure you <em>add</em> the above stuff. Do not just replace the `.htaccess` file. WordPress comes with an `.htaccess` file, and what's in there needs to be there. Here is how the default stuff looks in mine:
+
+```apache
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+```
+
+Unless you know what you're doing, it's probably a good idea to not touch any of that 🙂 And if you <em>do</em> end up messing up your WordPress blog after reading this blog post, don't blame me 😛

@@ -1,0 +1,50 @@
+---
+title: 'XSLT: Clean up duplicate namespaces and namespace declarations'
+published: '2012-10-01'
+permalinks:
+  - /2012/10/01/xslt-clean-up-duplicate-namespaces-and-namespace-declarations/
+  - /?p=2082
+categories:
+  - software-development
+tags:
+  - namespaces
+  - xml
+  - xslt
+---
+
+I got an XML file from a web service which had a default namespace and a namespace prefix with equal paths. In addition I had to change the root node which then lost all its defined namespaces. This resulted in various namespaces being redeclared on a bunch of various child elements, while it really should just need to be declared once on the root node.
+
+So, this is how you may do fix this:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns="http://api.example.com/schema"
+    xmlns:dup="http://api.example.com/schema">
+
+    <!-- Identity template, copies everything -->
+    <xsl:template match="@*|node()">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()" />
+        </xsl:copy>
+    </xsl:template>
+
+    <!-- Make all elements with dup prefix use default namespace so we avoid ugly mix of both -->
+    <xsl:template match="dup:*">
+        <xsl:element name="{local-name()}">
+            <xsl:apply-templates select="@* | node()" />
+        </xsl:element>
+    </xsl:template>
+
+    <!-- For the document element (top element) -->
+    <xsl:template match="/*">
+        <xsl:copy>
+            <!-- Add namespace to prevent redeclaration on every child element using it -->
+            <xsl:namespace name="xsi" select="'http://www.w3.org/2001/XMLSchema-instance'" />
+            <!-- Copy attributes and child elements -->
+            <xsl:apply-templates select="@*|node()" />
+        </xsl:copy>
+    </xsl:template>
+
+</xsl:stylesheet>
+```

@@ -1,0 +1,52 @@
+---
+title: 'PowerShell: Read hashtable from a file'
+published: '2014-06-30'
+permalinks:
+  - /2014/06/30/powershell-read-hashtable-from-a-file/
+  - /?p=2536
+categories:
+  - technology
+tags:
+  - files
+  - hashtable
+  - powershell
+---
+
+Had a file with the following kind of data.
+
+```text
+10.0.0.1=alice.example.com
+10.0.0.2=bob.example.com
+```
+
+Wanted to read this in as a hashtable so that I could use it for lookup in a script. Tried doing the following, but ended up with an array of hashtables instead of one hashtable. This is because `Get-Content` by default actually gives you an array of lines, which are then piped into `ConvertFrom-StringData` one by one.
+
+```powershell
+PS> Get-Content .\hostnames.txt | ConvertFrom-StringData
+PS> $names.GetType()
+
+IsPublic IsSerial Name                          BaseType
+-------- -------- ----                          --------
+True     True     Object[]                      System.Array
+
+PS> $names[0].GetType()
+
+IsPublic IsSerial Name                          BaseType
+-------- -------- ----                          --------
+True     True     Hashtable                     System.Object
+```
+
+<a href="http://stackoverflow.com/q/24452261/39321">Turns out</a> it was easy to
+fix by adding the `-raw` parameter.
+
+```powershell
+PS> $names = Get-Content -raw .\hostnames.txt | ConvertFrom-StringData
+PS> $names.GetType()
+
+IsPublic IsSerial Name                          BaseType
+-------- -------- ----                          --------
+True     True     Hashtable                     System.Object
+
+PS> $names['10.0.0.1']
+alice.example.com
+```

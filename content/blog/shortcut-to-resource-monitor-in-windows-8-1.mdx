@@ -1,0 +1,20 @@
+---
+title: Shortcut to Resource Monitor in Windows 8.1
+published: '2015-08-14'
+permalinks:
+  - /2015/08/14/shortcut-to-resource-monitor-in-windows-8-1/
+  - /?p=2801
+categories:
+  - technology
+tags:
+  - windows
+  - windows-8-1
+---
+
+In Windows 7 there was a shortcut to Resource Monitor in the start menu, which meant you could launch it quickly through search. In Windows 8.1 this didn't seem to be the case for some reason. Might have missed something... but found the shortcut for it on a Windows Server 2012 installation, and it worked just as nicely in Windows 8.1. So, note to self:
+
+```dos
+%windir%\system32\perfmon.exe /res
+```
+
+So after quickly making a shortcut to that in my menu, I'm once again back to launching it directly rather than through the button in Task Manager.

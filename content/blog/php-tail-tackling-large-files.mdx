@@ -1,0 +1,74 @@
+---
+title: 'PHP: Tail tackling large files'
+published: '2011-05-28'
+permalinks:
+  - /2011/05/28/php-tail-tackling-large-files/
+  - /?p=1654
+categories:
+  - software-development
+tags:
+  - log
+  - php
+  - snippet
+  - tail
+---
+
+Needed a function that could get me the last N lines of a log file. Wanted it to be efficient and not dependent on anything other than my code.
+
+Found some versions, but they were either a bit messy or depended on unstable arithmetic (where filesize is greater than `PHP_INT_MAX`). So, I decided to take on the challenge and try to write one myself. Nice little exercise 🙂
+
+```php
+function tail($filename, $lines = 10, $buffer = 4096)
+{
+    // Open the file
+    $f = fopen($filename, "rb");
+
+    // Jump to last character
+    fseek($f, -1, SEEK_END);
+
+    // Read it and adjust line number if necessary
+    // (Otherwise the result would be wrong if file doesn't end with a blank line)
+    if(fread($f, 1) != "\n") $lines -= 1;
+
+    // Start reading
+    $output = '';
+    $chunk = '';
+
+    // While we would like more
+    while(ftell($f) > 0 && $lines >= 0)
+    {
+        // Figure out how far back we should jump
+        $seek = min(ftell($f), $buffer);
+
+        // Do the jump (backwards, relative to where we are)
+        fseek($f, -$seek, SEEK_CUR);
+
+        // Read a chunk and prepend it to our output
+        $output = ($chunk = fread($f, $seek)).$output;
+
+        // Jump back to where we started reading
+        fseek($f, -mb_strlen($chunk, '8bit'), SEEK_CUR);
+
+        // Decrease our line counter
+        $lines -= substr_count($chunk, "\n");
+    }
+
+    // While we have too many lines
+    // (Because of buffer size we might have read too many)
+    while($lines++ < 0)
+    {
+        // Find first newline and remove all text before that
+        $output = substr($output, strpos($output, "\n") + 1);
+    }
+
+    // Close file and return
+    fclose($f);
+    return $output;
+}
+```
+
+### Sample
+
+You can try out a slightly modified version at <a href="http://samples.geekality.net/tail/">samples.geekality.net/tail</a>. Of course you won't be able to try it on your multi-gigabyte-sized log file, but at least you can see if it does what it should 🙂
+
+As usual, if you have any corrections or feedback, if you found it useful, please leave a comment!

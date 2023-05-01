@@ -1,0 +1,33 @@
+---
+title: Verbose status messages during Windows startup and shutdown
+published: '2010-12-12'
+permalinks:
+  - /2010/12/12/win7-verbose-status-messages-during-startup-and-shutdown/
+  - /?p=1432
+categories:
+  - technology
+tags:
+  - registry
+  - snippet
+  - windows
+---
+
+Just a small registry script that makes status messages during startup and shutdown procedures in Windows 7 (and possibly Vista?) more interesting.
+
+Create a simple text file with the following text in it:
+
+```text
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"VerboseStatus"=dword:00000001
+```
+
+Give the file a name with the `reg` extension, for example `VerboseStatus.reg` and run it. Double-clicking it should do the trick. After it has done it's job you should see some more interesting messages during startup and shutdown procedures 🙂
+
+To turn it off again, just switch the 1 to a 0 in that reg file and run it again. Should do the trick... Not sure if I have tested that as I always have it on.
+
+📝 **Note:** You do this on your own responsibility, so if you manage to
+mess up your computer, don't blame me 😛 I run this reg file after every fresh
+install of Windows 7 though, so as long as you don't do anything weird, it
+should work fine.

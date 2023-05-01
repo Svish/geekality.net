@@ -1,0 +1,77 @@
+---
+title: Simple PHP proxy for cross origin HEAD requests
+published: '2014-11-07'
+permalinks:
+  - /2014/11/07/simple-php-proxy-for-cross-origin-head-requests/
+  - /?p=2737
+categories:
+  - software-development
+tags:
+  - ajax
+  - cors
+  - curl
+  - javascript
+  - php
+  - proxy
+---
+
+<ins dateTime="2017-02-06T08:43:45+00:00">
+  **Update:** Refactored this into a much more improved version, and you can
+  find it on [GitHub](https://github.com/Svish/php-cross-domain-proxy) and
+  [Packagist](https://packagist.org/packages/geekality/php-cross-domain-proxy).
+</ins>
+
+Have some Javascript that runs through all the URLs on a site of mine to prep caching and check for dead links and other problems. Problem is that the site also includes embedded video files hosted by someone else. These fails of course because of cross origin restrictions and since I'm not in control of their servers I needed a workaround.
+
+I wrote this small PHP script to work as a proxy and as far as I can see it works pretty great. Short and easy to follow as well, so that's always fun 🙂
+
+So basically the script just pipes through whatever headers it gets to the target URL and pipes back whatever headers it gets in the response. Seems to work, but let me know of weaknesses and easy improvements if you see any 🙂
+
+```php
+<?php
+
+$request_headers = getallheaders();
+unset($request_headers['Cookie']);
+unset($request_headers['Host']);
+
+foreach($request_headers as $key => &$value)
+    $value = $key.': '.$value;
+
+$url = $_SERVER['QUERY_STRING'];
+$limit = 20;
+
+$curl = curl_init();
+do
+{
+    curl_setopt_array($curl, array
+    (
+        CURLOPT_URL => $url,
+        CURLOPT_HTTPHEADER => $request_headers,
+
+        CURLOPT_RETURNTRANSFER => TRUE,
+        CURLOPT_HEADER => TRUE,
+        CURLOPT_NOBODY => TRUE,
+
+        CURLOPT_FOLLOWLOCATION => TRUE,
+        CURLOPT_MAXREDIRS => $limit--,
+    ));
+
+    ob_start();
+    $headers = trim(curl_exec($curl));
+    $url = curl_getinfo($curl, CURLINFO_REDIRECT_URL);
+    ob_end_clean();
+}
+while($url and $limit > 0);
+
+curl_close($curl);
+
+$headers = trim(substr($headers, strrpos($headers, "\r\n\r\n")));
+header_remove();
+foreach(explode("\r\n", $headers) as $h)
+    header($h);
+```
+
+## Notes
+
+- The Cookie and Host headers sent from the browser are removed so they don't mess up the request.
+- CURL wasn't acting properly where I deployed this. It didn't follow redirects, and curl_exec output content to the browser even with return transfer set to true. So it has a manual workaround for following the redirects and uses output buffering to make sure nothing goes to the browser before we want to.

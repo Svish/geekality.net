@@ -1,0 +1,167 @@
+---
+title: 'PHP: Valid Javascript identifiers (or function names) for JSONP'
+published: '2011-08-03'
+permalinks:
+  - /2011/08/03/valid-javascript-identifier/
+  - /?p=1739
+categories:
+  - software-development
+tags:
+  - javascript
+  - language-spec
+  - php
+  - regular-expression
+  - snippet
+  - unicode
+---
+
+After another reply to <a href="http://stackoverflow.com/a/6892827/39321" title="PHP: Is this safe for providing JSONP?">a question</a> I've had on StackOverflow for a while, I decided that I perhaps should add another level of security to my method of <a href="/?p=1021" title="How to easily provide JSON and JSONP">providing JSONP</a> from PHP. The way I did it before, I didn't do any checking on the provided callback. This means that someone could technically put whatever they wanted in there, including malicious code. So, therefore it might be a good idea to check if the callback, which should be a function name, actually <em>is</em> a valid function name. But ...
+
+## What is valid?
+
+To figure that out, we need a look in the <a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf" title="ECMA-262, 5.1 Edition / June 2011">ECMAScript Language Specification</a>. In chapter 13 on functions, we find that a function name is a so-called identifier, which is described in chapter 7.6. There we can find the following facts:
+
+<table>
+  <tr>
+    <th scope="row">Identifier</th>
+    <td>
+      &lt;IdentifierName&gt; <strong>but not</strong> &lt;ReservedWord&gt;
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">IdentifierName</th>
+    <td>
+      &lt;IdentifierStart&gt; &lt;IdentifierName&gt; &lt;IdentifierPart&gt;
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">IdentifierStart</th>
+    <td>&lt;UnicodeLetter&gt; $ _ \ &lt;UnicodeEscapeSequence&gt;</td>
+  </tr>
+  <tr>
+    <th scope="row">IdentifierPart</th>
+    <td>
+      &lt;IdentifierStart&gt; &lt;UnicodeCombiningMark&gt; &lt;UnicodeDigit&gt;
+      &lt;UnicodeConnectorPunctuation&gt; &lt;ZWNJ&gt; &lt;ZWJ&gt;
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">UnicodeLetter</th>
+    <td>
+      Uppercase letter (Lu) Lowercase letter (Ll) Titlecase letter (Lt) Modifier
+      letter (Lm) Other letter (Lo) Letter number (Nl)
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">UnicodeCombiningMark</th>
+    <td>Non-spacing mark (Mn) Combining spacing mark (Mc)</td>
+  </tr>
+  <tr>
+    <th scope="row">UnicodeDigit</th>
+    <td>Decimal number (Nd)</td>
+  </tr>
+  <tr>
+    <th scope="row">UnicodeConnectorPunctuation</th>
+    <td>Connector punctuation (Pc)</td>
+  </tr>
+  <tr>
+    <th scope="row">UnicodeEscapeSequence</th>
+    <td>
+      The definitions of the nonterminal UnicodeEscapeSequence is given in 7.8.4
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">ZWNJ</th>
+    <td>
+      U+200C (
+      <a href="http://en.wikipedia.org/wiki/ZWNJ">Zero-width non-joiner</a>)
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">ZWJ</th>
+    <td>
+      U+200D (<a href="http://en.wikipedia.org/wiki/ZWJ">Zero-width joiner</a>)
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">ReservedWord</th>
+    <td>
+      &lt;Keyword&gt; &lt;FutureReservedWord&gt; &lt;NullLiteral&gt;
+      &lt;BooleanLiteral&gt;
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">Keyword</th>
+    <td>
+      break, do, instanceof, typeof, case, else, new, var, catch, finally,
+      return, void, continue, for, switch, while, debugger, function, this,
+      with, default, if, throw, delete, in, try
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">FutureReservedWord</th>
+    <td>
+      class, enum, extends, super, const, export, import implements, let,
+      private, public, yield, interface, package, protected, static
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">NullLiteral</th>
+    <td>null</td>
+  </tr>
+  <tr>
+    <th scope="row">BooleanLiteral</th>
+    <td>true, false</td>
+  </tr>
+</table>
+
+Looks long, but not too complicated.
+
+## Checking if a string is valid
+
+To check if a string is a valid identifier is now pretty easy. We just need to make sure the string matches the allowed syntax, and that it's not a reserved word. The first we can solve with a regular expression and the second with a simple white list array. For example, something along the following lines.
+
+```php
+function is_valid_identifier($subject)
+{
+    $identifier_syntax
+      = '/^[$_\p{L}][$_\p{L}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\x{200C}\x{200D}]*+$/u';
+
+    $reserved_words = new array('break', 'do', 'instanceof', 'typeof', 'case',
+      'else', 'new', 'var', 'catch', 'finally', 'return', 'void', 'continue',
+      'for', 'switch', 'while', 'debugger', 'function', 'this', 'with',
+      'default', 'if', 'throw', 'delete', 'in', 'try', 'class', 'enum',
+      'extends', 'super', 'const', 'export', 'import', 'implements', 'let',
+      'private', 'public', 'yield', 'interface', 'package', 'protected',
+      'static', 'null', 'true', 'false');
+
+    return preg_match($identifier_syntax, $subject)
+        && ! in_array(mb_strtolower($subject, 'UTF-8'), $reserved_words);
+}
+```
+
+Not too complex, although the regular expression might look a bit nuts at first because of all the Unicode character groups. You might find regular expressions other places to do this that uses a-z for the letters, but as you saw from the specification that won't cover much of what's actually valid.
+
+I built the expression using the very helpful <a href="http://www.regexbuddy.com/">RegexBuddy</a> and exported an HTML explanation of it. Also threw together a tiny identifier validator thing where you can test it out with. You find it all at <a href="http://samples.geekality.net/js-identifiers/">samples.geekality.net/js-identifiers</a>.
+
+And that's that. Hope that might be helpful for someone and please let me know if you find any issues with it!
+
+📝 **Note:** I have ignored the issue with the Unicode escape sequences
+for now as I'm not quite sure how to best handle those. From the
+specification:
+
+> A UnicodeEscapeSequence cannot be used to put a character into an
+> IdentifierName that would otherwise be illegal. In other words, if a
+> `\UnicodeEscapeSequence` sequence were replaced by
+> its `UnicodeEscapeSequence`'s <abbr title="Character Value">CV</abbr>, the
+> result must still be a valid
+> IdentifierName that has the exact same sequence of characters as the
+> original IdentifierName. All interpretations of identifiers within this
+> specification are based upon their actual characters regardless of whether
+> or not an escape sequence was used to contribute any particular characters.
+
+So, I'm not sure if there is a way to just convert those sequences into actual
+characters or if this is done automatically by PHP as they come in as GET
+parameters or what. Either way, my code above there is ignoring them. This
+means, identifiers with escape sequences will not be considered valid. If you
+have some good ideas on how to handle it, please leave a comment 🙂

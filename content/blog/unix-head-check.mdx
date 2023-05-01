@@ -1,0 +1,21 @@
+---
+title: 'Unix: HEAD check with `curl` or `wget`'
+published: '2012-06-27'
+permalinks:
+  - /2012/06/27/unix-head-check/
+  - /?p=2021
+categories:
+  - technology
+tags:
+  - command-line
+  - curl
+  - unix
+  - wget
+---
+
+Needed to check the `HEAD` of a URL on two Unix servers today. Goal was to check if routing, firewall and load balancer rules were all good. One server only had `curl`, and the other only had wget, so here are commands for both:
+
+```bash
+$ wget -S --spider http://geekality.net
+$ curl -i -X HEAD http://geekality.net
+```

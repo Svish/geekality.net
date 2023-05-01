@@ -1,0 +1,96 @@
+---
+title: 'Project Euler: Problem 4'
+published: '2009-09-18'
+permalinks:
+  - /2009/09/18/project-euler-problem-4/
+  - /?p=181
+categories:
+  - project-euler
+  - software-development
+tags:
+  - csharp
+  - palindromes
+---
+
+The fourth problem was a bit tricky, but at the same time a bit funny.
+
+> A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is $9009 = 91 * 99$.
+>
+> Find the largest palindrome made from the product of two 3-digit numbers.
+>
+> – [Project Euler Problem 4](https://projecteuler.net/problem=4)
+
+## Solution
+
+Once again I went for kind of a brute-force solution, since I am not that insanely clever when it comes to these things. 😛
+
+Anyways, I first needed a way to figure out if a number actually was a palindrome or not. I found a few ways of doing this. The first I came up with was to simply convert the number to a string, reverse it, and then see if the original string and the reversed string was equal. Pretty simple. But not sure how efficient that is. Anyways, I came up with a more clever solution that would compare the first letter with the last, then the second with the second to last, and so on until it either reached the middle or found a mismatch. Here is the code for that:
+
+```csharp
+public static bool IsPalindrome(this string text)
+{
+    var c = text.ToCharArray();
+    int length = text.Length;
+    int halfLength = length / 2;
+
+    for (int i = 0; i < halfLength; i++)
+    {
+        if (c[i] != c[length - 1 - i])
+            return false;
+    }
+    return true;
+}
+```
+
+After finding the answer to the problem, I found a way to do this without converting the numbers to strings. It is a method that "reverses" the number and then checks if the reversed is equal to the original number. So kind of the same solution I came up with using the string, but with only numbers. The code that reverses the number looks like this:
+
+```csharp
+public static ulong Reverse(this ulong n)
+{
+    ulong r = 0L;
+    while (n > 0)
+    {
+        r = 10*r + n%10;
+        n /= 10;
+    }
+    return r;
+}
+```
+
+A brute-force method that finds the largest palindrome can then be code like the following.
+
+```csharp
+public static ulong FindLargestPalindromeMadeFromProductOf(byte digits)
+{
+    if (digits == 0)
+        return 0;
+
+    ulong largestPalindrome = 0;
+
+    ulong lower = (ulong) Math.Pow(10, digits - 1);
+    ulong upper = (ulong) Math.Pow(10, digits) - 1;
+
+    for (ulong x = upper; x >= lower; x--)
+        for (ulong y = upper; y >= lower; y--)
+        {
+            ulong product = x*y;
+
+            if (product > largestPalindrome && product.IsPalindrome())
+            {
+                largestPalindrome = product;
+                break;
+            }
+        }
+    return largestPalindrome;
+}
+```
+
+It starts by finding the lower and upper limit, which for 3 digits would be 100 (10^2) and 999 (10^3 - 1). And after that it pretty much just goes to work, trying out combinations. (If you have a suggestion for a better name for that method, let me know. I don't really like it 😛 )
+
+Using the above method, the answer to problem 4 is a simple line of code:
+
+```csharp
+var answer = FindLargestPalindromeMadeFromProductOf(3);
+```
+
+Do you have a smarter solution? If so, please leave a comment and elaborate 🙂

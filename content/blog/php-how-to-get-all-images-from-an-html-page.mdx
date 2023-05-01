@@ -1,0 +1,149 @@
+---
+title: 'PHP: How to get all images from an HTML page'
+published: '2011-05-12'
+permalinks:
+  - /2011/05/12/php-how-to-get-all-images-from-an-html-page/
+  - /?p=1585
+categories:
+  - software-development
+tags:
+  - curl
+  - html
+  - parsing
+  - php
+  - regular-expression
+  - snippet
+  - tutorial
+---
+
+I was curious to how I could make something similar to what Facebook does when you add a link. Somehow it loads images found on the page your link leads to, and then it presents them to you so you can select one you want to use as a thumbnail.
+
+Well, step one to solve this is of course to find all the images on a page, and that is what I will present in this post. It will be sort of like a backend service we can use later from an AJAX call. You post it a URL, and you get all the image URLs it found back. Let's put the petal to medal!
+
+## Getting the URL
+
+We'll use POST for this, and it shouldn't require much explanation.
+
+```php
+$url = array_key_exists('url', $_POST) ? $_POST['url'] : null;
+```
+
+## Loading the HTML
+
+To load the HTML we'll use the handy <a href="http://php.net/manual/en/book.curl.php">cURL</a> library, which I've used in earlier posts as well.
+
+```php
+$request = curl_init();
+curl_setopt_array($request, array
+(
+    CURLOPT_URL => $url,
+
+    CURLOPT_RETURNTRANSFER => TRUE,
+    CURLOPT_HEADER => FALSE,
+
+    CURLOPT_SSL_VERIFYPEER => TRUE,
+    CURLOPT_CAINFO => 'cacert.pem',
+
+    CURLOPT_FOLLOWLOCATION => TRUE,
+    CURLOPT_MAXREDIRS => 10,
+));
+$response = curl_exec($request);
+curl_close($request);
+```
+
+We just create and execute a request for the supplied URL. The response is stored in a variable so we can use it later.
+
+💡 We won't bother with any fancy error handling or anywhere else. If it doesn't work, we'll just give an empty list back. Bad URLs, faulty HTML, not our problem 😛
+
+💡 The SSL and cacert.pem stuff is explained in <a href="/?p=1413" title="cURL SSL Verification">an earlier post</a>.
+
+## Parsing the HTML
+
+You might have seen examples on how to find things in HTML using regular expressions. This is by most experienced developers regarded as <a href="http://blog.codinghorror.com/parsing-html-the-cthulhu-way/">A Bad Idea™</a>. What we can, and probably should, use instead is the <a href="http://php.net/manual/en/class.domdocument.php">DOMDocument</a> class you find in PHP. This class can parse XML and HTML into a neat <a href="http://en.wiktionary.org/wiki/Document_Object_Model" title="Document Object Model">DOM</a> which is a lot easier to work with.
+
+```php
+$document = new DOMDocument();
+if($response)
+{
+    libxml_use_internal_errors(true);
+    $document->loadHTML($response);
+    libxml_clear_errors();
+}
+```
+
+Not everyone writes perfectly formed HTML without errors so we load the HTML, the DOMDocument class will do its best to plow through the HTML and figure it all out. When it does come across things that are a bit out of wack, it will let us know by spitting out warnings. There's a big chance it managed to deal with it fine, but just for our information. However, like I mentioned earlier, we don't care about errors here and we definitely don't want those warnings messing up our output.
+
+So, what we do here is to tell libxml (which is used internally) to <a href="http://php.net/manual/en/function.libxml-use-internal-errors.php">enable user error handling</a> instead. When we now load the HTML, those errors and warnings are then instead collected quietly. We can get to them afterwards by calling <a href="http://php.net/manual/en/function.libxml-get-errors.php">libxml_get_errors</a>, but since we don't care about them at all we just <a href="http://php.net/manual/en/function.libxml-clear-errors.php">clear them out</a> instead. Easy peasy.
+
+## Dealing with relative URLs
+
+As you perhaps know you can have both <a href="http://en.wikipedia.org/wiki/Uniform_Resource_Locator#Absolute_vs_relative_URLs">absolute and relative URLs</a> in HTML. The relative URLs are relative to the base path of the HTML page. Unless the HTML page has a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base">base tag</a>. In that case we need to use whatever that specifies instead. So, how do we deal with all of that?
+
+Well, I decided to stick that in <a href="/?p=1587" title="Dealing with absolute and relative URLs">a different post</a>. What's important here is that we can get the base tag from the DOM like this:
+
+```php
+$tags = $document->getElementsByTagName('base');
+
+foreach($tags as $tag)
+    return $tag->getAttribute('href');
+```
+
+Of course if there is a base tag, it should only be one, but since we get a collection back from `getElementsByTagName` I just use `foreach` for simplicity.
+
+Next up we have a function which turn a relative URL into an absolute one. The signature looks like the following and the content you can read more about in <a href="/?p=1587" title="Dealing with absolute and relative URLs">that earlier mentioned post</a>.
+
+```php
+private static function make_absolute($url, $base)
+{
+    // "Magic"
+}
+```
+
+## Getting the images
+
+Now to the fun part. With the HTML loaded up and the base path figured out, we just need to fetch the images.
+
+```php
+$images = array();
+
+foreach($document->getElementsByTagName('img') as $img)
+{
+    // Extract what we want
+    $image = array
+    (
+        'src' => self::make_absolute($img->getAttribute('src'), $base),
+    );
+
+    // Skip images without src
+    if( ! $image['src'])
+        continue;
+
+    // Add to collection. Use src as key to prevent duplicates.
+    $images[$image['src']] = $image;
+}
+$images = array_values($images);
+```
+
+Now that was pretty simple, wasn't it? The perhaps weird thing here is that I first collect them in an array, using the image source as a key. This way we won't end up with duplicate image URLs. We also skip images which for some reason were to not have any URL.
+
+We could of course also get other stuff from the image tag here, like the height, width, alt text or title, or we could do some more elaborate filtering to try to weed out uninteresting images. For example really tiny ones or whatever else we might think of.
+
+## Echo it all out
+
+Now we just need to echo it all out in a format we can use easily on the client side. And we will, surprise, surprise, of course use <a href="/?p=1021" title="How to easily provide JSON and JSONP">our good friend JSON</a> for this 🙂
+
+```php
+header('content-type: application/json; charset=utf-8');
+$result = array('images' => $images);
+echo json_encode($result);
+```
+
+We set the appropriate header, wrap it up in a result array, encode it, and spit it out. And that's pretty much all there is to that part.
+
+## Working sample
+
+When I implemented this I decided to wrap most of this up in a class I called Image_Finder. I have also created a tiny interface for this so you can test it out for yourself. Will go through that interface (or a variant of it) later, but since that's all HTML and JavaScript you are of course more than welcome to have a peek at the source of it 🙂
+
+Either way, you can find it all, code and sample, at <a href="http://samples.geekality.net/image-fetcher/">samples.geekality.net/image-fetcher</a>. Let me know if you like it. And definitely let me know if you find any bugs 😉
+
+Bugs, improvements, suggestions, praise; please leave a comment. I like to learn 🙂

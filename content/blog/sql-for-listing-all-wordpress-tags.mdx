@@ -1,0 +1,29 @@
+---
+title: SQL for listing all WordPress tags
+published: '2011-06-13'
+permalinks:
+  - /2011/06/13/sql-for-listing-all-wordpress-tags/
+  - /?p=1715
+categories:
+  - software-development
+tags:
+  - blogging
+  - snippet
+  - sql
+  - wordpress
+---
+
+When writing a post I sometimes find it difficult to choose what I should tag it with. I try reuse tags I already have to prevent a total mess, and sometimes I just don't really remember what tags I have used so far. When writing a post in WordPress you can get a list of the most used ones, but once in a while I write a post on subject I haven't written a lot about. So, instead of going to the Post Tags page and look through all the pages of tags, I decided to just connect to my blog database and run a query.
+
+```sql
+SELECT
+  name, slug, description, COUNT
+FROM wp_terms
+  NATURAL JOIN wp_term_taxonomy
+WHERE
+  taxonomy="post_tag"
+ORDER BY
+  name
+```
+
+Lists all your tags, sorted by name 🙂

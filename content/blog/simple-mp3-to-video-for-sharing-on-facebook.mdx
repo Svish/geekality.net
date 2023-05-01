@@ -1,0 +1,30 @@
+---
+title: Simple MP3 to Video for sharing on Facebook
+published: '2017-09-26'
+permalinks:
+  - /2017/09/26/simple-mp3-to-video-for-sharing-on-facebook/
+  - /?p=3129
+categories:
+  - technology
+tags:
+  - audio
+  - facebook
+  - ffmpeg
+  - mp3
+  - mp4
+  - video
+---
+
+Wanted to share a short sample audio file (MP3) on Facebook, but they only accept images or video. So, found a quick and simple way to convert an MP3 to a black video with sound. 😛
+
+```dos
+> ffmpeg ^
+    -f lavfi ^
+    -i color=s=160x120:r=2 ^
+    -i AudioFile.mp3 ^
+    -c:v libx264 ^
+    -preset ultrafast ^
+    -c:a copy ^
+    -shortest ^
+    VideoFile.mp4
+```

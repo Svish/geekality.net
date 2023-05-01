@@ -1,0 +1,37 @@
+---
+title: 'XSLT: Load XML or other text from external sources'
+published: '2014-03-11'
+permalinks:
+  - /2014/03/11/xslt-load-xml-or-other-text-from-external-sources/
+  - /?p=2457
+categories:
+  - software-development
+tags:
+  - xslt
+  - xslt-2-0
+---
+
+Just discovered you can pull in external XML and other kinds of text directly through standard XSLT 2.0 methods. So here's a note to self on how.
+
+### Documentation
+
+- **W3**
+  - [`unparsed-text`](http://www.w3.org/TR/xslt20/#function-unparsed-text)
+  - [`document`](http://www.w3.org/TR/xslt20/#function-document)
+- **Saxon:**
+  - [`unparsed-text`](http://www.saxonica.com/documentation/#!functions/fn/unparsed-text)
+  - [`document`](http://www.saxonica.com/documentation/#!functions/fn/document)
+
+### Example usage
+
+```xml
+<!-- Single string URI -->
+<copy-of select="doc('http://www.w3schools.com/xml/note.xml')"/>
+
+<!-- One or more URI from items, in this case a variable -->
+<variable name="uri" select="'http://www.w3schools.com/xml/note.xml'" />
+<copy-of select="document($uri)" />
+
+<!-- Unparsed text, in this case escaped HTML -->
+<copy-of select="unparsed-text('http://example.com')"/>
+```

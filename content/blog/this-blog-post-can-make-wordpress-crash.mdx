@@ -1,0 +1,47 @@
+---
+title: This blog post can make WordPress crash
+published: '2010-10-18'
+permalinks:
+  - /2010/10/18/this-blog-post-can-make-wordpress-crash/
+  - /?p=1228
+categories:
+  - random
+  - technology
+tags:
+  - apache
+  - mod_security
+  - wordpress
+---
+
+Was writing a blog post today. Happy, typing away. Hit Preview, and _bam_:
+
+> Service Temporarily Unavailable
+>
+> The server is temporarily unable to service your request due to maintenance downtime or capacity problems. Please try again later.
+
+Say wahaat? Strange thing was my website was otherwise working normally. Could even
+edit other posts just fine!
+
+Some head scratching, googling and making a support request to Dreamhost followed. Apparently they had just had an outtake, so I figured it might be related. They did too. But it was not! I finally found the answer on a blog:
+
+> Turns out this error is not alone in WordPress and not a bug of it at all.
+> Some of the administration tasks of other CMS software such as posting posts
+> with PHP code in them and uploading stuff would also trigger a module in
+> Apache called Mod_security to be over sensitive. -- [www.kavoir.com](http://www.kavoir.com/2009/04/wordpress-503-service-temporarily-unavailable-when-posting-new-posts-or-modifying-existing-posts.html)
+
+And sure enough, I had mentioned a PHP function called <a href="http://php.net/manual/en/function.curl-exec.php">`curl_exec`</a> in my blog post. Once I removed that word, the post could be previewed and saved just fine. Great stuff...
+
+## Solution
+
+Of course I could just have avoided using that word, but that's no fun. After reading the rest of that mentioned blog post, some comments and <a href="http://wiki.dreamhost.com/Mod_security">wiki page at Dreamhost</a>, I found that by adding the lines below to the .htaccess file the problem was fixed. Or makes it go away at least 😛
+
+```apache
+<IfModule mod_security.c>
+  SetEnvIfNoCase Request_URI ^/wp-admin/(?:post|async-upload)\.php$ MODSEC_ENABLE=Off
+  SetEnvIfNoCase Request_URI ^/xmlrpc\.php$ MODSEC_ENABLE=Off
+  SecFilterDebugLevel 0
+  SecFilterDefaultAction "deny,nolog,noauditlog,status:503"
+</IfModule>
+```
+
+Alrighty... back to my actual blog post...

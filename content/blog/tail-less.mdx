@@ -1,0 +1,48 @@
+---
+title: Tail less
+published: '2013-11-18'
+permalinks:
+  - /2013/11/18/tail-less/
+  - /?p=2432
+categories:
+  - software-development
+  - technology
+tags:
+  - tools
+  - unix
+---
+
+I keep seeing people typing these lines in the console:
+
+```bash
+$ tail /path/to/some.log
+$ tail -f /path/to/some.log
+```
+
+This is often a dumb thing to do. Why? Because you can't really do anything with tail. What if you discovered you needed to look at something right above the lines you got printed out? Or what if you were -f'ing and something flew past you that you needed to investigate further? You'd have to leave tail and run it again with more lines or use a different tool instead. Not very practical.
+
+What more people should do is to use less tail and more less 🙂
+
+```bash
+$ less /path/to/some.log
+```
+
+### Things you can do with less
+
+| Key                            | Function               |
+| ------------------------------ | ---------------------- |
+| <kbd>↑</kbd>                   | Up one line            |
+| <kbd>↓</kbd>                   | Down one line          |
+| <kbd>b</kbd>                   | Up one page            |
+| <kbd>space</kbd>               | Down one page          |
+| <kbd>g</kbd>                   | Beginning of file      |
+| <kbd>G</kbd>                   | End of file            |
+| <kbd>F</kbd>                   | Follow                 |
+| <kbd>ctrl</kbd> + <kbd>c</kbd> | Stop follow            |
+| <kbd>q</kbd>                   | Quit                   |
+| <kbd>/</kbd>                   | Search forward         |
+| <kbd>?</kbd>                   | Search backwards       |
+| <kbd>n</kbd>                   | Next search result     |
+| <kbd>N</kbd>                   | Previous search result |
+
+Much more flexible and handy than tail! Know your tools 😉 Now back to work...

@@ -1,0 +1,36 @@
+---
+title: SQL Server evaluation license expiration date
+published: '2015-08-28'
+permalinks:
+  - /2015/08/28/sql-server-evaluation-license-expiration-date/
+  - /?p=2806
+categories:
+  - technology
+tags:
+  - license
+  - sql
+  - sql-server
+---
+
+Running the following SQL should give you how many days left until your evaluation license runs out. Also tried adding a calculation of when that date is. Either way, beware of off-by-one errors...
+
+```sql
+sp_configure 'show advanced options', 1;
+RECONFIGURE
+GO
+
+sp_configure 'Agent XPs', 1;
+RECONFIGURE
+GO
+
+DECLARE @daysleft INT
+DECLARE @instancename sysname
+SELECT @instancename = CONVERT(sysname, SERVERPROPERTY('InstanceName'))
+EXEC @daysleft = xp_qv '2715127595', @instancename
+SELECT
+    DATEADD(dd, @daysleft, CONVERT(DATE, getdate())) 'Expiration date',
+    @daysleft 'Days left'
+GO
+```
+
+**Source:** <a href="http://blogs.msdn.com/b/sqlosteam/archive/2013/02/17/when-will-my-sql-server-evaluation-edition-expire.aspx">When will my SQL Server Evaluation Edition expire?</a>

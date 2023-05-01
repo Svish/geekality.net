@@ -1,0 +1,140 @@
+---
+title: Simple Meddler scripts for faking web service responses
+published: '2013-02-20'
+permalinks:
+  - /2013/02/20/simple-meddler-script-for-faking-web-service-responses/
+  - /?p=2181
+categories:
+  - software-development
+tags:
+  - http
+  - jscript
+  - meddler
+  - xml
+---
+
+I recently discovered <a href="http://webdbg.com/Meddler/">Meddler</a> which is an HTTP generator based on JScript. Since there were not many samples to find and Google wasn't really of much help here, I figured I could share the scripts I write here. Maybe it helps someone out, and even more likely, I will probably have to look back at this at some time since I will forget 😛
+
+To use these, simply load up the script in Meddler, hit compile and you can talk to it through `http://localhost:8088/`.
+
+## Map path to file
+
+This script responds with an XML file corresponding to whatever the first chunk of the request path was. For example if you tried to get `http://localhost:8088/foobar`, it would try to return `foobar.xml` from whatever directory your script is located.
+
+```java
+import Meddler;
+import System;
+import System.IO;
+import System.Text.RegularExpressions;
+
+class Handlers
+{
+  static function OnConnection(session: Session)
+  {
+    var headers: ResponseHeaders = new ResponseHeaders();
+
+    try
+    {
+      if( ! session.ReadRequest())
+        return;
+
+      if(session.requestHeaders.Path == "/favicon.ico")
+        return;
+
+      var filename:String = Path.GetDirectoryName(MeddlerObject.RunningScript)
+        + Path.DirectorySeparatorChar
+        + Regex.Match(session.requestHeaders.Path, "\\w+").Value
+        + ".xml";
+      var response:byte[] = Utilities.FileToByteArray(filename, false);
+
+      headers.Status = "200 OK";
+      headers["Connection"] = "close";
+      headers["Content-Type"] = "text/xml; charset=utf-8";
+      session.WriteString(headers);
+      session.WriteBytes(response);
+
+      MeddlerObject.Log.LogString(session.requestHeaders.Path
+        + "\t" + filename);
+    }
+    catch(e)
+    {
+      MeddlerObject.Log.LogString(e);
+
+      headers.Status = "500 Internal Server Error";
+      headers["Connection"] = "close";
+      headers["Content-Type"] = "text/plain; charset=utf-8";
+      session.WriteString(headers);
+      session.WriteLine(e);
+    }
+    finally
+    {
+      session.CloseSocket();
+    }
+  }
+}
+```
+
+## Alternating responses
+
+This script alternates between serving two different XML files. One containing a regular response, and one with an error. The files are expected to be in the same directory as the script itself. I used this to test an ESB process to make sure it handled both good and bad responses properly.
+
+```java
+import Meddler;
+import System;
+import System.Net.Sockets;
+import System.IO;
+
+class Handlers
+{
+  static const responses:String[] = [
+    "response.xml",
+    "error.xml",
+    ];
+
+  static var n:int;
+
+  static function OnConnection(session: Session)
+  {
+    var headers: ResponseHeaders = new ResponseHeaders();
+
+    try
+    {
+      if( ! session.ReadRequest())
+        return;
+
+      if(session.requestHeaders.Path == "/favicon.ico")
+        return;
+
+      var filename:String = Path.GetDirectoryName(MeddlerObject.RunningScript)
+        + Path.DirectorySeparatorChar
+        + responses[n % responses.Length];
+      var response:byte[] = Utilities.FileToByteArray(filename, false);
+
+      headers.Status = "200 OK";
+      headers["Connection"] = "close";
+      headers["Content-Type"] = "text/xml; charset=utf-8";
+      session.WriteString(headers);
+      session.WriteBytes(response);
+
+      MeddlerObject.Log.LogString(n
+        + "\t" + session.requestHeaders.Path
+        + "\t" + filename);
+      n++;
+    }
+    catch(e)
+    {
+      MeddlerObject.Log.LogString(e);
+
+      headers.Status = "500 Internal Server Error";
+      headers["Connection"] = "close";
+      headers["Content-Type"] = "text/plain; charset=utf-8";
+      session.WriteString(headers);
+      session.WriteLine(e);
+    }
+    finally
+    {
+      session.CloseSocket();
+    }
+  }
+}
+```

@@ -1,0 +1,31 @@
+---
+title: When to check for null
+published: '2009-01-15'
+permalinks:
+  - /2009/01/15/when-to-check-for-null/
+  - /?p=48
+categories:
+  - software-development
+tags:
+  - best-practices
+---
+
+I often get truly tired of all the null checking when programming. I keep asking myself, is this really necessary? For example, I am the one coding it, and I am the only one who will be sending stuff into those methods. This is of course not always the case, but very often it is.
+
+Anyways, I found some good advice on when we should check for null values and thought I could note it down here and share it.
+
+> One thing to remember is that the code you write today, while it may be a
+> small team and you can have good documentation, will turn into legacy code
+> that someone else will have to maintain. I use the following rules:
+>
+> - If I'm writing a public API that will be exposed to others, then I will do
+>   null checks on all reference parameters.
+> - If I'm writing an internal component to my application, I write null
+>   checks when I need to do something special when a null exists, or when I
+>   want to make it very clear. Otherwise I don't mind getting the null
+>   reference exception since that is also fairly clear what is going on.
+> - When working with return data from other peoples frameworks, I only check
+>   for null when it is possible and valid to have a null returned. If their
+>   contract says it doesn't return nulls, I won't do the check.
+
+Very good advice 🙂

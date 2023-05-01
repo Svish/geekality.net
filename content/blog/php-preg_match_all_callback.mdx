@@ -1,0 +1,57 @@
+---
+title: 'PHP: `preg_match_all_callback`'
+published: '2017-02-08'
+permalinks:
+  - /2017/02/08/php-preg_match_all_callback/
+  - /?p=2998
+categories:
+  - software-development
+tags:
+  - pcre
+  - php
+  - regular-expression
+---
+
+There are several <a href="http://php.net/manual/ref.pcre.php"><abbr title="Regular Expressions (Perl-Compatible)">PCRE</abbr> functions</a> available, but today I looked for one that just wasn't there: `preg_match_all_callback()`.
+
+Could've maybe used <a href="http://php.net/manual/function.preg-replace-callback.php">`preg_replace_callback()`</a>, but felt wrong since I didn't actually want to do any <em>replacing</em>. I just needed my function to be called for each match.
+
+So I wrote it myself. Noting it here, in case I (or someone else) needs it again.
+
+```php
+<?php
+/**
+ * Perform a global regular expression match
+ * and calls the callback for each match.
+ */
+function preg_match_all_callback(
+        string $pattern,
+        string $subject,
+        callable $callback)
+{
+    $r = preg_match_all($pattern, $subject, $matches, PREG_SET_ORDER);
+    foreach($matches ?? [] as $match)
+        $callback($match);
+    return $r;
+}
+```
+
+And, in case someone reads this post and knows it actually <em>does</em> exist... and if that someone is you, please do leave a comment!
+
+And, yes, I could've just written those 3 lines where I needed them, but what's the fun in that? And besides, the shorter the code where it counts, the easier what counts is to read.
+
+## Usage
+
+```php
+preg_match_all_callback('/(\w)\w*/', 'Hello World', 'var_dump');
+```
+
+```
+array (size=2)
+  0 => string 'Hello' (length=5)
+  1 => string 'H' (length=1)
+
+array (size=2)
+  0 => string 'World' (length=5)
+  1 => string 'W' (length=1)
+```

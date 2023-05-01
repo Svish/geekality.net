@@ -1,0 +1,28 @@
+---
+title: 'PHP: Natural sort array by a given key'
+published: '2017-02-03'
+permalinks:
+  - /2017/02/03/php-natural-sort-array-by-a-given-key/
+  - /?p=2976
+categories:
+  - software-development
+tags:
+  - php
+  - sorting
+---
+
+Just a note to self, after running around in google search circles for a bit...
+
+```php
+function array_sort_by($key, array &$array)
+{
+    return usort($array, function($x, $y) use ($key)
+    {
+        return strnatcasecmp($x[$key] ?? null, $y[$key] ?? null);
+    });
+}
+```
+
+Uses `?? null` in case key doesn't exist on some items.
+
+Switch to `strnatcmp` if you want case-sensitive sorting.

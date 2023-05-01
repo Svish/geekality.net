@@ -1,0 +1,187 @@
+---
+title: 'Project Euler: Problem 25'
+published: '2009-11-06'
+permalinks:
+  - /2009/11/06/project-euler-problem-25/
+  - /?p=751
+categories:
+  - project-euler
+  - software-development
+tags:
+  - big-int
+  - csharp
+  - fibonacci
+  - math
+---
+
+> The Fibonacci sequence is defined by the recurrence relation:
+>
+> $$
+> F_n = F_{n-1} + F_{n-2} \text{, where } F_1 = 1 \text{ and } F_2 = 1
+> $$
+>
+> Hence the first 12 terms will be:
+>
+> $$
+> \begin{align*}
+> F_1 &= 1 \\
+> F_2 &= 1 \\
+> &\ldots \\
+> F_{11} &= 89 \\
+> F_{12} &= 144
+> \end{align*}
+> $$
+>
+> The 12th term, $F\_{12}$, is the first term to contain three digits.
+>
+> What is the first term in the Fibonacci sequence to contain 1000 digits?
+>
+> – [Project Euler Problem 25](https://projecteuler.net/problem=25)
+
+## Solution
+
+We touched on the Fibonacci sequence a while ago in the <a href="/?p=165">second euler problem</a>. This time, however, we are in a whole different league. That time we were supposed to sum up all even Fibonacci numbers below 4 million, which might sound like a lot, but not when we compare it to the number we are asked for this time! The last Fibonacci number below 4 million is 3524578. That would be 7 digits. The maximum value of the datatype I used in the generator I made for that (ulong) is 18446744073709551615. That would be 20 digits. Quite a distance left to a thousand!
+
+So, once again we turn to our big integer class, [`IntX`](https://www.nuget.org/packages/IntX). And since we have that, a solution to this problem is actually pretty straight forward. We simply have to make a new generator that uses the IntX data type instead of tiny ulong (it's all relative...).
+
+```csharp
+public class LargeFibonacciSequence : IEnumerable<IntX>
+{
+    public IEnumerator<IntX> GetEnumerator()
+    {
+        var a = new IntX(0);
+        var b = new IntX(1);
+
+        while (true)
+        {
+            yield return a;
+
+            var c = a + b;
+            a = b;
+            b = c;
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
+```
+
+The straight forward solution should then be fairly obvious.
+
+```csharp
+var n = 0;
+var sequence = new LargeFibonacciSequence();
+
+using (var e = sequence.GetEnumerator())
+{
+    while (e.MoveNext() && e.Current.ToString().Length < 1000)
+        n++;
+}
+
+var answer = n;
+```
+
+That pretty much just moves through one Fibonacci number after the other, increasing `n` as it goes, until it reaches the first one that has 1000 or more digits.
+
+Very brute-force, not very fast (takes around 500 ms) and not very interesting, but that's pretty much it... ooor is it?
+
+## Take two!
+
+Alright, while reading up on Fibonacci numbers I found some interesting mathematical formulas and such. I'm not going to come with an in-depth explanation or lots proofs here, but I will share the formulas that matters and go through how we use them. If you want the elaborate explanations you can find them where smarter people than I reign. For example at <a href="http://en.wikipedia.org/wiki/Fibonacci_series">Wikipedia</a>, or at <a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibFormula.html">this site</a>. Anyways, here we go. Take cover if you fear math...
+
+### The Fibonacci sequence
+
+The $n$th number in the Fibonacci sequence, $F_n$, is defined by the recurrence relation
+
+$$
+F_n = F_{n - 1} + F_{n - 2}
+$$
+
+with the seed values $F_0=0$ and $F_1 = 1$.
+
+This recurrence, since it is linear, can be expressed by a <a href="http://en.wikipedia.org/wiki/Closed-form_expression">closed-form solution</a> known as the Binet's formula:
+
+$$
+\begin{align*}
+Fib(n)&=\dfrac{\varphi^n-(1-\varphi)^n}{\sqrt{5}}=\dfrac{\varphi^n-(\frac{-1}{\varphi})^n}{\sqrt{5}} \\
+\varphi&=\dfrac{1+\sqrt{5}}{2}\approx1.6180339887\ldots \text{ (Golden ratio)}
+\end{align*}
+$$
+
+Now, why $1-\varphi$ and $\frac{-1}{\varphi}$ is considered the same, or even why that formula works or looks like that, I will leave as an exercise for the reader (Cause I have no idea 😛 Please share if you do...). But anyways, as an example, if you put 20 into that formula, you will get 6765 which is the 20th number in the Fibonacci sequence. Fantastic. We could now use that formula to make another brute-force solution to find the term we are after. But that wouldn't make much sense and would be much much slower. So, we must move on further into this crazy land.
+
+Before we move on to the next part, since we will be working with quite large values of $n$, we can simplify that expression a bit. That is because $\frac{-1}{\varphi}^n$ will move pretty fast towards 0 as $n$ increases. In other words, we can pretty much just skip that part and use the following formula instead:
+
+$$
+Fib(n)=\dfrac{\varphi^n}{\sqrt{5}}
+$$
+
+### The length of a number
+
+How do you calculate the length of a number? I actually had to do this in an earlier post and then I kind of cheated. I just converted the number into a string and just count the characters (In C#, `string.Length`). But, I recently discovered that there actually is a way you can do this mathematically! I had no idea... The key lays in the <a href="http://en.wikipedia.org/wiki/Log10">logarithm to base 10</a>.
+
+$\log_{10}{n}$ (often written as just $\log{n}$) for any
+1-digit number will give you 0.something. For any 2-digit number it gives you
+1.something, and so on. So a formula for getting the length of any number:
+
+$$
+Len(n)=\lfloor\log{n}\rfloor+1
+$$
+
+In case you were wondering, those weird square brackets are called the <a href="http://en.wikipedia.org/wiki/Floor_function">floor function</a>.
+
+### The length of a Fibonacci number
+
+Now we are able to calculate the length of a certain Fibonacci number by using the following formula, which I for no good reason will call G:
+
+$$
+G(n)=Len(Fib(n))=\lfloor\log{\dfrac{\varphi^n}{\sqrt{5}}}\rfloor+1
+$$
+
+There is a problem here though. And the problem is $\varphi^n$. Why is it a problem? Because it get's <em>seriously</em> large very quick. A value of around 500 actually makes my calculator overflow and just give me an error.
+
+But fear not! There are a couple of formulas having to do with roots and logarithms that we can use to our advantage:
+
+$$
+\begin{align*}
+\sqrt{c}&=\sqrt[2]{c} \\
+\sqrt[b]{c}&=c^{\frac{1}{b}} \\
+\log_a{\dfrac{b}{c}}&=\log_a{b}-\log_a{c} \\
+\log_a{b^c}&=c\log_a{b}
+\end{align*}
+$$
+
+With those formulas we can handily rewrite our formula into one that is easier to handle:
+
+$$
+\begin{align*}
+G(n) &= \lfloor\log{\dfrac{\varphi^n}{\sqrt{5}}}\rfloor+1 \\
+&= \lfloor\log{\varphi^n}-\log{5^{\frac{1}{2}}}\rfloor+1 \\
+&= \lfloor n\log{\varphi}-\dfrac{\log{5}}{2}\rfloor+1
+\end{align*}
+$$
+
+Tadaa! Now we can push in 20 and get 4. And as we calculated earlier, the 20th Fibonacci number is 6769, which in fact is 4 digits long! Amazing...
+
+### The first Fibonacci number with 1000 digits
+
+Now we are almost ready to solve our problem. The formula we have now works perfectly. The only problem is that it's backwards! We are not looking for the length of a certain Fibonacci number, but rather what Fibonacci number has a certain length. In other words, we want $n$, not $G(n)$. Luckily, using pretty basic algebra and some guessing, we can make a new formula that finds exactly what we are looking for. (My way of skipping the floor stuff and introducing a ceiling function in the end is purely based on guessing and observation. But it gives the correct answer 😛 Now, if you know the proper way of handling it, please let me know! )
+
+$$
+\begin{align*}
+G(n) &= \left\lfloor n\log{\varphi}-\dfrac{\log{5}}{2}\right\rfloor+1 \\
+n\log{\varphi} &= G(n)+\dfrac{\log{5}}{2}-1 \\
+n &= \left\lceil\dfrac{G(n)+\dfrac{\log{5}}{2}-1}{\log\varphi}\right\rceil
+\end{align*}
+$$
+
+Now we can just substitute $G(n)$ with 1000, and calculate $n$, which should be the answer to this problem!
+
+As usual, I will not put the actual answer here though 😉
+
+This has been the longest blog post yet about these problems, I think, but I must say it was pretty fun to solve this one. I didn't really get much at first, just saw that the formulas worked, but now that I have written about it and gone through it all step by step, it actually makes sense. Most of it anyways. If you know how to properly handle that floor and ceiling stuff, let me know 😛
+
+Anyways, that was it for now! Stay tuned for more good stuff like this 😛

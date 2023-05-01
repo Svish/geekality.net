@@ -1,0 +1,44 @@
+---
+title: 'Project Euler: Problem 1'
+published: '2009-09-15'
+permalinks:
+  - /2009/09/15/project-euler-problem-1/
+  - /?p=155
+categories:
+  - project-euler
+  - software-development
+tags:
+  - csharp
+---
+
+Recently I decided that my brain needed some exercise. So I figured I would try to solve a couple of <a href="https://projecteuler.net/">Project Euler</a> problems once in a while. And while I was at it, try to to do a bit of TTD, or at least write test cases for things. What is Project Euler? Well, here is some of what they say about themselves, whoever they are:
+
+> Project Euler is a series of challenging mathematical/computer programming problems that will require more than just mathematical insights to solve. Although mathematics will help you arrive at elegant and efficient methods, the use of a computer and programming skills will be required to solve most problems.
+>
+> The motivation for starting Project Euler, and its continuation, is to provide a platform for the inquiring mind to delve into unfamiliar areas and learn new concepts in a fun and recreational context.
+
+I'm not particularly good at these things, but it is quite fun when you get it right. I also get to practice my Google-Fu a bit when I need to freshen up things I learned during math at school, but have forgotten. Or if I find that my solution to a problem is totally awful and takes ages to solve...
+
+Anyways, I can recommend the problems so far. They have (so far) been mind bending enough to be challenging, but not so insanely difficult that they are impossible.
+
+The first problem goes like this:
+
+> If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
+>
+> Find the sum of all the multiples of 3 or 5 below 1000.
+>
+> – [Project Euler Problem 1](https://projecteuler.net/problem=1)
+
+To solve this problem I used a pretty straight forward LINQ statement. It basically just generates all the numbers from 0 to 999, filters out the numbers not dividable by 3 or 5, and then sums those up.
+
+```csharp
+var multiples = new long[] {3, 5};
+var answer =  Enumerable
+  .Range(0, 1000)
+  .Where(x => multiples.Any(y =>; x%y == 0))
+  .Sum();
+```
+
+The answer to that would then be 233168, and it the code took less than 10 milliseconds to find.
+
+So, how did you solve it? What do you think about my solution?

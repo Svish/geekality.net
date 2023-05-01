@@ -1,0 +1,36 @@
+---
+title: Skype crash on Windows with offset 006eb5e2
+published: '2011-05-26'
+permalinks:
+  - /2011/05/26/skype-crash-on-win-xp-with-offset-006eb5e2/
+  - /?p=1641
+categories:
+  - technology
+tags:
+  - crash
+  - errors
+  - fix
+  - skype
+  - windows
+---
+
+Probably an obscure issue I'll never experience again, but in case it does, I found a solution in a <a href="https://answers.yahoo.com/question/index?qid=20110526051510AAfMa9H">thread on Yahoo Answers</a> that worked.
+
+Run one of the commands below in a Command Prompt or just stick it into the Run dialog (<kbd>win</kbd> + <kbd>r</kbd>). Then restart Skype \*sigh\*... 🙄
+
+## Windows XP
+
+```dos
+> del "%userprofile%\Application Data\Skype\shared.xml"
+```
+
+### Windows 7 (and Vista?)
+
+```dos
+> del "%appdata%\Skype\shared.xml"
+```
+
+<div className="note">
+  **Note:** You may of course also find and delete the file by using Windows
+  Explorer. I just prefer a quick one-off command 🙂
+</div>

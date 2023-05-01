@@ -1,0 +1,48 @@
+---
+title: 'Project Euler: Problem 10'
+published: '2009-09-30'
+permalinks:
+  - /2009/09/30/project-euler-problem-10/
+  - /?p=543
+categories:
+  - project-euler
+  - software-development
+tags:
+  - csharp
+  - primes
+---
+
+> The sum of the primes below 10 is
+>
+> $$
+> 2 + 3 + 5 + 7 = 17
+> $$
+>
+> Find the sum of all the primes below two million.
+>
+> – [Project Euler Problem 10](https://projecteuler.net/problem=10)
+
+## Solution
+
+Using our <a href="/?p=176">previously made</a> Eratosthenes class for generating primes, this problem can be solved in a very easy way.
+
+```csharp
+var answer = new Eratosthenes()
+    .TakeWhile(x => x < 2000000)
+    .Aggregate((sum, x) => sum + x)
+```
+
+And that was it actually. The only problem here is that it takes a bit of time. On my machine this solution takes over 2 seconds. Not very long maybe, but compared to the others that is quite a bit of time actually. Especially when I know that it <em>could</em> go a lot faster if I just had a faster algorithm for generating prime numbers. However, I haven't found that yet. Actually, I have, but I haven't managed to implement any of them yet... 😛
+
+## Update October, 19th 2009
+
+Managed to finally implement another algorithm called the <a href="http://en.wikipedia.org/wiki/Sieve_of_Atkin">Sieve of Atkin</a>. I have written about it in <a href="/?p=674">a different post</a>.
+
+Using that class, the solution to this problem looks like this:
+
+```csharp
+var answer = new Atkin(2000000)
+    .Aggregate((sum, x) => sum + x);
+```
+
+Pretty similar. But! The solution now takes only about 160 milliseconds, instead of the original 2 seconds 😄 Is that cool or what?

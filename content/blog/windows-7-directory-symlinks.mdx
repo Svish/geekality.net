@@ -1,0 +1,24 @@
+---
+title: Windows 7 directory symlinks
+published: '2012-03-09'
+permalinks:
+  - /2012/03/09/windows-7-directory-symlinks/
+  - /?p=1951
+categories:
+  - technology
+tags:
+  - command-line
+  - symbolic-links
+  - windows
+---
+
+Just a note to self, as I keep forgetting...
+
+```dos
+REM Creating a symlink
+mklink /d foo-current foo-1.0
+
+REM Replacing it with a new one
+rmdir foo-current
+mklink /d foo-current foo-1.1
+```

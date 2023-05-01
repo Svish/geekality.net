@@ -1,0 +1,37 @@
+---
+title: 'XSLT: Generate comma-separated string from element values'
+published: '2013-02-20'
+permalinks:
+  - /2013/02/20/xslt-generate-comma-separated-values/
+  - /?p=2188
+categories:
+  - software-development
+tags:
+  - csv
+  - xml
+  - xslt
+---
+
+This is one way to create a comma-separated list of values from a set of elements.
+
+```xml
+<xsl:for-each select="$orders/cm:Error">
+    <xsl:value-of select="cm:errorCode"/>
+    <xsl:if test="position() != last()">
+        <xsl:text>,</xsl:text>
+    </xsl:if>
+</xsl:for-each>
+<!-- Source: http://stackoverflow.com/a/668850/39321 -->
+```
+
+This is another.
+
+```xml
+<xsl:for-each select="$elements/Error[1]">
+    <xsl:value-of select="errorCode"/>
+    <xsl:for-each select="following-sibling::Error">
+        <xsl:value-of select="concat(',',errorCode)"/>
+    </xsl:for-each>
+</xsl:for-each>
+<!-- Source: http://stackoverflow.com/a/666600/39321 -->
+```

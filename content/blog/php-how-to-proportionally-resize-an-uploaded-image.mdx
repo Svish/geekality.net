@@ -1,0 +1,133 @@
+---
+title: 'PHP: How to proportionally resize an uploaded image'
+published: '2011-05-01'
+permalinks:
+  - /2011/05/01/php-how-to-proportionally-resize-an-uploaded-image/
+  - /?p=1564
+categories:
+  - software-development
+tags:
+  - images
+  - php
+  - resize
+  - tutorial
+---
+
+Say you have a form where someone can upload a profile image. The uploaded image can be of any size of course, but you want all the profile images to fit inside a certain frame. You could just set the dimensions on the image tag to this size, but in most browsers that would look ugly, and it would also most likely stretch the image. It would look awful. In addition you would be serving a image which most likely was a lot larger than you wanted it to be. This would cost you bandwidth.
+
+In this case you might want to proportionally resize the image to the appropriate size when you get it uploaded. You can then store the resized image instead and serve it directly with no problems afterwards. It doesn't have to be difficult! Here's how 🙂
+
+## The form
+
+To keep this ultra simple, we will just have a tiny form with one field and a submit button.
+
+```html
+<form action="upload.php" method="post" enctype="multipart/form-data">
+  <input type="file" name="image" />
+  <input type="submit" value="Upload" />
+</form>
+```
+
+Notice that the form has `enctype="multipart/form-data"`. If it's not, the file upload won't work. Up next is the file which catches the uploaded data.
+
+## Processing the upload
+
+First thing we need to do is to check that the upload went alright.
+
+```php
+// Check if file was uploaded ok
+if( ! is_uploaded_file($_FILES['image']['tmp_name']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK)
+{
+    exit('File not uploaded. Possibly too large.');
+}
+```
+
+If all good, we can turn the uploaded file into an image resource.
+
+```php
+// Create image from file
+switch(strtolower($_FILES['image']['type']))
+{
+    case 'image/jpeg':
+        $image = imagecreatefromjpeg($_FILES['image']['tmp_name']);
+        break;
+    case 'image/png':
+        $image = imagecreatefrompng($_FILES['image']['tmp_name']);
+        break;
+    case 'image/gif':
+        $image = imagecreatefromgif($_FILES['image']['tmp_name']);
+        break;
+    default:
+        exit('Unsupported type: '.$_FILES['image']['type']);
+}
+```
+
+Before we can actually resize this image, we need to figure out a couple of things. We need the size of the frame we want to fit this image into, the current size, and the size it should have to fit inside the frame without messing up its <a href="http://en.wikipedia.org/wiki/Aspect_ratio">aspect ratio</a>.
+
+```php
+// Target dimensions
+$max_width  = 240;
+$max_height = 180;
+
+// Get current dimensions
+$old_width  = imagesx($image);
+$old_height = imagesy($image);
+
+// Calculate the scaling we need to do to fit the image inside our frame
+$scale      = min($max_width/$old_width, $max_height/$old_height);
+
+// Get the new dimensions
+$new_width  = ceil($scale*$old_width);
+$new_height = ceil($scale*$old_height);
+```
+
+We calculate the scaling by dividing the wanted dimension with the current one. I do this for both the width and the height, and then choose the lesser of the two. This makes sure that both wide and tall images will fit into our frame. When we have the scale, we simply multiply it with the current height and width to get our new dimensions.
+
+With that calculated, we can then create a new empty image resource and fill it with a resized copy of the original image.
+
+```php
+// Create new empty image
+$new = imagecreatetruecolor($new_width, $new_height);
+
+// Resize old image into new
+imagecopyresampled($new, $image,
+    0, 0, 0, 0,
+    $new_width, $new_height, $old_width, $old_height);
+```
+
+Where you go from here is a bit up to you. You could turn the image resource into a PNG or a JPEG and then store it as a file, in a database, or whatever you feel like. Just as an example I'll turn it into a JPEG, catch the data in a versatile variable and output it to the browser.
+
+First I create a JPEG image out of it and catch it using output buffering. With the data in a variable it can easily be stored in a database, dumped to a file or to the browser. If you wanted to dump it to a file, you'd probably want to swap `NULL` with the filename. And if you wanted to output it to the browser, you could just skip the output buffering and let the data flow to the browser freely. But, just so you can see how to catch the data in a variable, I will do it the hard way 😛
+
+```php
+// Catch the imagedata
+ob_start();
+imagejpeg($new, NULL, 90);
+$data = ob_get_clean();
+```
+
+Next up we need to clean up after ourselves. Never forget that!
+
+```php
+// Destroy resources
+imagedestroy($image);
+imagedestroy($new);
+```
+
+Finally we'll set a proper content-type so the browser understands what it gets and output the data.
+
+```php
+// Set new content-type and status code
+header("Content-type: image/jpeg", true, 200);
+
+// Output data
+echo $data;
+```
+
+And that's all 🙂
+
+## Working sample
+
+You can check out a working sample and complete source code at <a href="http://samples.geekality.net/image-resize/">samples.geekality.net/image-resize</a>. Don't abuse it 😉
+
+Let me know if this was useful or if you have some ideas for improvement. Also, if I have messed up somewhere, please do let me know so I can fix it and possibly learn something new 🙂

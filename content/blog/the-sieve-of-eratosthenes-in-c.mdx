@@ -1,0 +1,74 @@
+---
+title: The Sieve of Eratosthenes in C#
+published: '2009-10-19'
+permalinks:
+  - /2009/10/19/the-sieve-of-eratosthenes-in-c/
+  - /?p=626
+categories:
+  - software-development
+tags:
+  - algorithm
+  - csharp
+  - primes
+  - sieve-of-eratosthenes
+---
+
+In <a href="/?p=176" title="Problem 3">some</a> <a href="/?p=496" title="Problem 7">of</a> <a href="/?p=543" title="Problem 10">the</a> <a href="https://projecteuler.net/">Project Euler</a> <a href="https://projecteuler.net/index.php?section=problems">problems</a> we have needed a source of <a href="http://en.wikipedia.org/wiki/Primes">primes</a>. One algorithm for finding primes is called the <a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>. This algorithm is both pretty simple to understand and to implement. It is also fairly fast and usable, at least for the lower primes.
+
+My implementation is based upon the algorithm described on the Wikipedia page and some helpful optimizations I found in an article at <a href="http://www.blackwasp.co.uk/Eratosthenes.aspx">Black Wasp</a>. The differences from the original algorithm and the solution at Black Wasp is that it finds the primes incrementally and that it only looks for a new prime when asked.
+
+My code should be pretty self explanatory, but the basic idea is that we have a list of known primes and for each odd number we check it against the these. If a number is not evenly divisible by any of the known primes, then we have found a new one and can add it to our list.
+
+```csharp
+public class Eratosthenes : IEnumerable<ulong>
+{
+    private readonly List<ulong> knownPrimes;
+
+    public Eratosthenes()
+    {
+        knownPrimes = new List<ulong> {2, 3};
+    }
+
+    public IEnumerator<ulong> GetEnumerator()
+    {
+        // Return the ones we know first
+        foreach (var prime in knownPrimes)
+            yield return prime;
+
+        // Then find new ones
+        var possible = knownPrimes.Last();
+        while (true)
+            if (IsPrime(possible += 2))
+            {
+                yield return possible;
+                knownPrimes.Add(possible);
+            }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    private bool IsPrime(ulong value)
+    {
+        var sqrt = (ulong) Math.Sqrt(value);
+        return ! knownPrimes
+            .TakeWhile(x => x <= sqrt)
+            .Any(x => value%x == 0);
+    }
+}
+```
+
+How do you use it? Simple! For example, to print the first 500 primes you can do this:
+
+```csharp
+var primes = new Eratosthenes().Take(500);
+
+foreach(var prime in primes)
+{
+    Console.WriteLine(prime);
+}
+```
+
+And that's all there is to it! What do you think? Let me know if you have any questions about it or any suggestions to how it can be improved. I want to know 😉

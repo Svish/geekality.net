@@ -1,0 +1,73 @@
+---
+title: 'Project Euler: Problem 9'
+published: '2009-09-24'
+permalinks:
+  - /2009/09/24/project-euler-problem-9/
+  - /?p=512
+categories:
+  - project-euler
+  - software-development
+tags:
+  - csharp
+  - pythagorean-triplets
+---
+
+> A Pythagorean triplet is a set of three natural numbers, for which,
+>
+> $$
+> a < b < c \qquad a^2 + b^2 = c^2
+> $$
+>
+> For example,
+>
+> $$
+> 3^2 + 4^2 = 9 + 16 = 25 = 5^2
+> $$
+>
+> There exists exactly one Pythagorean triplet for which,
+>
+> $$
+> a + b + c = 1000
+> $$
+>
+> Find the product abc.
+>
+> – [Project Euler Problem 9](https://projecteuler.net/problem=9)
+
+## Solution
+
+This I wasn't quite sure how to solve effectively and my solution is probably not the fastest or most clever, but at least it is pretty simple 🙂 To start off, we need a source of Pythagorean triplets.
+
+```csharp
+public class PythagoreanTriples
+    : IEnumerable<Triple<ulong, ulong, ulong>>
+{
+  public IEnumerator<Triple<ulong, ulong, ulong>> GetEnumerator()
+  {
+      for (ulong c = 1;; c++)
+          for (ulong b = 1; b <= c; b++)
+              for (ulong a = 1; a < b; a++)
+                  if ((a*a) + (b*b) == c*c)
+                      yield return Tuple.From(a, b, c);
+  }
+
+  IEnumerator IEnumerable.GetEnumerator()
+  {
+      return GetEnumerator();
+  }
+}
+```
+
+You can find the <a href="http://abdullin.com/journal/2008/9/30/using-tuples-in-c-functions-and-dictionaries.html">Triple</a> class in a library called the <a href="http://abdullin.com/shared-libraries/">Lokad Shared Libraries</a>.
+
+Anyways, that's pretty much what we need to solve this problem actually. We can use it like so:
+
+```csharp
+var t = new PythagoreanTriples()
+  .First(x => x.Item1 + x.Item2 + x.Item3 == 1000);
+var answer = t.Item1 * t.Item2 * t.Item3;
+```
+
+This piece of code simply goes through triplets until it finds the first one fulfilling our requirement. It runs in around 230 milliseconds, which is acceptable enough.
+
+Do you have a more clever way to do this? Please leave a comment and share 🙂

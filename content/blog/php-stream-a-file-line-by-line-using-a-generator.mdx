@@ -1,0 +1,36 @@
+---
+title: 'PHP: Stream a file line-by-line using a generator'
+published: '2016-02-28'
+permalinks:
+  - /2016/02/28/php-stream-a-file-line-by-line-using-a-generator/
+  - /?p=2910
+categories:
+  - software-development
+tags:
+  - files
+  - generator
+  - php
+  - yield
+---
+
+This function will "stream" a file line-by-line, as a <a href="http://php.net/manual/en/language.generators.php">`Generator`</a>.
+
+Can be very useful if for example you need to process a big file, don't want to read the whole thing into memory, but only process each line by itself.
+
+```php
+function read($file)
+{
+    $fp = fopen($file, 'rb');
+
+    while(($line = fgets($fp)) !== false)
+        yield rtrim($line, "\r\n");
+
+    fclose($fp);
+}
+
+// Usage
+foreach(read('http://example.com') as $line)
+{
+    var_dump($line);
+}
+```

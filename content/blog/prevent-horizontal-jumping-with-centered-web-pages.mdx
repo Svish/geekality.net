@@ -1,0 +1,24 @@
+---
+title: Prevent horizontal jumping with centered web pages
+published: '2012-02-21'
+permalinks:
+  - /2012/02/21/prevent-horizontal-jumping-with-centered-web-pages/
+  - /?p=1944
+categories:
+  - software-development
+tags:
+  - css
+  - web-design
+---
+
+If you have a centered web page, you might have noticed ugly annoying jumping when you change between pages where some extend beyond the browser bottom and some don't. This is of course caused by the simple fact that the vertical scroll bar appears and disappears depending on how long the page is.
+
+Not a big deal, but I find it annoying. A simple fix is to just always show the vertical scroll bar, which you can do with a tiny piece of CSS.
+
+```css
+html {
+  overflow-y: scroll;
+}
+```
+
+Problem solved. 🤷‍♂️

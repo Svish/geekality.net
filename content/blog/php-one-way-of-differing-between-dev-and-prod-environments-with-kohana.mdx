@@ -1,0 +1,75 @@
+---
+title: 'PHP: Differing between DEV and PROD environments with Apache and PHP'
+published: '2012-01-12'
+permalinks:
+  - >-
+    /2012/01/12/php-one-way-of-differing-between-dev-and-prod-environments-with-kohana/
+  - /?p=1904
+categories:
+  - software-development
+tags:
+  - htaccess
+  - apache
+  - environment
+  - kohana
+  - php
+  - setup
+---
+
+Usually when I develop websites, they will be deployed to a domain, for example `www.geekality.net`. But when I develop this site locally, I usually want it to be in some sub-folder of `localhost`, since I usually have more than one website going on, and I don't want the trouble with virtual-hosts. So, to solve this for my Kohana websites I do the following simple thing. This technique would work for other websites programmed in PHP as well, but the PHP part would probably be a bit different.
+
+## Apache httpd.conf
+
+First of all, I add this to the end of my httpd.conf.
+
+```apache
+# Custom htaccess file
+AccessFileName .htaccess.local .htaccess
+```
+
+Make sure to check if there is already a line with `AccessFileName` though, and if it is, just edit that instead of adding another one 🙂
+
+With that done, you can have one regular `.htaccess` which would be used in production and a .htaccess.local to override it on your machine.
+
+## Kohana `.htaccess` files
+
+Set environment variables for the Kohana environment and for the base_url. Also make sure the RewriteBase is set to the same.
+
+```apache
+SetEnv KOHANA_ENV production
+SetEnv KOHANA_BASE /
+RewriteBase /
+```
+
+Copy the `.htaccess` to `.htaccess.local` and change the environment and base to whatever is the case on your local machine.
+
+```apache
+SetEnv KOHANA_ENV development
+SetEnv KOHANA_BASE /geekality/
+RewriteBase /geekality/
+```
+
+These two files can now live side by side, checked in to source control. Alternatively you could set the local one to be ignored by source control so that other developers would create their own setup.
+
+Both files can be uploaded to the production server as well, since the local one most likely will be ignored.
+
+## Kohana bootstrap
+
+Then to wrap this up I have in my application/bootstrap.php the following (among other stuff of course).
+
+```php
+if (isset($_SERVER['KOHANA_ENV']))
+{
+  Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['KOHANA_ENV']));
+}
+
+Kohana::init(array(
+  'base_url'   => $_SERVER['KOHANA_BASE'],
+  'index_file' => '',
+  'profile' => Kohana::$environment !== Kohana::PRODUCTION,
+  'caching' => Kohana::$environment !== Kohana::DEVELOPMENT,
+  'errors' => TRUE,
+));
+```
+
+And that's pretty much all there is to it. This way I don't have to worry about not overwriting the `.htaccess` on my production server or stuff like that. The `.htaccess` is untouched and just for the production environment 🙂

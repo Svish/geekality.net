@@ -1,0 +1,58 @@
+---
+title: Windows 10 Default app removal
+published: '2017-10-30'
+permalinks:
+  - /2017/10/30/windows-10-default-app-removal/
+  - /?p=3151
+categories:
+  - technology
+tags:
+  - app
+  - fix
+  - powershell
+  - windows
+---
+
+PowerShell commands to remove apps. Just a note to self... and possibly others...
+
+Remember to not just run all the commands blindly... do the list first, then actually consider what you're removing...
+
+## List
+
+```powershell
+Get-AppxPackage | Select-Object -expandproperty name
+```
+
+## Remove
+
+```powershell
+Get-AppxPackage *xbox* | Remove-AppxPackage
+Get-AppxPackage *windowsalarms* | Remove-AppxPackage
+Get-AppxPackage *windowscommunicationsapps* | Remove-AppxPackage
+Get-AppxPackage *windowscamera* | Remove-AppxPackage
+Get-AppxPackage *windowsmaps* | Remove-AppxPackage
+Get-AppxPackage *officehub* | Remove-AppxPackage
+Get-AppxPackage *people* | Remove-AppxPackage
+Get-AppxPackage *skypeapp* | Remove-AppxPackage
+Get-AppxPackage *getstarted* | Remove-AppxPackage
+Get-AppxPackage *zune* | Remove-AppxPackage
+Get-AppxPackage *solitairecollection* | Remove-AppxPackage
+Get-AppxPackage *bing* | Remove-AppxPackage
+Get-AppxPackage *onenote* | Remove-AppxPackage
+Get-AppxPackage *sway* | Remove-AppxPackage
+Get-AppxPackage *messaging* | Remove-AppxPackage
+Get-AppxPackage *phone* | Remove-AppxPackage
+
+Get-AppxPackage drawboardpdf | Remove-AppxPackage
+Get-AppxPackage freshpaint | Remove-AppxPackage
+Get-AppxPackage SurfaceHub | Remove-AppxPackage
+Get-AppxPackage flipboard | Remove-AppxPackage
+```
+
+## Reinstall
+
+```powershell
+Get-AppxPackage -AllUsers| Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+```
+
+**Source:** <a href="https://www.howtogeek.com/224798/how-to-uninstall-windows-10s-built-in-apps-and-how-to-reinstall-them/">www.howtogeek.com</a>

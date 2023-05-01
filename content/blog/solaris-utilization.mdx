@@ -1,0 +1,92 @@
+---
+title: Solaris utilization
+published: '2014-01-08'
+permalinks:
+  - /2014/01/08/solaris-utilization/
+  - /?p=2438
+categories:
+  - technology
+tags:
+  - solaris
+---
+
+Commands for checking various utilization on Solaris. Notes to self, based on <a href="http://dennis_caparas.tripod.com/Configuring_sar_for_your_system.html">this</a>, <a href="http://www.ibm.com/developerworks/aix/library/au-unix-perfmonsar.html">this</a>, <a href="http://docs.oracle.com/cd/E23824_01/html/821-1451/spmonitor-8.html">this</a>, and <a href="http://www.cyberciti.biz/faq/unix-command-to-find-cpu-utilization/">this</a>. The sar command depends on regular collection of data by sa1 and sa2 commands. See bottom of post for how to set that up.
+
+- `top` (various)
+- `vmstat` (various)
+- `mpstat` (per CPU)
+- `sar` (see below)
+
+## Sar switches
+
+```text
+-u  CPU utilization
+-a  File access
+-d  Disk activity
+-b  Buffer activity
+-c  System call statistics
+-g  Page-out and memory
+-r  Unused memory
+-k  Kernel memory allocation
+-m  Interprocess communication
+-p  Page-in activity
+-q  Queue activity
+-v  System table activity
+-w  Swapping activity
+-y  Terminal activity
+-A  Overall system performance
+```
+
+For what output means, see <a href="http://docs.oracle.com/cd/E23824_01/html/821-1451/spmonitor-8.html">this page</a>.
+
+## Real-time gathering
+
+You can add interval and count to the `vmstat`, `sar` and `mpstat` commands to collect statistics real-time. For example
+
+```bash
+# Collect CPU usage in 10 second intervals, 60 times
+$ sar -u 10 60
+# Collect CPU usage in 10 second intervals indefinitely
+$ sar -u 10
+```
+
+## Setup of `sar`
+
+Some sar commands depends on sa1 and sa2 collecting data regularly. If not setup, you'll get the following error when running various `sar` commands (XX=todays date).
+
+```bash
+$ sar
+sar: can\'t open /var/adm/sa/saXX
+```
+
+To set it up you need to edit the crontab of the sys user.
+
+```bash
+$ su
+♯ su sys
+♯ EDITOR=vi
+♯ export EDITOR
+♯ crontab -e
+```
+
+The sys crontab should already contain samples which you could just uncomment.
+
+```bash
+# System performance snapshot every hour
+0 * * * 0-6 /usr/lib/sa/sa1
+# System performance snapshot every 20 minutes, Monday through Friday between 8 and 17
+20,40 8-17 * * 1-5 /usr/lib/sa/sa1
+# ASCII report at 6:05, Monday through Friday
+5 18 * * 1-5 /usr/lib/sa/sa2 -s 8:00 -e 18:01 -i 1200 -A
+```
+
+Following is a more straight forward version.
+
+```bash
+# System performance snapshot every 15 minutes
+0,15,30,45 * * * 0-6 /usr/lib/sa/sa1
+# ASCII report every day at 23:55
+55 23 * * 0-6 /usr/lib/sa/sa2 -A
+```
+
+After editing, save the file and data should start being collected.

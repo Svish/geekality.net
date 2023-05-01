@@ -1,0 +1,26 @@
+---
+title: What's running on port 80 in Windows?
+published: '2017-12-06'
+permalinks:
+  - /2017/12/06/whats-running-on-port-80-in-windows/
+  - /?p=3196
+categories:
+  - technology
+tags:
+  - network
+  - port-80
+  - server
+  - windows
+---
+
+Trying to set up Apache on a server, something is hogging port 80, but very "helpfully" the Resource Monitor just reports "System" with PID 4...
+
+However, some commands found in <a href="https://stackoverflow.com/a/26653919/39321">a StackOverflow answer</a> and its comments _were_ helpful:
+
+```dos
+netsh http show urlacl
+netsh http show servicestate
+net stop http
+```
+
+📝 **Note:** Do _not_ just run these commands blindly and turn off services (in particular you should probably answer `N` when the last one asks...), but use them to identify what service(s) might be to blame. Then do an intelligent decision on whether the service is needed or not, before you potentially stop it and disable it...

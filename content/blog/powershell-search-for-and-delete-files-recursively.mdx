@@ -1,0 +1,30 @@
+---
+title: 'PowerShell: Search for and delete files recursively'
+published: '2014-07-30'
+permalinks:
+  - /2014/07/30/powershell-search-for-and-delete-files-recursively/
+  - /?p=2549
+categories:
+  - technology
+tags:
+  - cleaning
+  - powershell
+  - recursion
+---
+
+Short and simple, but keep forgetting some minor details, so... <em>note to self</em>...
+
+```powershell
+# Files
+gci -recurse -force |
+where {$_.name -eq "Thumbs.db"} |
+foreach {ri $_.fullname -whatif}
+
+# Directories (and using regex for matching)
+
+gci -recurse -force |
+where {$_.name -match "^(bin|obj)$"} |
+foreach {ri $\_.fullname -recurse -whatif}
+```
+
+Minus the `-whatif`, of course 🙂

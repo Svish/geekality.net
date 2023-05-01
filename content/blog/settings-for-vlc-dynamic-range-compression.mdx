@@ -1,0 +1,77 @@
+---
+title: Settings for VLC dynamic range compression
+published: '2013-11-01'
+permalinks:
+  - /2013/11/01/settings-for-vlc-dynamic-range-compression/
+  - /?p=2417
+categories:
+  - technology
+tags:
+  - audio
+  - media
+  - video
+  - vlc
+---
+
+Kept Googling for this, so finally figured I should note it down on my own blog. The dynamic range compressor in <a href="http://www.videolan.org/vlc/">VLC</a> is a very handy tool I discovered recently. You can use it to even out movies which have both very quiet and very loud scenes so you can hear what people say <em>and</em> not damage your ears when the action scenes kick in.
+
+You find the thing in VLC under Tools, Effects and Filters, Audio Effects, Compressor. Or simply just press <kbd>Ctrl</kbd>+<kbd>E</kbd>.
+
+<b>Update:</b> To make the Compressor settings persist through VLC restarts, select
+the Write changes to config option on the Compressor setting tab.
+
+<b>Update:</b> To make the Compressor on by default when you launch VLC, go to Preferences,
+All, Audio and Filters, and check the Dynamic range compressor box.
+
+Following are some good initial settings you can use. Remember to hit the Enable dynamic range compressor checkbox, or it won't do much good 😉
+
+<table>
+  <tr>
+    <th>RMS/peak</th>
+    <td>0.0</td>
+    <td>
+      If threshold should apply to peaks (machine-like) or RMS values
+      (human-ear-like)
+    </td>
+  </tr>
+  <tr>
+    <th>Attack</th>
+    <td>50 ms</td>
+    <td>How quick to react</td>
+  </tr>
+  <tr>
+    <th>Release</th>
+    <td>300 ms</td>
+    <td>How slow to release</td>
+  </tr>
+  <tr>
+    <th>Threshold</th>
+    <td>-20.0 dB</td>
+    <td>When to react</td>
+  </tr>
+  <tr>
+    <th>Ratio</th>
+    <td>20.0:1</td>
+    <td>How much to compress levels above the treshold</td>
+  </tr>
+  <tr>
+    <th>Knee radius</th>
+    <td>1.0 dB</td>
+    <td>
+      How soft the compressor should kick in. Zero will apply ratio immediately
+      when level hits threshold. Higher values leads to softer compression
+      closer to the threshold.
+    </td>
+  </tr>
+  <tr>
+    <th>Makeup gain</th>
+    <td>12.0 dB</td>
+    <td>Fixed audio boost</td>
+  </tr>
+</table>
+
+As you see, I'm not quite sure what all these does, but these settings are a good start which usually gives a good result in my experience. I usually only adjust the makeup gain and leave the others as specified above.
+
+If you know exactly what they do, don't hesitate to leave a comment and explain it to me cause I'd love to know!
+
+**Source:** <a href="http://ariandy1.wordpress.com/2012/10/18/vlcs-dynamic-range-compression-starter-settings/">ariandy1.wordpress.com</a>

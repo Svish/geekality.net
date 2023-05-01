@@ -1,0 +1,48 @@
+---
+title: 'PHP: Pathable RecursiveIteratorIterator'
+published: '2017-08-03'
+permalinks:
+  - /2017/08/03/php-pathable-recursiveiteratoriterator/
+  - /?p=3055
+categories:
+  - software-development
+tags:
+  - arrays
+  - php
+  - recursion
+---
+
+Needed to recursively loop through a multi-dimensional array and print out each leaf-node with its full "path".
+
+For this I used a <a href="http://php.net/manual/en/class.recursivearrayiterator.php">RecursiveArrayIterator</a> for the array and a <a href="http://php.net/manual/en/class.recursiveiteratoriterator.php">RecursiveIteratorIterator</a> for the recursion. Thought I was home free because I had used a method called `getSubpathname` before, but turned out that was just something the <a href="http://php.net/manual/en/class.recursivedirectoryiterator.php">Recursive<b>Directory</b>Iterator</a> had...
+
+So, had to grow my own... noting it here for others and the future:
+
+```php
+class PathableRecursiveIteratorIterator
+    extends RecursiveIteratorIterator
+{
+    /**
+     * Gets the path to current node, i.e. each
+     *   key "upwards", including self.
+     *
+     * @param null|string $glue Optional $glue for implode().
+     *
+     * @return array|string The keys, from root to self,
+     *   as an array; or as a string if $glue is provided.
+     */
+    public function getPath($glue = null)
+    {
+        for($i = 0; $i < $this->getDepth(); $i++)
+            $path[] = $this->getSubIterator($i)->key();
+
+        $path[] = $this->key();
+
+        return $glue !== null
+            ? implode($glue, $path)
+            : $path;
+    }
+}
+```
+
+**Source:** <a href="https://stackoverflow.com/a/16855432/39321">StackOverflow</a>

@@ -1,0 +1,110 @@
+---
+title: 'Project Euler: Problem 3'
+published: '2009-09-17'
+permalinks:
+  - /2009/09/17/project-euler-problem-3/
+  - /?p=176
+categories:
+  - project-euler
+  - software-development
+tags:
+  - csharp
+  - factorization
+  - primes
+---
+
+The third Euler problem has to do with prime factorization:
+
+> The prime factors of 13195 are 5, 7, 13 and 29.
+>
+> What is the largest prime factor of the number 600851475143?
+>
+> – [Project Euler Problem 3](https://projecteuler.net/problem=3)
+
+## Solution
+
+This one I struggled with a bit, cause I wasn't sure exactly how to do this prime factorization. I knew what it was, and how to do it by hand, but wasn't quite sure how to do it effective in code. Either way I ended up using something called the <a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>. Not the most efficient algorithm for this, if I have understood correctly, but it worked well enough for this use, and it was fairly straight forward to implement with some help from <a href="http://www.blackwasp.co.uk/Eratosthenes.aspx">Black</a> <a href="http://www.blackwasp.co.uk/PrimeFactors.aspx">Wasp</a>.
+
+I started to make a prime number generator similar to the one I created for Fibonacci numbers in Problem 2.
+
+```csharp
+public interface IPrimeSequence : IEnumerable<ulong> {}
+
+public class Eratosthenes : IPrimeSequence
+{
+    private readonly List<ulong> knownPrimes;
+
+    public Eratosthenes()
+    {
+        knownPrimes = new List<ulong> {2, 3};
+    }
+
+    #region IPrimeSequence Members
+    public IEnumerator<ulong> GetEnumerator()
+    {
+        // Return the ones we know first
+        foreach (var prime in knownPrimes)
+            yield return prime;
+
+        // Then find new ones
+        var possible = primes.Last();
+        while (true)
+            if (IsPrime(possible += 2))
+            {
+                yield return possible;
+                knownPrimes.Add(possible);
+            }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+    #endregion
+
+    private bool IsPrime(ulong value)
+    {
+        var sqrt = (ulong) Math.Sqrt(value);
+        return !knownPrimes
+            .TakeWhile(x => x <= sqrt)
+            .Any(x => value%x == 0);
+    }
+}
+```
+
+It basically starts with the 2 first primes. And for each new requested prime number, it goes through the following odd numbers until it finds one that is not dividable by any of the primes ones we know so far.
+
+<em>
+  <strong>Note:</strong> I've created <a href="/?p=626">a separate post</a>{' '}
+  about the Sieve of Eratosthenes, which might be updated with some
+  optimizations, et cetera 🙂
+</em>
+
+With that prime number generator in place, finding prime factors is pretty straight forward here.
+
+```csharp
+public static IEnumerable<ulong> GetPrimeFactors(ulong value, IPrimeSequence primeSequence)
+{
+    foreach (var prime in primeSequence)
+    {
+        while (value%prime == 0)
+        {
+            value /= prime;
+            yield return prime;
+        }
+
+        if (value == 1)
+        {
+            yield break;
+        }
+    }
+}
+```
+
+Now, that is pretty much what is needed to solve this problem. A simple LINQ statement finds the answer.
+
+```csharp
+var answer = GetPrimeFactors(600851475143, new Eratosthenes()).Max();
+```
+
+Tadaa 😄

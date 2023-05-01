@@ -1,0 +1,28 @@
+---
+title: Pretty print XML on Unix command line
+published: '2013-04-05'
+permalinks:
+  - /2013/04/05/pretty-print-xml-on-unix-command-line/
+  - /?p=2242
+categories:
+  - software-development
+tags:
+  - command-line
+  - curl
+  - unix
+  - xml
+---
+
+Needed to check some XML output from a CalDAV service so I used curl, which is nice and simple. Only problem was that all the XML came back on a single long unreadable line. Turned out it wasn't too difficult to get it formatted:
+
+```bash
+$ curl --digest --user usr:pwd -X PROPFIND | xmllint --format -
+```
+
+The key part here is of course the piping into `xmllint`. `--format` tells it to format the XML and the `-` tells it to read the XML from standard in. The dash can be swapped with the path to an XML file, if you need to format already downloaded XML.
+
+```bash
+$ xmllint --format file.xml
+```
+
+Simple pimple dimple 🙂

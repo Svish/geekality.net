@@ -1,0 +1,109 @@
+---
+title: 'Project Euler: Problem 6'
+published: '2009-09-24'
+permalinks:
+  - /2009/09/24/project-euler-problem-6/
+  - /?p=465
+categories:
+  - project-euler
+  - software-development
+tags:
+  - csharp
+  - math
+---
+
+> The sum of the squares of the first ten natural numbers is,
+>
+> $$
+> 1^2 + 2^2 + \ldots + 10^2 = 385
+> $$
+>
+> The square of the sum of the first ten natural numbers is,
+>
+> $$
+> (1 + 2 + \ldots + 10)^2 = 55^2 = 3025
+> $$
+>
+> Hence the difference between the sum of the squares of the first ten natural numbers and the square of the sum is 3025 -- 385 = 3640.
+>
+> Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
+>
+> – [Project Euler Problem 6](https://projecteuler.net/problem=6)
+
+So, apparently <a href="http://blog.vi-kan.net/">my brother</a> has joined me on my <a href="https://projecteuler.net/">Project Euler</a> solving quest. You can see his Delphi solution <a href="http://blog.vi-kan.net/2009/project-euler-problem-6/">on his blog</a>. My C# solution, you can find below 🙂
+
+## Solution
+
+This problem is quite straight forward so I turned to Linq and used some obvious brute force:
+
+```csharp
+var numbers = Enumerable.Range(1, 100); var answer = numbers.Sum() *
+numbers.Sum() - numbers.Aggregate(0, (sum, n) => sum + n * n);
+```
+
+This gives the answer, in 0 ms, around 2-3000 ticks.
+
+## Take 2
+
+However, my brother went further and found some pretty smart optimizations. Had to have a look at those of course and see if I could make sense of those too. It all boils down to <a href="http://www.math.com/tables/expansion/power.htm">expansion of power summations</a>.
+
+$$
+\sum\limits_{(k = 1)}^n k^m
+$$
+
+The Euler problem we are trying to solve here can be described mathematically like this:
+
+$$
+\left(\sum\limits_{(k = 1)}^{100}k\right)^2 - \sum\limits_{(k = 1)}^{100} k^2
+$$
+
+In other words, the answer can be found very easily if we have the formulas for m=1 and m=2. And that we do:
+
+$$
+\begin{align*}
+\sum\limits_{k=1}^n k &= 1+2+3+\ldots+n=\frac{n^2+n}{2}=\frac{1}{2}n^2+\frac{1}{2}n \\
+\sum\limits_{k=1}^n k^2 &= 1+4+9+\ldots+n^2 = \frac{n(n+1)(2n+1)}{6} = \frac{1}{3}n^3+\frac{1}{2}n^2+\frac{1}{6}n
+\end{align*}
+$$
+
+Turning those into two C# methods is quite easy and we can find our answer like so:
+
+```csharp
+static ulong SumExpansion1(ulong n)
+{
+    return (n * n + n) / 2;
+}
+
+static ulong SumExpansion2(ulong n)
+{
+    return n * (n + 1) * (2 * n + 1) / 6;
+}
+
+var answer = SumExpansion1(100) * SumExpansion1(100) - Numbers.SumExpansion2(100);
+```
+
+That also takes 0 ms, but we are down to around 2-300 ticks. So, compared to the brute force solution, this only takes 10% of the time. Awesome ^\_^
+
+## Take 2.5
+
+The formula can actually be simplified a bit if we bring out our math skills. Not that my math skills really deserve being called skills, but anyways 😛
+
+$$
+\begin{align*}
+\left(\sum\limits_{k=1}^{100}k\right)^2 - \sum\limits_{k=1}^{100} k^2 &= \left(\frac{n^2}{2}+\frac{n}{2}\right)^2 - \left(\frac{n^3}{3}+\frac{n^2}{2}+\frac{n}{6}\right) \\
+&= \Bigl(\frac{n^2}{2}\Bigr)^2 + 2\Bigl(\frac{n^2}{2}\Bigr)\Bigl(\frac{n}{2}\Bigr) + \Bigl(\frac{n}{2}\Bigr)^2 - \Bigl(\frac{n^3}{3}\Bigr) - \Bigl(\frac{n^2}{2}\Bigr) - \Bigl(\frac{n}{6}\Bigr) \\
+&= \frac{n^4}{4} + \frac{2n^3}{4} + \frac{n^4}{4} - \frac{n^3}{3} - \frac{n^2}{2} - \frac{n}{6} \\
+&= \frac{3n^4+2n^3-3n^2-2n}{12}
+\end{align*}
+$$
+
+Now, our answer can be found like this:
+
+```csharp
+const ulong n = 100;
+var answer =  (3*n*n*n*n + 2*n*n*n - 3*n*n - 2*n) / 12;
+```
+
+Which, compared to take 2, takes about half the time. Around 150 ticks. 😎
+
+Alright... done with this one now...
