@@ -1,0 +1,41 @@
+---
+title: How to increase heap size for node
+published: '2021-05-10'
+permalinks:
+  - /2021/05/10/how-to-increase-heap-size-for-node/
+  - /?p=3425
+categories:
+  - software-development
+tags:
+  - eslint
+  - javascript
+  - node-js
+  - typescript
+---
+
+Experienced getting fatal build errors on our build server during ESLint linting of our React project:
+
+> FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
+>
+> ```text
+> <--- Last few GCs --->
+>
+> [10012:0000000001DA2080]   184320 ms: Mark-sweep 2035.1 (2051.8) -> 2034.3 (2051.8) MB, 2297.9 / 0.0 ms  (average mu = 0.114, current mu = 0.001) allocation failure scavenge might not succeed
+> [10012:0000000001DA2080]   185393 ms: Mark-sweep 2035.3 (2051.8) -> 2033.6 (2051.8) MB, 1068.8 / 0.0 ms  (average mu = 0.077, current mu = 0.003) allocation failure scavenge might not succeed
+> ```
+
+The MB values looked _very_ suspicious in that they were on either side of 2048 MB (2 GB), so suspected our project had run into some sort of limit. And seems there is indeed a max limit of ~2 GB by default on the heap size.
+
+To increase the node heap size limit, set the `--max-old-space-size` to something more than 2048, e.g. like this on Windows:
+
+```dos
+setx NODE_OPTIONS "--max-old-space-size=4096" /m
+```
+
+To verify that it actually works (or check what it is by default), this command seems to do it:
+
+```dos
+node -e "console.log(require('v8').getHeapStatistics().total_available_size / 1024 / 1024)"
+```
+
+Note that the output for some reason always seem to be a bit more than what's set as the limit. Not sure what that's about, but anyways... 🤷‍♂️

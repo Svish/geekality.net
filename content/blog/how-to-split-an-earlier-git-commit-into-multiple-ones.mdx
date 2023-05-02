@@ -1,0 +1,24 @@
+---
+title: How to split an earlier git commit into multiple ones
+published: '2021-12-22'
+permalinks:
+  - /2021/12/22/how-to-split-an-earlier-git-commit-into-multiple-ones/
+  - /?p=3440
+categories:
+  - software-development
+tags:
+  - git
+---
+
+As usual, keep having to google this, so finally writing it down here...
+
+## Last commit
+
+Simply do `git reset HEAD~` and make new commits as needed.
+
+## Commit further back
+
+1. Perform an interactive rebase (e.g. `git rebase -i main`), and change the commit from `pick` to `edit`.
+2. Reset the commit with `git reset HEAD~`.
+3. Make new commits as needed.
+4. Complete the rebase with `git rebase --continue`

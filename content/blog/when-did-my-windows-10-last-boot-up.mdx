@@ -1,0 +1,30 @@
+---
+title: When did my Windows 10 last boot up?
+published: '2021-10-15'
+permalinks:
+  - /2021/10/15/when-did-my-windows-10-last-boot-up/
+  - /?p=3436
+categories:
+  - technology
+tags:
+  - power-management
+  - windows
+---
+
+Sometimes curious about this, usually because I forgot to note what time I arrived at the office, and I keep forgetting how to check. So, here's some commands I found on <a href="https://superuser.com/q/523726/62">SuperUser</a> which seem to do the trick:
+
+```dos
+> systeminfo | find /i "Boot Time"
+System Boot Time:          15.10.2021, 08:37:29
+> wmic os get lastbootuptime
+LastBootUpTime
+20211015083729.500000+120
+> net statistics workstation | find /i "Statistics since"
+Statistics since 15.10.2021 08:37:45
+```
+
+Also discovered <a href="https://superuser.com/a/1350900/62">this one</a>, which will create a more thorough report, which can be interesting to look at:
+
+```dos
+> powercfg /sleepstudy /output report.html && start report.html
+```
