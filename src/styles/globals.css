@@ -1,54 +1,98 @@
-/*@tailwind base;*/
-body {
-  margin: 0;
-}
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .inline-list {
+    display: contents;
+    li {
+      display: contents;
+      &::before {
+        content: ' ';
+      }
+      &:not(:first-of-type) {
+        &::before {
+          content: ', ';
+        }
+      }
+    }
+  }
+}
 
 html {
   font-family: sans-serif;
 }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-th,
-td {
-  vertical-align: top;
-  text-align: left;
-  border: 1px solid #aaa;
-  padding: 0.25rem 0.5rem;
-  /* https://developer.mozilla.org/en-US/docs/Web/CSS/margin-trim */
-}
-th > *:first-child,
-td > *:first-child {
-  margin-top: 0;
-}
-th > *:last-child,
-td > *:last-child {
-  margin-bottom: 0;
+*:focus {
+  outline: none;
 }
 
-dt {
-  font-weight: bold;
-}
-dd {
-  margin-left: 1em;
-}
-
-ins {
-  display: inline-block;
-  text-decoration: none;
-  background-color: #fff9c0;
+*:focus-visible {
+  outline-width: 0.125rem;
+  outline-style: solid;
+  @apply outline-gray-800 dark:outline-gray-300;
 }
 
-kbd {
-  font: inherit;
-  background: #0001;
-  border: 1px outset #0008;
-  padding: 0.05em 0.25em;
-  border-radius: 0.2em;
+main,
+footer {
+  *:focus-visible {
+    outline-offset: 0.125rem;
+  }
+
+  a,
+  .prose :where(a):not(:where([class~='not-prose'] *)) {
+    @apply font-medium;
+    color: var(--tw-prose-links);
+    text-decoration-line: underline;
+    text-decoration-thickness: 0.1rem;
+    &:hover {
+      text-decoration-thickness: 0.175rem;
+    }
+  }
+}
+
+.prose {
+  /* Missing styles */
+  dt {
+    @apply font-bold;
+  }
+  dd {
+    @apply ml-4;
+  }
+
+  ins {
+    @apply inline-block no-underline bg-yellow-200;
+  }
+
+  del {
+    @apply line-through;
+  }
+
+  kbd {
+    font: inherit;
+    background: #0001;
+    border: 1px outset #0008;
+    padding: 0.05em 0.25em;
+    border-radius: 0.2em;
+  }
+
+  :not(pre) > code {
+    @apply bg-gray-200 rounded-sm dark:bg-gray-700;
+    padding: 0.125rem 0.25rem;
+  }
+
+  pre:has(.hljs) {
+    background-color: initial;
+    padding: initial;
+    color: initial;
+
+    .hljs {
+      padding-top: 0.8571429em;
+      padding-right: 1.1428571em;
+      padding-bottom: 0.8571429em;
+      padding-left: 1.1428571em;
+    }
+  }
 }
 
 .project-euler-problem-11 {

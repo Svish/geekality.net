@@ -1,21 +1,33 @@
-import H1 from '@/components/H1'
-import PostListItem from './PostListItem'
-
 import { posts } from '@/content'
+import { type Metadata } from 'next'
 
-export const metadata = {
+import H1 from '@/components/H1'
+import PostList from '@/components/PostList'
+import Link from '@/components/Link'
+
+export const metadata: Metadata = {
   title: 'Blog',
+  alternates: {
+    canonical: '/blog',
+  },
 }
 
 export default async function BlogPage() {
   return (
     <>
       <H1>Blog</H1>
-      <ul>
-        {posts.map((post) => (
-          <PostListItem key={post._id} post={post} />
-        ))}
-      </ul>
+      <PostList posts={posts()} />
+
+      <aside className="prose">
+        <ul>
+          <li>
+            <Link href="/blog/tags">All tags</Link>
+          </li>
+          <li>
+            <Link href="/blog/categories">All categories</Link>
+          </li>
+        </ul>
+      </aside>
     </>
   )
 }

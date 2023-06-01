@@ -3,6 +3,8 @@ import { defineDocumentType, makeSource } from 'contentlayer/source-files'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 import rehypeHighlight from 'rehype-highlight'
 import apache from 'highlight.js/lib/languages/apache'
@@ -41,18 +43,22 @@ export default makeSource({
         categories: {
           type: 'list',
           of: { type: 'string' },
-          required: false,
+          required: true,
         },
         tags: {
           type: 'list',
           of: { type: 'string' },
-          required: false,
+          required: true,
         },
       },
       computedFields: {
         slug: {
           type: 'string',
-          resolve: (post) => post._raw.sourceFileName.replace(/\.mdx$/, ''),
+          resolve: makeSlug,
+        },
+        pathname: {
+          type: 'string',
+          resolve: (post) => `/blog/${makeSlug(post)}`,
         },
       },
     })),
@@ -60,6 +66,16 @@ export default makeSource({
   mdx: {
     remarkPlugins: [remarkMath, remarkGfm],
     rehypePlugins: [
+      rehypeSlug,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavoir: 'wrap',
+          properties: {
+            // ariaLabel: 'Link to section',
+          },
+        },
+      ],
       rehypeKatex,
       [
         rehypeHighlight,
@@ -79,3 +95,7 @@ export default makeSource({
     ],
   },
 })
+
+function makeSlug(post: { _raw: { sourceFileName: string } }): string {
+  return post._raw.sourceFileName.replace(/\.mdx$/, '')
+}

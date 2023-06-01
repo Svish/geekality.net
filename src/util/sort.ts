@@ -1,4 +1,4 @@
-import { LOCALE } from '@/locale'
+import { LOCALE } from '@/config/locale'
 
 type CompareFn<T> = (x: T, y: T) => number
 type ValueFn<T, R> = (o: T) => R

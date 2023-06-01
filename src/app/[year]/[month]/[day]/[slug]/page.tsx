@@ -1,4 +1,4 @@
-import { handlePermalink } from '@/wordpress'
+import { handlePermalink } from '@/util/wordpress'
 
 interface Props {
   params: {

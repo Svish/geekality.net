@@ -1,4 +1,4 @@
-import { LOCALE } from '@/locale'
+import { LOCALE } from '@/config/locale'
 
 export type DateFormat = 'short' | 'long' | Intl.DateTimeFormatOptions
 

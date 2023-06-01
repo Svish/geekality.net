@@ -1,0 +1,23 @@
+import Link from '@/components/Link'
+import { formatDate } from '@/util/format'
+
+import { type BlogPost } from 'contentlayer/generated'
+
+interface Props {
+  posts: BlogPost[]
+}
+
+export default function PostList({ posts }: Props) {
+  return (
+    <ul className="flex flex-col gap-4">
+      {posts.map((post) => (
+        <li key={post._id} className="flex flex-col">
+          <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+          <div className="text-xs text-gray-600 dark:text-gray-400">
+            Published: {formatDate(post.published, 'long')}
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
