@@ -96,7 +96,7 @@ $ sudo shutdown -h now
 ## Setup your Minecraft Server
 
 <ol>
-<li>Either download the <a href="https://www.minecraft.net/en-us/download/server/">vanilla server</a>, or create one through the <a href="http://www.atlauncher.com">ATLauncher</a> and copy it to the VM through SFTP or something. I used the Yogscast Complete Pack and extracted it to <code inline="true">/opt/minecraft/yogpack-<i>version</i></code>.<br/>
+<li>Either download the <a href="https://www.minecraft.net/en-us/download/server/">vanilla server</a>, or create one through the <a href="http://www.atlauncher.com">ATLauncher</a> and copy it to the VM through SFTP or something. I used the Yogscast Complete Pack and extracted it to `/opt/minecraft/yogpack-<version>`.<br/>
 <a href="http://www.geekality.net/wp-content/uploads/2014/09/Hyper-V-Minecraft-6.jpg"><img src="http://www.geekality.net/wp-content/uploads/2014/09/Hyper-V-Minecraft-6-300x172.jpg" alt="Create Server in ATLauncher" width="300" height="172" className="alignnone size-medium wp-image-2584" /></a>
 <li>Adjust <b>server.properties</b>, <b>ops.txt</b> and <b>white-list.txt</b> as needed.
 <li>Create <b>launch.sh</b> with, in the case of current Yogpack version, something like the following command. This will start the server in screen using the current directory name as screen name and giving it 5 GB of memory.<br/>
