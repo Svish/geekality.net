@@ -80,6 +80,7 @@ export default makeSource({
       [
         rehypeHighlight,
         {
+          detect: true,
           languages: {
             apache,
             applescript,
