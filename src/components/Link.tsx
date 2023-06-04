@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import invariant from 'tiny-invariant'
 
 import { type ReactNode } from 'react'
 import NextLink, { type LinkProps } from 'next/link'
