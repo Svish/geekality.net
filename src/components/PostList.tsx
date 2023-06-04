@@ -12,7 +12,9 @@ export default function PostList({ posts }: Props) {
     <ul className="flex flex-col gap-4">
       {posts.map((post) => (
         <li key={post._id} className="flex flex-col">
-          <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+          <div>
+            <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+          </div>
           <div className="text-xs text-gray-600 dark:text-gray-400">
             Published: {formatDate(post.published, 'long')}
           </div>
