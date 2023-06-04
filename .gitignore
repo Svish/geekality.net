@@ -3,5 +3,4 @@
 /.contentlayer
 /node_modules
 /next-env.d.ts
-/content_TODO
 /.env*

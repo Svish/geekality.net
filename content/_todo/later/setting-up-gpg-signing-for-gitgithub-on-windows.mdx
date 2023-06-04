@@ -1,0 +1,140 @@
+---
+title: Setting up GPG signing for Git/GitHub on Windows
+published: '2017-08-23'
+permalinks:
+  - /2017/08/23/setting-up-gpg-signing-for-gitgithub-on-windows/
+  - /?p=3086
+categories:
+  - software-development
+tags:
+  - git
+  - github
+  - gpg
+  - signing
+  - windows
+---
+
+What I did to get from <a href="/?p=3077">working GPG</a> to <a href="https://github.com/blog/2144-gpg-signature-verification">green and verified signatures</a> for Git commits and tags on GitHub.
+
+<ol>
+<li>Find the long id of the <b>S</b>igning key we want to use:<br/>
+<code lang="bash">
+🔶 > gpg --edit-key alice
+gpg (GnuPG) 2.0.30; Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Secret key is available.
+
+pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
+trust: ultimate validity: ultimate
+sub 4096R/62275E24 created: 2017-08-23 expires: never usage: S 👈
+sub 4096R/4AEA9524 created: 2017-08-23 expires: never usage: E
+[ultimate] (1). Alice Person (alice) <alice.person@example.com>
+[ultimate] (2) Alice Person (alice) <alice@example.org>
+
+🔶 gpg> quit
+
+🔶 > gpg --list-secret-keys --keyid-format LONG alice
+sec 4096R/8C0BBECBAA79CCAE 2017-08-23
+uid Alice Person (alice) <alice.person@example.com>
+uid Alice Person (alice) <alice@example.org>
+ssb 4096R/6ADB9D4262275E24 2017-08-23 👈
+ssb 4096R/33F2E1644AEA9524 2017-08-23
+
+</code><br/>
+<i><b>Note:</b> So in this case we want `6ADB9D4262275E24`</i>
+
+<li>Configure git and (optionally) make it sign commits and tags by default:<br/>
+<code lang="bash">
+🔷 > git config --global user.name "Alice Person"
+🔷 > git config --global user.email "alice.person@example.com"
+🔶 > git config --global user.signingkey "6ADB9D4262275E24"
+🔷 > git config --global commit.gpgsign true
+🔷 > git config --global tag.forceSignAnnotated true
+🔷 > git config --global push.gpgsign if-asked
+🔶 > where gpg
+C:\Program Files (x86)\GNU\GnuPG\pub\gpg.exe
+🔶 > git config --global gpg.program "C:/Program Files (x86)/GNU/GnuPG/pub/gpg.exe"
+🔶 > echo no-tty >> %APPDATA%\gnupg\gpg.conf
+</code><br/>
+<i><b>Note:</b> If repo specific, just skip `--global` and run the command in the repo instead.</i>
+
+</ol>
+
+## Test it...
+
+<ol start="3">
+<li>Do a commit:<br/>
+<code lang="bash">
+🔷 > git init gpg-test
+🔷 > cd gpg-test
+🔷 > touch file.txt
+🔶 > git commit -a -m "Signed commit"
+[master (root-commit) 2814856] Signed commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 file.txt
+</code><br/>
+<i><b>Note:</b> If not using `commit.gpgsign true`, one can also use `-S` to explicitly sign a commit.</i>
+
+<li>Verify commit was signed:<br/>
+<code lang="bash">
+🔷 > git log --show-signature
+commit 2814856365a07b3deb374f1337258102c06b77ef
+gpg: Signature made 08/23/17 06:18:50 W. Europe Daylight Time^M
+gpg:                using RSA key 6ADB9D4262275E24^M
+gpg: Good signature from "Alice Person (alice) <alice.person@example.com>" [ultimate]^M
+gpg:                 aka "Alice Person (alice) <alice@example.org>" [ultimate]^M
+Author: Alice Person <alice.person@example.com>
+Date:   Wed Aug 23 06:18:48 2017 +0200
+
+    Signed commit
+
+</code>
+
+<li>Add a signed tag, using `-s`:
+<code lang="bash">
+🔶 > git tag v1 -m "Signed tag"
+</code><br/>
+<i><b>Note:</b> If not using `tag.forceSignAnnotated true`, one can also use `-s` to explicitly sign a tag.</i>
+
+<li>Verify tag was signed:
+<code lang="bash">
+🔷 > git tag -v v1
+gpg: Signature made 08/23/17 06:34:18 W. Europe Daylight Time
+gpg:                using RSA key 6ADB9D4262275E24
+gpg: Good signature from "Alice Person (alice) <alice.person@example.com>" [ultimate]
+gpg:                 aka "Alice Person (alice) <alice@example.org>" [ultimate]
+object 53e7f2e637eaf3c47b5dcad30b57be7b6829be02
+type commit
+tag v1
+tagger Alice Person <alice.person@example.com> 1503462856 +0200
+
+Signed tag
+
+</code>
+
+</ol>
+
+## Add GPG key to GitHub
+
+<ol start="7">
+<li>Export the public key:<br/>
+<code lang="bash">
+🔶 gpg -a --export alice > public.txt
+</code>
+<li>Copy it.
+<li>Go to <a href="https://github.com/settings/keys">GPG keys</a> on GitHub.
+<li>New GPG Key.
+<li>Paste it.
+<li>Add GPG Key.
+<li>Pushed commits and tags should now look verified, as in this post: <a href="https://github.com/blog/2144-gpg-signature-verification">GPG signature verification</a>...
+</ol>
+
+<i>
+  <b>Sources:</b>{' '}
+  <a href="https://help.github.com/articles/telling-git-about-your-gpg-key/">
+    help.github.com
+  </a>
+  , <a href="https://stackoverflow.com/a/42008822/39321">StackOverflow</a>, <a href="https://git-scm.com/book/es/v2/Git-Tools-Signing-Your-Work">git-scm.com</a>
+</i>

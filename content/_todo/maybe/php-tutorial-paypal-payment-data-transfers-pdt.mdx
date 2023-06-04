@@ -1,0 +1,359 @@
+---
+title: 'PHP Tutorial: PayPal Payment Data Transfers (PDT)'
+published: '2010-10-19'
+permalinks:
+  - /2010/10/19/php-tutorial-paypal-payment-data-transfers-pdt/
+  - /?p=1210
+categories:
+  - software-development
+tags:
+  - paypal
+  - pdt
+  - php
+  - snippet
+  - tutorial
+---
+
+<img
+  src="http://www.geekality.net/wp-content/uploads/2010/10/Money-300x200.jpg"
+  alt="Money"
+  title="Money"
+  width="300"
+  height="200"
+  className="alignright size-medium wp-image-1265"
+/>
+Say you have a PayPal "Buy Now"-button on your website and you have assigned return
+URLs like `http://example.com/order?done` and <code inline="true">
+  http://example.com/order?canceled
+</code>
+. You can then welcome the user back after a successful payment. But what if you
+wanted to say something more interesting than just "hey, welcome back" when they
+click on that "Return to Merchant"-button? And can you know if the order was <em>
+  actually
+</em> done or canceled? Maybe you'd like to log the transaction in your database
+and mark a payment as complete or something like that too? In that case you sure
+can't trust a simple flag in the address bar...
+
+<blockquote>
+  Payment Data Transfer (PDT) is a secure method to retrieve the details about a
+  PayPal transaction so that you can display them to your customer. It is used
+  in combination with Website Payments Standard, so that after a customer
+  returns to your website after paying on the PayPal site, they can instantly
+  view a confirmation message with the details of the transaction. --{' '}
+  <a href="https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/paymentdatatransfer/">
+    PayPal
+  </a>
+</blockquote>
+
+I've tried to figure out how to use PDT and found that most samples and classes to build from are usually quite ugly, old or outdated. I didn't find them too useful anyways... So, therefore, I've tried to do my own thing based on the documentation found on the PayPal Developer websites. (Seriously, how many versions of documents and developer websites do they have anyways? It's like a complete jungle...)
+
+Since the documentation was a bit of a mess, I thought I make a small tutorial on the steps needed to get started. That way I can learn it better myself and hopefully help some other poor souls that need to figure this stuff out as well. Please provide feedback if you have any! Would love to make this page nicer and clearer if possible 🙂
+
+<hr className="fix" />
+
+## Step 0: Sign up for a Developer Account
+
+Before you start playing around with PayPal stuff, I would recommend that you <a href="https://developer.paypal.com/docs/classic/lifecycle/ug_sandbox/">get a PayPal developer account</a>. You should also set up a business account in the PayPal Sandbox which you can then use instead of your real account. A lot safer, cheaper and easier than using a real one...
+
+## Step 1: Enable PDT for your PayPal account
+
+<del dateTime="2011-08-01T18:52:38+00:00">
+  For this step I'll just quote their{' '}
+  <a href="https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/paymentdatatransfer/">
+    PDT page
+  </a>{' '}
+  (one of many, it seems):
+</del>
+
+<ins dateTime="2011-08-01T18:52:38+00:00">
+  Apparently they have changed their UI now, so the instructions in their PDT
+  documentation is wrong... Thanks for the heads up Yuriy! The description below
+  should be correct now 🙂
+</ins>
+
+To use PDT, you must activate PDT and Auto Return in your PayPal account profile. You must also acquire a PDT <em>identity token</em>, which is used in all PDT communication you send to PayPal.
+
+Follow these steps to configure your account for PDT:
+
+<ol>
+  <li>Log in to your PayPal account.</li>
+  <li>
+    Click the <strong>Profile</strong> subtab.
+  </li>
+  <li>
+    Click the <strong>My Selling Tools</strong> button in the left column.
+  </li>
+  <li>
+    Find the <strong>Selling online</strong> section and click{' '}
+    <strong>Update</strong> in the <strong>Website preferences</strong> row.
+  </li>
+  <li>
+    Under Auto Return for Website Payments, click the <strong>On</strong> radio
+    button.
+  </li>
+  <li>
+    For the Return URL, enter the URL on your site that will receive the
+    transaction ID posted by PayPal after a customer payment.{' '}
+  </li>
+  <li>
+    Under Payment Data Transfer, click the <strong>On</strong> radio button.
+  </li>
+  <li>
+    Click <strong>Save</strong>.
+  </li>
+  <li>
+    Find the <strong>Selling online</strong> section and click{' '}
+    <strong>Update</strong> in the <strong>Website preferences</strong> row
+    again.
+  </li>
+  <li>
+    Scroll down to the Payment Data Transfer section of the page and take note
+    of your PDT identity token.
+  </li>
+</ol>
+
+The last point is particularly important and you should not only view the token, but note it down. Reason being that you need this in your code when we're going to talk to PayPal later.
+
+<a href="http://www.geekality.net/wp-content/uploads/2010/10/Capture.jpg">
+  <img
+    src="http://www.geekality.net/wp-content/uploads/2010/10/Capture-122x300.jpg"
+    alt="Screenshot of PayPal Payment Preferences"
+    title="PayPal Payment Preferences"
+    width="122"
+    height="300"
+    className="alignright size-medium wp-image-1214"
+  />
+</a>
+As an aside, I would also recommend you turn off the "Block Non-encrypted Website
+Payment", at least while testing, since it's a lot easier to make PayPal buttons
+on the fly without encrypting them. I currently don't know how, but I'll probably
+try to figure out soon. I would also recommend that you set PayPal Account Optional,
+so that people can make payments without signing up (since some people don't want
+to be bothered with that). To the right I have put a screen shot of that page with
+the mentioned options marked in yellow. Click on it for full-size view 🙂
+
+## Step 2: Create a button
+
+The PayPal buttons consist of a form which has a number of hidden key/value pairs and a submit button. You can find info on how to make those in their <a href="https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/">Website Payments Standard Integration Guide</a> so I won't explain how to do that here. What I would like to mention in this case though, is that you can, if you need to, override the return URL that you set in the previous step for specific buttons. For example you can return them to the order they paid for rather than just a general return page.
+
+<code lang="html">
+  <input
+    type="hidden"
+    name="return"
+    value="http://business.example.com/order/123/"
+  />
+  <input
+    type="hidden"
+    name="cancel_return"
+    value="http://business.example.com/order/123/"
+  />
+</code>
+
+I use the same URL for both since we will check things with PDT anyways. Here is an example button with the data I use in this tutorial:
+
+<code lang="html">
+  <form
+    action="https://www.sandbox.paypal.com/cgi-bin/webscr"
+    method="post"
+    accept-charset="utf-8"
+  >
+    <p>
+      <input type="hidden" name="cmd" value="_xclick" />
+      <input type="hidden" name="charset" value="utf-8" />
+      <input
+        type="hidden"
+        name="business"
+        value="paypal@business.example.com"
+      />
+      <input type="hidden" name="item_name" value="Stuffed bear" />
+      <input type="hidden" name="item_number" value="BEAR05" />
+      <input type="hidden" name="amount" value="20.00" />
+      <input type="hidden" name="currency_code" value="USD" />
+      <input
+        type="hidden"
+        name="return"
+        value="http://business.example.com/order/123/"
+      />
+      <input
+        type="hidden"
+        name="cancel_return"
+        value="http://business.example.com/order/123/"
+      />
+      <input type="hidden" name="bn" value="Business_BuyNow_WPS_SE" />
+      <input
+        type="image"
+        src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif"
+        name="submit"
+        alt="Buy Now"
+      />
+    </p>
+  </form>
+</code>
+
+So, the user will click the button, go through the payment procedure, and at the end there will be a link/button to return to the merchant. When that is clicked, we get to the next step.
+
+## Step 3: Catch the return
+
+The URL they are returned to could for example look like this (split for easier reading):
+
+<code>
+  http://business.example.com/order/123/?tx=6BC88318RN685282M &st=Completed
+  &amt=20.00 &cc=USD &cm= &item_number=BEAR05
+</code>
+
+As you can see we get some GET parameters to work with here, but the only one you need is the Transaction ID, `tx`:
+
+<code lang="php">
+if(isset($_GET['tx']))
+{
+  $tx = $_GET['tx'];
+  // Further processing
+}
+</code>
+
+The reason we don't care about the rest is that they're not trustworthy at all. Since they are GET parameters we can easily tamper with them in the address bar of our browser, and we just can't have any of that, can we?
+
+To get good and trustworthy data we need to send this transaction id back to PayPal together with our PDT Identity Token. If the id and token are valid, we will get real and actual transaction details back in return.
+
+## Step 4: Do a POST request back to PayPal
+
+Sending the Transaction ID and our PDT Identity Token back to PayPal can be done in various ways from PHP. I used <a href="http://php.net/manual/en/ref.curl.php">cURL</a> which I found to be pretty clean and easy to use.
+
+<code lang="php">
+// Init cURL
+$request = curl_init();
+
+// Set request options
+curl_setopt_array($request, array
+(
+CURLOPT_URL => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+CURLOPT_POST => TRUE,
+CURLOPT_POSTFIELDS => http_build_query(array
+(
+'cmd' => '\_notify-synch',
+'tx' => $tx,
+'at' => $your_pdt_identity_token,
+)),
+CURLOPT_RETURNTRANSFER => TRUE,
+CURLOPT_HEADER => FALSE,
+// CURLOPT_SSL_VERIFYPEER => TRUE,
+// CURLOPT_CAINFO => 'cacert.pem',
+));
+
+// Execute request and get response and status code
+$response = curl_exec($request);
+$status   = curl_getinfo($request, CURLINFO_HTTP_CODE);
+
+// Close connection
+curl_close($request);
+
+</code>
+
+The cURL options we set means roughly: Use this URL, do a POST, send these variables, return the transfer as a string when I call `curl_exec` and do not include the HTTP headers in that string. The reason behind the last two are in <a href="/?p=1413">this post</a>. I've commented them out, and if it works without them, just leave them out. For me it worked fine on one server, while on another I had to add them.
+
+<blockquote>
+  <strong>Note:</strong> For security reasons, PayPal will only allow you to use
+  the transaction id to get a response up to 5 times. After that it will be
+  invalidated and you will get an error back instead of the transaction data.
+  Fair enough for regular use, but found it a bit annoying while developing
+  since it took some tries to get the result I wanted 😛
+</blockquote>
+
+## Step 5: Check the response
+
+The response will be a string that looks something like this:
+
+<code>
+  SUCCESS mc_gross=20.00 invoice=AF000001 protection_eligibility=Eligible
+  address_status=confirmed payer_id=ADSZV7LHTCJM4 tax=0.00
+  address_street=Candy+Road+77 payment_date=12%3A04%3A18+Oct+19%2C+2010+PDT
+  payment_status=Completed charset=windows-1252 address_zip=99501
+  first_name=Alice mc_fee=0.88 address_country_code=US address_name=Alice+Foobar
+  custom= payer_status=unverified business=paypal%40business.example.com
+  address_country=United+States address_city=Anchorage quantity=1
+  payer_email=alice.foobar%40example.com txn_id=6BC88318RN685282M
+  payment_type=instant last_name=Foobar address_state=AK
+  receiver_email=paypal%40business.example.com payment_fee=0.88
+  receiver_id=JNNUMM42GJB9U txn_type=web_accept item_name=Stuffed+bear
+  mc_currency=USD item_number=BEAR05 residence_country=US
+  receipt_id=3354-8100-5749-2926 handling_amount=0.00
+  transaction_subject=Stuffed+bear payment_gross=20.00 shipping=0.00
+</code>
+
+To make sure everything is well we must check that the status code is 200 and that the first line says SUCCESS. On failure it would say FAIL, or something like that. We can do that like this:
+
+<code lang="php">
+  if($status == 200 AND strpos($response, 'SUCCESS') === 0)
+  {
+    // Further processing
+  }
+  else
+  {
+    // Log the error, ignore it, whatever
+  }
+</code>
+
+That response is not very useful right now though. Even if it is valid, the string is just, well, a long string. Not to mention it's URL encoded and possibly in the wrong character encoding. We want to clean it up and turn it into a much more handy associative array.
+
+## Step 6: Clean up the response
+
+We want to remove the first line, URL decode the string, turn it into an associative array and convert the encoding if needed. This is how you might do that:
+
+<code lang="php">
+// Remove SUCCESS part (7 characters long)
+$response = substr($response, 7);
+
+// URL decode
+$response = urldecode($response);
+
+// Turn into associative array
+preg_match_all('/^([^=\s]++)=(.\*+)/m', $response, $m, PREG_PATTERN_ORDER);
+$response = array_combine($m[1], $m[2]);
+
+// Fix character encoding if different from UTF-8 (in my case)
+if(isset($response['charset']) AND strtoupper($response['charset']) !== 'UTF-8')
+{
+foreach($response as $key => &$value)
+{
+$value = mb_convert_encoding($value, 'UTF-8', $response['charset']);
+}
+$response['charset_original'] = $response['charset'];
+$response['charset'] = 'UTF-8';
+}
+
+// Sort on keys for readability (handy when debugging)
+ksort($response);
+
+</code>
+
+The `$response` should now contain a nice and sorted associative array with the correct encoding and it's ready to be used for whatever purpose you need.
+
+## Step 7: What now?
+
+What you do with the validated and cleaned up data depends on what you need and what you want. You could use it to display a nice helpful message to the user, store it somewhere, maybe mark something as paid in your database, et cetera. You should also most likely check that the data you have gotten corresponds to what you expected. For example if the amount they paid matches the amount they should have paid and so on.
+
+## Important thing to remember about PDT
+
+You are actually <strong>not guaranteed</strong> to get this PDT data. Unless the user clicks that last button in the payment process at PayPal and returns to your page, you will get nothing. They could for example close the browser tab when the payment is done or the power could go out just before they had the opportunity to. Theoretically it could happen!
+
+If you want something that is fully reliable, you need to have a look at <a href="https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/">PayPal Instant Payment Notifications</a> (IPN). PayPal sends these notifications to a certain URL you have provided behind the scenes and it is not part what the user does or does not do. They may not be instantaneous, but you are guaranteed to eventually get them.
+
+What you most likely want is a combination of these two. Use PDT to give the returning users a quick response and store what you can/need in the database. Then use IPN to fill out the gaps of missed PDTs or missing transaction details (IPN will give you many more details than PDT does).
+
+<ins dateTime="2011-05-28T21:14:32+00:00">
+  It took some time, but I have finally finished a{' '}
+  <a href="http://www.geekality.net/?p=1420">tutorial on IPN</a> Check it out if
+  you're interested 😎
+</ins>
+
+## Working sample
+
+Since the code above was a bit broken up, I have gathered it all in a single example page that should be operational. It contains a simple Buy Now button and it will display the PDT response when you return from the fake purchase. Since it uses the PayPal Sandbox you need to be logged in to your developer account. For the payment you can use one of your existing test accounts or you can pretend to be a person that just wants to use his credit card without an account (If you need help coming up with a fake credit card number that validates, have a look at <a href="http://www.darkcoding.net/credit-card-numbers/">darkcoding.net/credit-card-numbers</a>).
+
+You find it over at <a href="http://samples.geekality.net/pdt/">samples.geekality.net/pdt</a>.
+
+The `process_pdt` function you can see in the source code should be pretty self-contained and you should be able to just drop it in to whatever you are working on and use it out of the box. Just remember to fill in <em>your</em> actual identity token 😉
+
+And that's the end of this tutorial!
+
+Think this was my first longish in-depth post, so if you have any feedback, found it helpful, please leave a comment. Also do that if something is unclear, could be improved or is flat out wrong. Especially if it's flat out wrong. There's <em>a lot</em> of <em>wrong</em> stuff on the Internet, and I don't want to contribute to that 😛

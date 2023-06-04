@@ -1,0 +1,267 @@
+---
+title: Setting up GPG on Windows
+published: '2017-08-23'
+permalinks:
+  - /2017/08/23/setting-up-gpg-on-windows/
+  - /?p=3077
+categories:
+  - technology
+tags:
+  - encryption
+  - gpg
+  - rsa
+  - security
+  - signing
+  - windows
+---
+
+What I did to get from zero to a good working (hopefully) secure GPG key set, usable for <a href="/?p=3086">signing</a> and encrypting stuff on Windows...
+
+<ol>
+<li>Install <a href="https://www.gpg4win.org">Gpg4win</a>.
+
+<li>Create main/root key:<br/>
+<code lang="bash">
+🔶 $ gpg --gen-key
+gpg (GnuPG) 2.0.30; Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Please select what kind of key you want:
+(1) RSA and RSA (default)
+(2) DSA and Elgamal
+(3) DSA (sign only)
+(4) RSA (sign only)
+🔶 Your selection? 4
+RSA keys may be between 1024 and 4096 bits long.
+What keysize do you want? (2048) 4096
+Requested keysize is 4096 bits
+Please specify how long the key should be valid.
+0 = key does not expire
+<n> = key expires in n days
+<n>w = key expires in n weeks
+<n>m = key expires in n months
+<n>y = key expires in n years
+🔶 Key is valid for? (0) 0
+Key does not expire at all
+🔶 Is this correct? (y/N) y
+
+GnuPG needs to construct a user ID to identify your key.
+
+🔶 Real name: Alice Person
+🔶 Email address: alice.person@example.com
+🔶 Comment: alice
+You selected this USER-ID:
+"Alice Person (alice) <alice.person@example.com>"
+
+🔶 Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? o
+You need a Passphrase to protect your secret key.
+
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+gpg: key AA79CCAE marked as ultimately trusted
+public and secret key created and signed.
+
+gpg: checking the trustdb
+gpg: public key of ultimately trusted key AA77EE54 not found
+gpg: 3 marginal(s) needed, 1 complete(s) needed, PGP trust model
+gpg: depth: 0 valid: 2 signed: 0 trust: 0-, 0q, 0n, 0m, 0f, 2u
+pub 4096R/AA79CCAE 2017-08-23
+Key fingerprint = 98A1 5DD0 0653 55BB 3358 B35C 8C0B BECB AA79 CCAE
+uid [ultimate] Alice Person (alice) <alice.person@example.com>
+
+Note that this key cannot be used for encryption. You may want to use
+the command "--edit-key" to generate a subkey for this purpose.
+
+</code>
+
+<li>Open the key for editing:<br/>
+<code lang="bash">
+🔶 $ gpg --edit-key alice
+gpg (GnuPG) 2.0.30; Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Secret key is available.
+
+pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
+trust: ultimate validity: ultimate
+[ultimate] (1). Alice Person (alice) <alice.person@example.com>
+
+</code>
+
+<li>(Optionally) Add other user ids, and set the right one as primary:<br/>
+<code lang="bash">
+🔷 gpg> adduid
+🔷 Real name: Alice Person
+🔷 Email address: alice@example.org
+🔷 Comment: alice
+You selected this USER-ID:
+    "Alice Person (alice) <alice@example.org>"
+
+🔷 Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? o
+
+You need a passphrase to unlock the secret key for
+user: "Alice Person (alice) <alice.person@example.com>"
+4096-bit RSA key, ID AA79CCAE, created 2017-08-23
+
+pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
+trust: ultimate validity: ultimate
+[ultimate] (1) Alice Person (alice) <alice.person@example.com>
+[ unknown] (2). Alice Person (alice) <alice@example.org>
+
+# Select one of them
+
+🔷 gpg> uid 1
+
+pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
+trust: ultimate validity: ultimate
+[ultimate] (1)\* Alice Person (alice) <alice.person@example.com>
+[ unknown] (2). Alice Person (alice) <alice@example.org>
+
+🔷 gpg> primary
+
+You need a passphrase to unlock the secret key for
+user: "Alice Person (alice) <alice.person@example.com>"
+4096-bit RSA key, ID AA79CCAE, created 2017-08-23
+
+pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
+trust: ultimate validity: ultimate
+[ultimate] (1)\* Alice Person (alice) <alice.person@example.com>
+[ unknown] (2) Alice Person (alice) <alice@example.org>
+
+</code>
+
+<li>Add subkeys for signing and encryption:<br/>
+<code lang="bash">
+🔶 gpg> addkey
+Key is protected.
+
+You need a passphrase to unlock the secret key for
+user: "Alice Person (alice) <alice.person@example.com>"
+4096-bit RSA key, ID AA79CCAE, created 2017-08-23
+
+Please select what kind of key you want:
+(3) DSA (sign only)
+(4) RSA (sign only)
+(5) Elgamal (encrypt only)
+(6) RSA (encrypt only)
+🔶 Your selection? 4
+RSA keys may be between 1024 and 4096 bits long.
+🔶 What keysize do you want? (2048) 4096
+Requested keysize is 4096 bits
+Please specify how long the key should be valid.
+0 = key does not expire
+<n> = key expires in n days
+<n>w = key expires in n weeks
+<n>m = key expires in n months
+<n>y = key expires in n years
+🔶 Key is valid for? (0) 0
+Key does not expire at all
+🔶 Is this correct? (y/N) y
+🔶 Really create? (y/N) y
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+
+pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
+trust: ultimate validity: ultimate
+sub 4096R/62275E24 created: 2017-08-23 expires: never usage: S
+[ultimate] (1)\* Alice Person (alice) <alice.person@example.com>
+[ unknown] (2) Alice Person (alice) <alice@example.org>
+
+🔶 gpg> addkey
+Key is protected.
+
+You need a passphrase to unlock the secret key for
+user: "Alice Person (alice) <alice.person@example.com>"
+4096-bit RSA key, ID AA79CCAE, created 2017-08-23
+
+Please select what kind of key you want:
+(3) DSA (sign only)
+(4) RSA (sign only)
+(5) Elgamal (encrypt only)
+(6) RSA (encrypt only)
+🔶 Your selection? 6
+RSA keys may be between 1024 and 4096 bits long.
+🔶 What keysize do you want? (2048) 4096
+Requested keysize is 4096 bits
+Please specify how long the key should be valid.
+0 = key does not expire
+<n> = key expires in n days
+<n>w = key expires in n weeks
+<n>m = key expires in n months
+<n>y = key expires in n years
+🔶 Key is valid for? (0) 0
+Key does not expire at all
+🔶 Is this correct? (y/N) y
+🔶 Really create? (y/N) y
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+
+pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
+trust: ultimate validity: ultimate
+sub 4096R/62275E24 created: 2017-08-23 expires: never usage: S
+sub 4096R/4AEA9524 created: 2017-08-23 expires: never usage: E
+[ultimate] (1)\* Alice Person (alice) <alice.person@example.com>
+[ unknown] (2) Alice Person (alice) <alice@example.org>
+
+</code>
+
+<li>Save (and quit):<br/>
+<code lang="bash">
+🔶 gpg> save
+</code>
+
+<li>Export keys for (safe!) storage:<br/>
+<code lang="bash">
+🔶 $ set id=AA79CCAE
+🔶 $ gpg -a --export %id% > %id%_public.asc
+🔶 $ gpg -a --export-secret-keys %id% > %id%_private.asc
+🔶 $ gpg -a --export-secret-subkeys %id% > %id%_subkeys.asc
+</code>
+
+<li>Export revocation file:<br/>
+<code lang="bash">
+🔶 $ gpg -a --gen-revoke %id% > %id%_revoke_cert.asc
+
+sec 4096R/AA79CCAE 2017-08-23 Alice Person (alice) <alice.person@example.com>
+
+Create a revocation certificate for this key? (y/N) y
+Please select the reason for the revocation:
+0 = No reason specified
+1 = Key has been compromised
+2 = Key is superseded
+3 = Key is no longer used
+Q = Cancel
+(Probably you want to select 1 here)
+🔶 Your decision? 1
+Enter an optional description; end it with an empty line:
+🔶 >
+Reason for revocation: Key has been compromised
+(No description given)
+🔶 Is this okay? (y/N) y
+
+You need a passphrase to unlock the secret key for
+user: "Alice Person (alice) <alice.person@example.com>"
+4096-bit RSA key, ID AA79CCAE, created 2017-08-23
+
+Revocation certificate created.
+
+Please move it to a medium which you can hide away; if Mallory gets
+access to this certificate he can use it to make your key unusable.
+It is smart to print this certificate and store it away, just in case
+your media become unreadable. But have some caution: The print system of
+your machine might store the data and make it available to others!
+
+</code>
+</ol>
+
+<i>
+  <b>Source(s):</b> <a href="https://blog.bravi.org/?p=1135">blog.bravi.org</a>
+</i>

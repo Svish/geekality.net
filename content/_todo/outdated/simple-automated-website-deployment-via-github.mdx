@@ -1,0 +1,78 @@
+---
+title: Simple automated website deployment via GitHub
+published: '2013-05-01'
+permalinks:
+  - /2013/05/01/simple-automated-website-deployment-via-github/
+  - /?p=2285
+categories:
+  - software-development
+tags:
+  - cgi
+  - deployment
+  - git
+  - github
+  - website
+---
+
+Here is a very simple way to add automatic deployment via <a href="https://github.com/">GitHub</a>. This assumes
+
+<ul>
+<li>You have shell access to your web host
+<li>Your website is in a repository on GitHub
+<li>CGI scripts are enabled for your website
+<li>That git (and optionally composer if you use that) is installed
+</ul>
+
+## Initial pull
+
+Log on to your web host and do the initial pull.
+
+<code lang="bash">
+$ cd path/to/website
+$ git clone https://github.com/<you>/<website>.git .
+</code>
+
+## Deployment script
+
+Put the following script in a file named for example `deploy.cgi` in your website root.
+
+<code lang="bash">
+#!/bin/bash
+echo Content-type: text/plain
+echo
+
+export PATH=~/bin/:$PATH
+
+git pull
+composer.phar install
+echo DONE
+
+</code>
+
+<div className="note">
+  I'm on <a href="http://www.dreamhost.com/r.cgi?322827">Dreamhost</a> and the
+  export line is so the cgi script will use the composer.phar and php symlink
+  located in ~/bin. See <a href="/?p=2153">this post</a> for more info.
+</div>
+
+Add execute rights to the script.
+
+<code lang="bash">$ chmod u+x deploy.cgi</code>
+
+You should now be able to visit <code inline="true">http://<your-website>/deploy.cgi</code> in your browser and see output like this:
+
+<code>
+  Already up-to-date. Loading composer repositories with package information
+  Installing dependencies from lock file Nothing to install or update Generating
+  autoload files DONE
+</code>
+
+## Set up GitHub service hook
+
+Go to <code inline="true">https://github.com/<you>/<website>/settings/hooks</code>, click on WebHook URLs and enter the full URL to your script, <code inline="true">http://<your-website>/deploy.cgi</code>
+
+## Test it out
+
+With this set up you should be able to make a change at your dev machine, commit it and push it to GitHub. The script should then be executed shortly after and your website should be updated automatically. Pretty cool 🙂
+
+This is of course ultra simple, and if this is a critical site you should probably add some security of some sort. A simple version could be to use a cryptic name like a guid for the script and of course not have this script checked in at GitHub. You might also perhaps want to only pull from a certain branch or things like that, but for a small simple site this works pretty well as long as you remember to only push to GitHub when you have a working set of commits 😉

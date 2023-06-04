@@ -1,0 +1,72 @@
+---
+title: 'jQuery: Nice and smooth hover effect'
+published: '2010-08-26'
+permalinks:
+  - /2010/08/26/jquery-nice-and-smooth-hover-effect/
+  - /?p=1165
+categories:
+  - software-development
+tags:
+  - css
+  - html
+  - javascript
+  - jquery
+  - jquery-ui
+  - snippet
+---
+
+Needed to add a hover effect on some table rows and wanted to make it look nice. Think I managed to get it quite smooth in the end and thought I could share it.
+
+<ins dateTime="2015-03-19T19:27:10+00:00">
+  <b>Outdated:</b> I wrote this in 2010. These days you should almost most
+  definitely use{' '}
+  <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_transitions">
+    CSS transitions
+  </a>{' '}
+  instead 🙂
+</ins>
+
+<hr className="fix" />
+
+<code lang="javascript" line_numbers="true">
+// In the document ready event
+$(function()
+{
+	// Attach handler
+	$('table tbody').delegate('tr', 'hover', hoverHandler);
+});
+
+function hoverHandler(event)
+{
+switch(event.type)
+{
+// When mouse comes over
+case 'mouseover':
+$(this)
+// Stop animation where it is
+.stop(true)
+// Start fading up
+.animate({backgroundColor:'#fd8'}, 'fast');
+break;
+
+    	// When mouse goes out
+    	case 'mouseout':
+    		$(this)
+    			// Jump to end of animation
+    			.stop(true, true)
+    			// Start fading down
+    			.animate({backgroundColor:'transparent'}, 'slow');
+    		break;
+    }
+
+}
+
+</code>
+
+You can check out a live version at <a href="http://samples.geekality.net/hover-effect/">samples.geekality.net/hover-effect</a>
+
+I would like to have used a class instead of a hard-coded color though. I tried to use addClass and removeClass, but with animation those proved to be quite buggy in this case. The problem with hard-coded colors is first of all that it generally is much better to collect styles in style-sheets than to have them spread out in other code. Secondly, doing it this way will override any background-color the rows might have had before you hovered over them.
+
+A case where the second can ruin things a bit is if you have alternated background colors. This could be worked around if you take it into account in the handler though. Just for fun I tried to do just that: <a href="http://samples.geekality.net/hover-effect/alt.php">samples.geekality.net/hover-effect/alt.php</a>
+
+Note that this might not work so well if your table is dynamic (if you sort, add or remove rows for example). But anyways, looks pretty cool I think 😛

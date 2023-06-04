@@ -1,0 +1,55 @@
+---
+title: Output embedded resources into Razor views
+published: '2014-11-04'
+permalinks:
+  - /2014/11/04/output-embedded-resources-into-razor-views/
+  - /?p=2620
+categories:
+  - software-development
+tags:
+  - asp-net-mvc
+  - csharp
+  - embedded-resources
+  - razor
+---
+
+In relation to my <a href="/?p=2616">ASP.NET MVC Areas in separate projects thing</a> I needed to share some tiny bits of javascript and css between pages in this separate project. Could probably be solved better by looking into the bundling stuff, but as a quick fix I decided to just compile the javascript and css files into the assembly and output them raw into my views. Quick and simple.
+
+<ol>
+
+<li>Set the <b>Build Action</b> of your js and css file to <b>Embedded Resource</b>
+
+<li>Add this extension method to a static class.
+<code lang="csharp">
+public static IHtmlString RawResource(this HtmlHelper html, Type type, string resourceName)
+{
+    using (var s = type.Assembly.GetManifestResourceStream(resourceName) ?? new MemoryStream())
+    using (var r = new StreamReader(s))
+    {
+        s.Position = 0;
+        return new HtmlString(r.ReadToEnd());
+    }
+}
+</code>
+
+<li>Make sure the extension method is available in your view
+<code lang="csharp">
+@using The.Namespace.Of.My.Static.Class
+</code>
+
+<li>Use the method in your view
+<code lang="csharp">
+<script type="text/javascript">
+    @Html.RawResource(typeof(AnyClassInAssembyOfEmbeddedResource), "Default.Namespace.Of.Project.Resources.file.js");
+</script>
+
+<style type="text/css">
+    @Html.RawResource(typeof(AnyClassInAssembyOfEmbeddedResource), "Default.Namespace.Of.Project.Resources.file.min.css")
+</style>
+</code>
+
+</ol>
+
+Easy peasy. And slightly hackish and ugly... let me know if you have smoother, cleaner bundling approach 😉
+
+If you're having problems figuring out the right name of your embedded resource, see my post on <a href="/?p=62">how to use embedded resources</a> for how to list them all out.
