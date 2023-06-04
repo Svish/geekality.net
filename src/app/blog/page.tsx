@@ -1,4 +1,4 @@
-import { posts } from '@/content'
+import { postsByTitle } from '@/content'
 import { type Metadata } from 'next'
 
 import H1 from '@/components/H1'
@@ -16,7 +16,7 @@ export default async function BlogPage() {
   return (
     <>
       <H1>Blog</H1>
-      <PostList posts={posts()} />
+      <PostList posts={postsByTitle} />
 
       <aside className="prose">
         <ul>

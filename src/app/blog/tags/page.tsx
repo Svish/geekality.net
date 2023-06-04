@@ -12,7 +12,7 @@ export default async function BlogTagsPage() {
     <>
       <H1>Tags</H1>
       <ul>
-        {tags().map((slug) => (
+        {tags.map((slug) => (
           <li key={slug}>
             <Link href={`/blog/tags/${slug}`}>{slug}</Link>
           </li>

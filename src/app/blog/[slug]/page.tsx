@@ -1,6 +1,7 @@
 import '@/styles/blogPage.css'
 
-import { allBlogPosts } from 'contentlayer/generated'
+import { postsByPublished, findSiblings } from '@/content'
+
 import { getMDXComponent } from 'next-contentlayer/hooks'
 import { notFound } from 'next/navigation'
 import { formatDate } from '@/util/format'
@@ -16,13 +17,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return allBlogPosts.map((post) => ({
+  return postsByPublished.map((post) => ({
     slug: post.slug,
   }))
 }
 
 export function generateMetadata({ params }: Props) {
-  const post = allBlogPosts.find(({ slug }) => slug === params.slug)
+  const post = postsByPublished.find(({ slug }) => slug === params.slug)
   if (post == null) notFound()
 
   return {
@@ -37,10 +38,11 @@ export function generateMetadata({ params }: Props) {
 }
 
 export default async function BlogPage({ params }: Props) {
-  const post = allBlogPosts.find(({ slug }) => slug === params.slug)
+  const post = postsByPublished.find(({ slug }) => slug === params.slug)
   if (post == null) notFound()
 
   const MDXContent = getMDXComponent(post.body.code)
+  const { prev, next } = findSiblings(post)
 
   return (
     <>
@@ -50,32 +52,50 @@ export default async function BlogPage({ params }: Props) {
         <MDXContent components={mdxComponents} />
       </Prose>
 
-      <aside
-        aria-label="post meta"
-        className="mt-4 text-xs text-gray-600 dark:text-gray-400"
-      >
-        Published:{' '}
-        <time dateTime={post.published}>
-          {formatDate(post.published, 'long')}
-        </time>
-        <br />
-        Posted in
-        <ul className="inline-list">
-          {post.categories.map((category) => (
-            <li key={category}>
-              <Link href={`/blog/categories/${category}`}>{category}</Link>
-            </li>
-          ))}
-        </ul>
-        , tagged with
-        <ul className="inline-list">
-          {post.tags.map((tag) => (
-            <li key={tag}>
-              <Link href={`/blog/tags/${tag}`}>{tag}</Link>
-            </li>
-          ))}
-        </ul>
-      </aside>
+      <div className="max-w-[65ch]">
+        <aside
+          aria-label="Post meta"
+          className="mt-4 text-xs text-gray-600 dark:text-gray-400"
+        >
+          Published:{' '}
+          <time dateTime={post.published}>
+            {formatDate(post.published, 'long')}
+          </time>
+          <br />
+          Posted in
+          <ul className="inline-list">
+            {post.categories.map((category) => (
+              <li key={category}>
+                <Link href={`/blog/categories/${category}`}>{category}</Link>
+              </li>
+            ))}
+          </ul>
+          , tagged with
+          <ul className="inline-list">
+            {post.tags.map((tag) => (
+              <li key={tag}>
+                <Link href={`/blog/tags/${tag}`}>{tag}</Link>
+              </li>
+            ))}
+          </ul>
+          {prev && (
+            <p className="mt-2">
+              Next post:{' '}
+              <Link href={`/blog/${prev.slug}`} rel="prev">
+                {prev.title}
+              </Link>
+            </p>
+          )}
+          {next && (
+            <p>
+              Previous post:{' '}
+              <Link href={`/blog/${next.slug}`} rel="next">
+                {next.title}
+              </Link>
+            </p>
+          )}
+        </aside>
+      </div>
     </>
   )
 }

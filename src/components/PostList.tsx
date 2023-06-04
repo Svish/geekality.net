@@ -1,10 +1,10 @@
 import Link from '@/components/Link'
 import { formatDate } from '@/util/format'
 
-import { type BlogPost } from 'contentlayer/generated'
+import { type Post } from '@/content'
 
 interface Props {
-  posts: BlogPost[]
+  posts: Post[]
 }
 
 export default function PostList({ posts }: Props) {
