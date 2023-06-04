@@ -25,7 +25,7 @@ public static T NewIfNull<T>(this T subject, Func<T> createNew)
 }
 ```
 
-Not claiming this is a very useful method, but it was the simplest thing I could come up with 😛 Anyways, in Visual Studio you will now probably have a blue (is blue here at least) squiggly line under the <a href="http://msdn.microsoft.com/en-us/library/53k8ybth.aspx">equality operator</a>. It states you are doing a <cite>Possible compare of value type with 'null'</cite>, which of course is reasonable and correct. We <em>could</em> just ignore it and move on... but we don't really like squiggly lines, do we? I sure don't... so lets get rid of it.
+Not claiming this is a very useful method, but it was the simplest thing I could come up with 😛 Anyways, in Visual Studio you will now probably have a blue (is blue here at least) squiggly line under the <a href="http://msdn.microsoft.com/en-us/library/53k8ybth.aspx">equality operator</a>. It states you are doing a <cite>Possible compare of value type with 'null'</cite>, which of course is reasonable and correct. We _could_ just ignore it and move on... but we don't really like squiggly lines, do we? I sure don't... so lets get rid of it.
 
 ## Faulty solution
 
@@ -56,7 +56,7 @@ public static T NewIfNull<T>(T subject, Func<T> createNew)
 }
 ```
 
-That is kind of ugly though... And it is <em>so</em> much longer to type. <em>And</em>, most importantly, it kind of makes the code a bit unreadable... At least if you have a bunch of things you have to check for null, like I did today.
+That is kind of ugly though... And it is _so_ much longer to type. _And_, most importantly, it kind of makes the code a bit unreadable... At least if you have a bunch of things you have to check for null, like I did today.
 
 But fear not! Today I came up with a tiny, but brilliant extension method which makes things a lot better:
 
@@ -74,6 +74,6 @@ public static T NewIfNull<T>(T subject, Func<T> createNew)
 }
 ```
 
-Doesn't that just look <em>a lot</em> cleaner? I think so 😄
+Doesn't that just look _a lot_ cleaner? I think so 😄
 
 And yes, I know this isn't really a big issue. And I realize you have probably all come up with something similar already. Yes, I am slow 😛 But hey, I figured it might be worth sharing this anyways, just in case you hadn't thought about it before. I sure hadn't! And I really do think that tiny snippet of code made a huge difference in code readability. And we all want that, don't we? Yes, yes we do...

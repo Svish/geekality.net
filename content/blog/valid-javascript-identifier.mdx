@@ -15,7 +15,7 @@ tags:
   - unicode
 ---
 
-After another reply to <a href="http://stackoverflow.com/a/6892827/39321" title="PHP: Is this safe for providing JSONP?">a question</a> I've had on StackOverflow for a while, I decided that I perhaps should add another level of security to my method of <a href="/?p=1021" title="How to easily provide JSON and JSONP">providing JSONP</a> from PHP. The way I did it before, I didn't do any checking on the provided callback. This means that someone could technically put whatever they wanted in there, including malicious code. So, therefore it might be a good idea to check if the callback, which should be a function name, actually <em>is</em> a valid function name. But ...
+After another reply to <a href="http://stackoverflow.com/a/6892827/39321" title="PHP: Is this safe for providing JSONP?">a question</a> I've had on StackOverflow for a while, I decided that I perhaps should add another level of security to my method of <a href="/?p=1021" title="How to easily provide JSON and JSONP">providing JSONP</a> from PHP. The way I did it before, I didn't do any checking on the provided callback. This means that someone could technically put whatever they wanted in there, including malicious code. So, therefore it might be a good idea to check if the callback, which should be a function name, actually _is_ a valid function name. But ...
 
 ## What is valid?
 
@@ -83,8 +83,7 @@ To figure that out, we need a look in the <a href="http://www.ecma-international
     <tr>
       <th scope="row">ZWJ</th>
       <td>
-        U+200D (<a href="http://en.wikipedia.org/wiki/ZWJ">Zero-width joiner</a>
-        )
+        U+200D (<a href="http://en.wikipedia.org/wiki/ZWJ">Zero-width joiner</a>)
       </td>
     </tr>
     <tr>

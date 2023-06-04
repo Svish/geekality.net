@@ -20,7 +20,7 @@ Stumbled upon <a href="http://stackoverflow.com/q/8181291/39321">a question on S
 $upload_time = time() - $_SERVER['REQUEST_TIME'];
 ```
 
-This pretty much always returns zero, even though the uploading actually took many seconds, because the request start time is <em>after</em> the server has received the post data. That we actually just get how long the script took to run, which of course is pretty close to zero seconds. So, what can we do?
+This pretty much always returns zero, even though the uploading actually took many seconds, because the request start time is _after_ the server has received the post data. That we actually just get how long the script took to run, which of course is pretty close to zero seconds. So, what can we do?
 
 1. Right before data is posted, nudge the server with an AJAX call which stores the current timestamp in a session variable
 1. Post the data

@@ -47,7 +47,7 @@ Here's what I use and try to cover here:
 <ol>
 <li>Find the <b>Hyper-V Manager</b>.<br/>
 <a href="http://www.geekality.net/wp-content/uploads/2014/09/Hyper-V-Minecraft-4.jpg"><img src="http://www.geekality.net/wp-content/uploads/2014/09/Hyper-V-Minecraft-4-300x268.jpg" alt="Searching for hyper-v" width="300" height="268" className="alignnone size-medium wp-image-2575" /></a>
-<li>And open it up for <em>this</em> fun stuff.<br/>
+<li>And open it up for _this_ fun stuff.<br/>
 <a href="http://www.geekality.net/wp-content/uploads/2014/09/Hyper-V-Minecraft-3.jpg"><img src="http://www.geekality.net/wp-content/uploads/2014/09/Hyper-V-Minecraft-3-300x276.jpg" alt="Hyper-V Manager window" width="300" height="276" className="alignnone size-medium wp-image-2577" /></a>
 <li>Open <b>Hyper-V Settings</b> and change the <b>default folders</b> for Virtual Machines and Virtual Hard Disks (if you want them somewhere else).
 <li>Open <b>Virtual Switch Manager</b> and create a new virtual switch of type <b>external</b> and make sure <b>Allow management operating system to share this network adapter</b> is checked. This will briefly cut your network connection, but it comes right back up. Also note that Windows uses slightly longer to connect to your network when booting up because this virtual thing has to boot up too.<br/>
@@ -64,7 +64,7 @@ Here's what I use and try to cover here:
 <li>Set <b>Number of virtual processors</b> to 2, or whatever you want.
 <li>Add a <b>Hard Drive</b> to <b>IDE Controller 0</b> and select the <b>Physical hard disk</b> you want to use, which in my case was an unused SSD. Make sure to make the disk <b>offline</b> through <b>Disk Management</b> first, or it won't show up in the dropdown list.
 <li>Download the <a href="http://www.ubuntu.com/download/server">Ubuntu Server</a> and set it as the <b>Image file</b> of the <b>IDE Controller 1</b>, which should already be a <b>DVD Drive</b>.
-<li>Make sure <b>Automatic Start Action</b> is set to <b>Automatically start if it was running when the service stopped</b>, and <b>Automatic Stop Action</b> is set to <b>Save the virtual machine state</b>. This means you can safely restart your computer and your VM <em>with</em> your Minecraft server should come right back up where it was left off.
+<li>Make sure <b>Automatic Start Action</b> is set to <b>Automatically start if it was running when the service stopped</b>, and <b>Automatic Stop Action</b> is set to <b>Save the virtual machine state</b>. This means you can safely restart your computer and your VM _with_ your Minecraft server should come right back up where it was left off.
 <li>Hit <b>Ok</b>, connect to the VM and start it up!<br/>
 <a href="http://www.geekality.net/wp-content/uploads/2014/09/Hyper-V-Minecraft-5.jpg"><img src="http://www.geekality.net/wp-content/uploads/2014/09/Hyper-V-Minecraft-5-300x282.jpg" alt="Settings for VM" width="300" height="282" className="alignnone size-medium wp-image-2582" /></a>
 </ol>

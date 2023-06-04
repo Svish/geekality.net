@@ -14,7 +14,7 @@ tags:
 
 There are several <a href="http://php.net/manual/ref.pcre.php"><abbr title="Regular Expressions (Perl-Compatible)">PCRE</abbr> functions</a> available, but today I looked for one that just wasn't there: `preg_match_all_callback()`.
 
-Could've maybe used <a href="http://php.net/manual/function.preg-replace-callback.php">`preg_replace_callback()`</a>, but felt wrong since I didn't actually want to do any <em>replacing</em>. I just needed my function to be called for each match.
+Could've maybe used <a href="http://php.net/manual/function.preg-replace-callback.php">`preg_replace_callback()`</a>, but felt wrong since I didn't actually want to do any _replacing_. I just needed my function to be called for each match.
 
 So I wrote it myself. Noting it here, in case I (or someone else) needs it again.
 
@@ -36,7 +36,7 @@ function preg_match_all_callback(
 }
 ```
 
-And, in case someone reads this post and knows it actually <em>does</em> exist... and if that someone is you, please do leave a comment!
+And, in case someone reads this post and knows it actually _does_ exist... and if that someone is you, please do leave a comment!
 
 And, yes, I could've just written those 3 lines where I needed them, but what's the fun in that? And besides, the shorter the code where it counts, the easier what counts is to read.
 

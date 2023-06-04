@@ -86,7 +86,7 @@ After reading about <a href="https://www.symantec.com/page.jsp?id=how-ssl-works"
 
 ## Manual certificate validation
 
-SSL has two purposes: security and authentication. And the security will actually work fine and all the traffic will be encrypted even if the authentication fails. In other words, as long as we can look at the certificate ourselves and be sure that <em>we</em> thrust it, we can go ahead and continue with our work.
+SSL has two purposes: security and authentication. And the security will actually work fine and all the traffic will be encrypted even if the authentication fails. In other words, as long as we can look at the certificate ourselves and be sure that _we_ thrust it, we can go ahead and continue with our work.
 
 To check the certificate ourselves we can provide a <a href="http://msdn.microsoft.com/en-us/library/system.net.security.remotecertificatevalidationcallback.aspx">RemoteCertificate&shy;ValidationCallback</a> delegate to a class called the <a href="http://msdn.microsoft.com/en-us/library/system.net.servicepointmanager.aspx">ServicePoint&shy;Manager</a>.
 
@@ -107,11 +107,11 @@ static bool OurCertificateValidation(object s, X509Certificate certificate, X509
 }
 ```
 
-This is of course not very good... we should at least make <em>some</em> effort and check if the certificate is the one we should be getting. We can for example...
+This is of course not very good... we should at least make _some_ effort and check if the certificate is the one we should be getting. We can for example...
 
 ### Check the certificate fingerprint
 
-Certificates have something called a fingerprint and if we know the fingerprint of the certificate we <em>should</em> get, then we can compare it with the fingerprint of the one we actually got.
+Certificates have something called a fingerprint and if we know the fingerprint of the certificate we _should_ get, then we can compare it with the fingerprint of the one we actually got.
 
 ```csharp
 static bool OurCertificateValidation(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)

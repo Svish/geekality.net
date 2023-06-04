@@ -26,11 +26,10 @@ Say you have a PayPal "Buy Now"-button on your website and you have assigned ret
 URLs like `http://example.com/order?done` and `http://example.com/order?canceled`.
 You can then welcome the user back after a successful payment. But what if you wanted
 to say something more interesting than just "hey, welcome back" when they click on
-that "Return to Merchant"-button? And can you know if the order was <em>
-  actually
-</em> done or canceled? Maybe you'd like to log the transaction in your database
-and mark a payment as complete or something like that too? In that case you sure
-can't trust a simple flag in the address bar...
+that "Return to Merchant"-button? And can you know if the order was _actually_ done
+or canceled? Maybe you'd like to log the transaction in your database and mark a
+payment as complete or something like that too? In that case you sure can't trust
+a simple flag in the address bar...
 
 <blockquote>
   Payment Data Transfer (PDT) is a secure method to retrieve the details about a
@@ -69,7 +68,7 @@ Before you start playing around with PayPal stuff, I would recommend that you <a
   should be correct now 🙂
 </ins>
 
-To use PDT, you must activate PDT and Auto Return in your PayPal account profile. You must also acquire a PDT <em>identity token</em>, which is used in all PDT communication you send to PayPal.
+To use PDT, you must activate PDT and Auto Return in your PayPal account profile. You must also acquire a PDT _identity token_, which is used in all PDT communication you send to PayPal.
 
 Follow these steps to configure your account for PDT:
 
@@ -350,8 +349,8 @@ Since the code above was a bit broken up, I have gathered it all in a single exa
 
 You find it over at <a href="http://samples.geekality.net/pdt/">samples.geekality.net/pdt</a>.
 
-The `process_pdt` function you can see in the source code should be pretty self-contained and you should be able to just drop it in to whatever you are working on and use it out of the box. Just remember to fill in <em>your</em> actual identity token 😉
+The `process_pdt` function you can see in the source code should be pretty self-contained and you should be able to just drop it in to whatever you are working on and use it out of the box. Just remember to fill in _your_ actual identity token 😉
 
 And that's the end of this tutorial!
 
-Think this was my first longish in-depth post, so if you have any feedback, found it helpful, please leave a comment. Also do that if something is unclear, could be improved or is flat out wrong. Especially if it's flat out wrong. There's <em>a lot</em> of <em>wrong</em> stuff on the Internet, and I don't want to contribute to that 😛
+Think this was my first longish in-depth post, so if you have any feedback, found it helpful, please leave a comment. Also do that if something is unclear, could be improved or is flat out wrong. Especially if it's flat out wrong. There's _a lot_ of _wrong_ stuff on the Internet, and I don't want to contribute to that 😛

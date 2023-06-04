@@ -65,7 +65,7 @@ This is roughly what I tried first:
 </template>
 ```
 
-The order of the elements is the problem here since the input order is random. The `Value` element won't be the first in the output, and the whole transformation will actually crash because it'll try to add attributes to the `Option` node <em>after</em> child nodes has been added, which is not allowed.
+The order of the elements is the problem here since the input order is random. The `Value` element won't be the first in the output, and the whole transformation will actually crash because it'll try to add attributes to the `Option` node _after_ child nodes has been added, which is not allowed.
 
 So we need to process the id and name nodes first, then the value node and finally the rest. You could use several apply-templates to first do 'id', then 'name' and so on, but the last would be a bit annoying as that would have to be 'not id and not name' and so on. So I found a different way to do it.
 
