@@ -94,23 +94,3 @@ footer {
     }
   }
 }
-
-.project-euler-problem-11 {
-  td {
-    text-align: center;
-    padding: 0.125rem 0.25rem;
-
-    &.highlight {
-      color: hsl(0, 100%, 25%);
-      background-color: hsl(0, 50%, 92%);
-
-      &.main {
-        background-color: hsl(0, 50%, 82%);
-      }
-    }
-
-    strong {
-      color: inherit;
-    }
-  }
-}

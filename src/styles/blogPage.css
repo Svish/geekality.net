@@ -2,3 +2,21 @@
 
 @import 'highlight.js/styles/panda-syntax-light.css';
 @import 'highlight.js/styles/panda-syntax-dark.css' (prefers-color-scheme: dark);
+
+.project-euler-problem-11 {
+  td {
+    @apply text-center py-[0.125rem] px-1;
+
+    &.highlight {
+      @apply text-pink-900 bg-pink-100 dark:text-pink-100 dark:bg-pink-950;
+
+      &.main {
+        @apply bg-pink-200 dark:bg-pink-800;
+      }
+    }
+
+    strong {
+      @apply text-inherit;
+    }
+  }
+}
