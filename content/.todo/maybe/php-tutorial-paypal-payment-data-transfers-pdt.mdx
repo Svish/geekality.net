@@ -74,34 +74,24 @@ Follow these steps to configure your account for PDT:
 
 <ol>
   <li>Log in to your PayPal account.</li>
+  <li>Click the **Profile** subtab.</li>
+  <li>Click the **My Selling Tools** button in the left column.</li>
   <li>
-    Click the <strong>Profile</strong> subtab.
+    Find the **Selling online** section and click **Update** in the **Website
+    preferences** row.
   </li>
   <li>
-    Click the <strong>My Selling Tools</strong> button in the left column.
-  </li>
-  <li>
-    Find the <strong>Selling online</strong> section and click{' '}
-    <strong>Update</strong> in the <strong>Website preferences</strong> row.
-  </li>
-  <li>
-    Under Auto Return for Website Payments, click the <strong>On</strong> radio
-    button.
+    Under Auto Return for Website Payments, click the **On** radio button.
   </li>
   <li>
     For the Return URL, enter the URL on your site that will receive the
     transaction ID posted by PayPal after a customer payment.{' '}
   </li>
+  <li>Under Payment Data Transfer, click the **On** radio button.</li>
+  <li>Click **Save**.</li>
   <li>
-    Under Payment Data Transfer, click the <strong>On</strong> radio button.
-  </li>
-  <li>
-    Click <strong>Save</strong>.
-  </li>
-  <li>
-    Find the <strong>Selling online</strong> section and click{' '}
-    <strong>Update</strong> in the <strong>Website preferences</strong> row
-    again.
+    Find the **Selling online** section and click **Update** in the **Website
+    preferences** row again.
   </li>
   <li>
     Scroll down to the Payment Data Transfer section of the page and take note
@@ -248,13 +238,11 @@ curl_close($request);
 
 The cURL options we set means roughly: Use this URL, do a POST, send these variables, return the transfer as a string when I call `curl_exec` and do not include the HTTP headers in that string. The reason behind the last two are in <a href="/?p=1413">this post</a>. I've commented them out, and if it works without them, just leave them out. For me it worked fine on one server, while on another I had to add them.
 
-<blockquote>
-  <strong>Note:</strong> For security reasons, PayPal will only allow you to use
-  the transaction id to get a response up to 5 times. After that it will be
-  invalidated and you will get an error back instead of the transaction data.
-  Fair enough for regular use, but found it a bit annoying while developing
-  since it took some tries to get the result I wanted 😛
-</blockquote>
+📝 <b>Note:</b> For security reasons, PayPal will only allow you to use
+the transaction id to get a response up to 5 times. After that it will be
+invalidated and you will get an error back instead of the transaction data.
+Fair enough for regular use, but found it a bit annoying while developing
+since it took some tries to get the result I wanted. 😛
 
 ## Step 5: Check the response
 
@@ -331,7 +319,7 @@ What you do with the validated and cleaned up data depends on what you need and 
 
 ## Important thing to remember about PDT
 
-You are actually <strong>not guaranteed</strong> to get this PDT data. Unless the user clicks that last button in the payment process at PayPal and returns to your page, you will get nothing. They could for example close the browser tab when the payment is done or the power could go out just before they had the opportunity to. Theoretically it could happen!
+You are actually _not guaranteed_ to get this PDT data. Unless the user clicks that last button in the payment process at PayPal and returns to your page, you will get nothing. They could for example close the browser tab when the payment is done or the power could go out just before they had the opportunity to. Theoretically it could happen!
 
 If you want something that is fully reliable, you need to have a look at <a href="https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/">PayPal Instant Payment Notifications</a> (IPN). PayPal sends these notifications to a certain URL you have provided behind the scenes and it is not part what the user does or does not do. They may not be instantaneous, but you are guaranteed to eventually get them.
 

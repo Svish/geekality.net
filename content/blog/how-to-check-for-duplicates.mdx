@@ -23,7 +23,7 @@ Needed to do this a while ago and the first solution that hit me wasn't exactly 
 var hasDuplicates = subjects.Count() != subjects.Distinct().Count();
 ```
 
-This is of course a <strong>_really bad_</strong> solution. So _don't_ use it! 😛
+This is of course a **_really bad_** solution. So _don't_ use it! 😛
 
 Why is it bad? Because we have to go through the collection 3 times. First to count all of the subjects, next to filter out duplicates, and finally to count them once again.
 

@@ -25,26 +25,21 @@ To figure that out, we need a look in the <a href="http://www.ecma-international
   <tbody>
     <tr>
       <th scope="row">Identifier</th>
-      <td>
-        &lt;IdentifierName&gt; <strong>but not</strong> &lt;ReservedWord&gt;
-      </td>
+      <td>`IdentifierName`, _but not_ `ReservedWord`</td>
     </tr>
     <tr>
       <th scope="row">IdentifierName</th>
-      <td>
-        &lt;IdentifierStart&gt; &lt;IdentifierName&gt; &lt;IdentifierPart&gt;
-      </td>
+      <td>`IdentifierStart` `IdentifierName` `IdentifierPart`</td>
     </tr>
     <tr>
       <th scope="row">IdentifierStart</th>
-      <td>&lt;UnicodeLetter&gt; $ _ \ &lt;UnicodeEscapeSequence&gt;</td>
+      <td>`UnicodeLetter` $ _ \ `UnicodeEscapeSequence`</td>
     </tr>
     <tr>
       <th scope="row">IdentifierPart</th>
       <td>
-        &lt;IdentifierStart&gt; &lt;UnicodeCombiningMark&gt;
-        &lt;UnicodeDigit&gt; &lt;UnicodeConnectorPunctuation&gt; &lt;ZWNJ&gt;
-        &lt;ZWJ&gt;
+        `IdentifierStart` `UnicodeCombiningMark` `UnicodeDigit`
+        `UnicodeConnectorPunctuation` `ZWNJ` `ZWJ`
       </td>
     </tr>
     <tr>
@@ -83,15 +78,13 @@ To figure that out, we need a look in the <a href="http://www.ecma-international
     <tr>
       <th scope="row">ZWJ</th>
       <td>
-        U+200D (<a href="http://en.wikipedia.org/wiki/ZWJ">Zero-width joiner</a>)
+        U+200D (<a href="http://en.wikipedia.org/wiki/ZWJ">Zero-width joiner</a>
+        )
       </td>
     </tr>
     <tr>
       <th scope="row">ReservedWord</th>
-      <td>
-        &lt;Keyword&gt; &lt;FutureReservedWord&gt; &lt;NullLiteral&gt;
-        &lt;BooleanLiteral&gt;
-      </td>
+      <td>`Keyword` `FutureReservedWord` `NullLiteral` `BooleanLiteral`</td>
     </tr>
     <tr>
       <th scope="row">Keyword</th>
