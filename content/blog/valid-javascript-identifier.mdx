@@ -22,97 +22,102 @@ After another reply to <a href="http://stackoverflow.com/a/6892827/39321" title=
 To figure that out, we need a look in the <a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf" title="ECMA-262, 5.1 Edition / June 2011">ECMAScript Language Specification</a>. In chapter 13 on functions, we find that a function name is a so-called identifier, which is described in chapter 7.6. There we can find the following facts:
 
 <table>
-  <tr>
-    <th scope="row">Identifier</th>
-    <td>
-      &lt;IdentifierName&gt; <strong>but not</strong> &lt;ReservedWord&gt;
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">IdentifierName</th>
-    <td>
-      &lt;IdentifierStart&gt; &lt;IdentifierName&gt; &lt;IdentifierPart&gt;
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">IdentifierStart</th>
-    <td>&lt;UnicodeLetter&gt; $ _ \ &lt;UnicodeEscapeSequence&gt;</td>
-  </tr>
-  <tr>
-    <th scope="row">IdentifierPart</th>
-    <td>
-      &lt;IdentifierStart&gt; &lt;UnicodeCombiningMark&gt; &lt;UnicodeDigit&gt;
-      &lt;UnicodeConnectorPunctuation&gt; &lt;ZWNJ&gt; &lt;ZWJ&gt;
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">UnicodeLetter</th>
-    <td>
-      Uppercase letter (Lu) Lowercase letter (Ll) Titlecase letter (Lt) Modifier
-      letter (Lm) Other letter (Lo) Letter number (Nl)
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">UnicodeCombiningMark</th>
-    <td>Non-spacing mark (Mn) Combining spacing mark (Mc)</td>
-  </tr>
-  <tr>
-    <th scope="row">UnicodeDigit</th>
-    <td>Decimal number (Nd)</td>
-  </tr>
-  <tr>
-    <th scope="row">UnicodeConnectorPunctuation</th>
-    <td>Connector punctuation (Pc)</td>
-  </tr>
-  <tr>
-    <th scope="row">UnicodeEscapeSequence</th>
-    <td>
-      The definitions of the nonterminal UnicodeEscapeSequence is given in 7.8.4
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">ZWNJ</th>
-    <td>
-      U+200C (
-      <a href="http://en.wikipedia.org/wiki/ZWNJ">Zero-width non-joiner</a>)
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">ZWJ</th>
-    <td>
-      U+200D (<a href="http://en.wikipedia.org/wiki/ZWJ">Zero-width joiner</a>)
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">ReservedWord</th>
-    <td>
-      &lt;Keyword&gt; &lt;FutureReservedWord&gt; &lt;NullLiteral&gt;
-      &lt;BooleanLiteral&gt;
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">Keyword</th>
-    <td>
-      break, do, instanceof, typeof, case, else, new, var, catch, finally,
-      return, void, continue, for, switch, while, debugger, function, this,
-      with, default, if, throw, delete, in, try
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">FutureReservedWord</th>
-    <td>
-      class, enum, extends, super, const, export, import implements, let,
-      private, public, yield, interface, package, protected, static
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">NullLiteral</th>
-    <td>null</td>
-  </tr>
-  <tr>
-    <th scope="row">BooleanLiteral</th>
-    <td>true, false</td>
-  </tr>
+  <tbody>
+    <tr>
+      <th scope="row">Identifier</th>
+      <td>
+        &lt;IdentifierName&gt; <strong>but not</strong> &lt;ReservedWord&gt;
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">IdentifierName</th>
+      <td>
+        &lt;IdentifierStart&gt; &lt;IdentifierName&gt; &lt;IdentifierPart&gt;
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">IdentifierStart</th>
+      <td>&lt;UnicodeLetter&gt; $ _ \ &lt;UnicodeEscapeSequence&gt;</td>
+    </tr>
+    <tr>
+      <th scope="row">IdentifierPart</th>
+      <td>
+        &lt;IdentifierStart&gt; &lt;UnicodeCombiningMark&gt;
+        &lt;UnicodeDigit&gt; &lt;UnicodeConnectorPunctuation&gt; &lt;ZWNJ&gt;
+        &lt;ZWJ&gt;
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">UnicodeLetter</th>
+      <td>
+        Uppercase letter (Lu) Lowercase letter (Ll) Titlecase letter (Lt)
+        Modifier letter (Lm) Other letter (Lo) Letter number (Nl)
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">UnicodeCombiningMark</th>
+      <td>Non-spacing mark (Mn) Combining spacing mark (Mc)</td>
+    </tr>
+    <tr>
+      <th scope="row">UnicodeDigit</th>
+      <td>Decimal number (Nd)</td>
+    </tr>
+    <tr>
+      <th scope="row">UnicodeConnectorPunctuation</th>
+      <td>Connector punctuation (Pc)</td>
+    </tr>
+    <tr>
+      <th scope="row">UnicodeEscapeSequence</th>
+      <td>
+        The definitions of the nonterminal UnicodeEscapeSequence is given in
+        7.8.4
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">ZWNJ</th>
+      <td>
+        U+200C (
+        <a href="http://en.wikipedia.org/wiki/ZWNJ">Zero-width non-joiner</a>)
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">ZWJ</th>
+      <td>
+        U+200D (<a href="http://en.wikipedia.org/wiki/ZWJ">Zero-width joiner</a>
+        )
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">ReservedWord</th>
+      <td>
+        &lt;Keyword&gt; &lt;FutureReservedWord&gt; &lt;NullLiteral&gt;
+        &lt;BooleanLiteral&gt;
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">Keyword</th>
+      <td>
+        break, do, instanceof, typeof, case, else, new, var, catch, finally,
+        return, void, continue, for, switch, while, debugger, function, this,
+        with, default, if, throw, delete, in, try
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">FutureReservedWord</th>
+      <td>
+        class, enum, extends, super, const, export, import implements, let,
+        private, public, yield, interface, package, protected, static
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">NullLiteral</th>
+      <td>null</td>
+    </tr>
+    <tr>
+      <th scope="row">BooleanLiteral</th>
+      <td>true, false</td>
+    </tr>
+  </tbody>
 </table>
 
 Looks long, but not too complicated.

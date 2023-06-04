@@ -16,66 +16,68 @@ tags:
 It's actually really simple, but for some reason I just keep having to look up some of these... so... finally... <em>note</em> to self...
 
 <table>
-  <tr>
-    <th>Calculations</th>
-    <td>
-      <code>=X+Y</code>
-      <br />
-      <code>=X+N</code>
-      <br />
-      <code>=Y-X</code>
-      <br />
-      Etc.
-    </td>
-    <td>
-      <code>12:45 - 9:55 = 2:50</code>
-    </td>
-  </tr>
-  <tr>
-    <th>Time to decimal</th>
-    <td>
-      <code>=X*24</code>
-    </td>
-    <td>
-      <code>2:50 * 24 = 2.83</code>
-    </td>
-  </tr>
-  <tr>
-    <th>Decimal to time</th>
-    <td>
-      <code>=X/24</code>
-    </td>
-    <td>
-      <code>2,83 / 24 = 2:50</code>
-    </td>
-  </tr>
-  <tr>
-    <th>Days, hours, minutes</th>
-    <td>
-      <code>d h:mm</code>
-    </td>
-    <td>
-      <code>11 19:20</code>
-    </td>
-  </tr>
-  <tr>
-    <th>Total hours and minutes</th>
-    <td>
-      <code>[h]:mm</code>
-    </td>
-    <td>
-      <code>283:20</code>
-    </td>
-  </tr>
-  <tr>
-    <th>Total minutes</th>
-    <td>
-      <code>[m]</code>
-    </td>
-    <td>
-      <code>17000</code>
-    </td>
-  </tr>
+  <tbody>
+    <tr>
+      <th>Calculations</th>
+      <td>
+        <code>=X+Y</code>
+        <br />
+        <code>=X+N</code>
+        <br />
+        <code>=Y-X</code>
+        <br />
+        Etc.
+      </td>
+      <td>
+        <code>12:45 - 9:55 = 2:50</code>
+      </td>
+    </tr>
+    <tr>
+      <th>Time to decimal</th>
+      <td>
+        <code>=X*24</code>
+      </td>
+      <td>
+        <code>2:50 * 24 = 2.83</code>
+      </td>
+    </tr>
+    <tr>
+      <th>Decimal to time</th>
+      <td>
+        <code>=X/24</code>
+      </td>
+      <td>
+        <code>2,83 / 24 = 2:50</code>
+      </td>
+    </tr>
+    <tr>
+      <th>Days, hours, minutes</th>
+      <td>
+        <code>d h:mm</code>
+      </td>
+      <td>
+        <code>11 19:20</code>
+      </td>
+    </tr>
+    <tr>
+      <th>Total hours and minutes</th>
+      <td>
+        <code>[h]:mm</code>
+      </td>
+      <td>
+        <code>283:20</code>
+      </td>
+    </tr>
+    <tr>
+      <th>Total minutes</th>
+      <td>
+        <code>[m]</code>
+      </td>
+      <td>
+        <code>17000</code>
+      </td>
+    </tr>
+  </tbody>
 </table>
 
 Regarding the formatting, without the brackets, it formats as regular time (`total hours % 24`). So, for example, 2 hours and 50 minutes multiplied by 100:
@@ -84,25 +86,27 @@ Regarding the formatting, without the brackets, it formats as regular time (`tot
 - using brackets (`[h]:mm`) you get the correct 283:20, which is 11 days 19 hours and 20 minutes (hence the 19:20 from `h:mm`).
 
 <table>
-  <tr>
-    <td colSpan={2} />
-    <th>`=B3-A3`</th>
-    <th>`=C3*24`</th>
-    <th>`=D2/24`</th>
-    <th>`=E2*100`</th>
-    <th>`d h:mm`</th>
-    <th>`[h]:mm`</th>
-    <th>`[m]`</th>
-  </tr>
-  <tr>
-    <td>`09:55`</td>
-    <td>`12:45`</td>
-    <th>`02:50`</th>
-    <th>`2,83`</th>
-    <th>`02:50`</th>
-    <th>`12:20`</th>
-    <th>`11 19:20`</th>
-    <th>`283:20`</th>
-    <th>`17000`</th>
-  </tr>
+  <tbody>
+    <tr>
+      <td colSpan={2} />
+      <th>`=B3-A3`</th>
+      <th>`=C3*24`</th>
+      <th>`=D2/24`</th>
+      <th>`=E2*100`</th>
+      <th>`d h:mm`</th>
+      <th>`[h]:mm`</th>
+      <th>`[m]`</th>
+    </tr>
+    <tr>
+      <td>`09:55`</td>
+      <td>`12:45`</td>
+      <th>`02:50`</th>
+      <th>`2,83`</th>
+      <th>`02:50`</th>
+      <th>`12:20`</th>
+      <th>`11 19:20`</th>
+      <th>`283:20`</th>
+      <th>`17000`</th>
+    </tr>
+  </tbody>
 </table>

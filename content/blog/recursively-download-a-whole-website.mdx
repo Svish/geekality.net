@@ -1,0 +1,17 @@
+---
+title: Recursivly download a whole website
+published: '2023-05-29'
+categories:
+  - technology
+tags:
+  - command-line
+  - tools
+---
+
+A few times I've needed to download a full website. Some examples have been to download a full website for offline browsing, or to make a full static HTML backup/archive.
+
+`wget` usually comes built-in with unix systems, but it’s [available for Windows as well](http://www.gnu.org/software/wget/).
+
+```bash
+wget --timeout 5 --tries 0 --mirror --no-parent --wait 5 --random-wait --adjust-extension --convert-links --page-requisites --directory-prefix=output/dir http://example.com
+```
