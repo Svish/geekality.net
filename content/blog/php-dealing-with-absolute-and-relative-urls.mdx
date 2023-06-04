@@ -13,9 +13,9 @@ tags:
   - url
 ---
 
-I'm currently writing a post on <a href="/?p=1585">how to get image tags from a remote HTML page using PHP</a>. One sticky issue with that is that the image URLs you find is a joyful mix of absolute and relative URLs.
+I'm currently writing a post on [how to get image tags from a remote HTML page using PHP](/?p=1585). One sticky issue with that is that the image URLs you find is a joyful mix of absolute and relative URLs.
 
-Luckily, I found a function on <a href="http://nashruddin.com/PHP_Script_for_Converting_Relative_to_Absolute_URL">nashruddin.com</a> which seem to handle them alright. After a bit of clean up and fixing an error, we have this function:
+Luckily, I found a function on [nashruddin.com](http://nashruddin.com/PHP_Script_for_Converting_Relative_to_Absolute_URL) which seem to handle them alright. After a bit of clean up and fixing an error, we have this function:
 
 ```php
 <?php
@@ -60,7 +60,7 @@ I can sort of read through and see what it does, but I can't explain it very wel
 
 ## The base tag
 
-A tag that is easy to forget about is the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base">base tag</a>. The above function gets the base path from the URL given as base. For example if you gave it `http://www.example.com/directory/file.html` as base, it would use `http://www.example.com/directory/`. However, if `file.html` included the following base tag:
+A tag that is easy to forget about is the [base tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base). The above function gets the base path from the URL given as base. For example if you gave it `http://www.example.com/directory/file.html` as base, it would use `http://www.example.com/directory/`. However, if `file.html` included the following base tag:
 
 ```html
 <base href="http://www.example.com/" />

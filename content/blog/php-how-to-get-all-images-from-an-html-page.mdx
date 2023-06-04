@@ -30,7 +30,7 @@ $url = array_key_exists('url', $_POST) ? $_POST['url'] : null;
 
 ## Loading the HTML
 
-To load the HTML we'll use the handy <a href="http://php.net/manual/en/book.curl.php">cURL</a> library, which I've used in earlier posts as well.
+To load the HTML we'll use the handy [cURL](http://php.net/manual/en/book.curl.php) library, which I've used in earlier posts as well.
 
 ```php
 $request = curl_init();
@@ -55,11 +55,11 @@ We just create and execute a request for the supplied URL. The response is store
 
 💡 We won't bother with any fancy error handling or anywhere else. If it doesn't work, we'll just give an empty list back. Bad URLs, faulty HTML, not our problem 😛
 
-💡 The SSL and cacert.pem stuff is explained in <a href="/?p=1413" title="cURL SSL Verification">an earlier post</a>.
+💡 The SSL and cacert.pem stuff is explained in [an earlier post](/?p=1413 'cURL SSL Verification').
 
 ## Parsing the HTML
 
-You might have seen examples on how to find things in HTML using regular expressions. This is by most experienced developers regarded as <a href="http://blog.codinghorror.com/parsing-html-the-cthulhu-way/">A Bad Idea™</a>. What we can, and probably should, use instead is the <a href="http://php.net/manual/en/class.domdocument.php">DOMDocument</a> class you find in PHP. This class can parse XML and HTML into a neat <a href="http://en.wiktionary.org/wiki/Document_Object_Model" title="Document Object Model">DOM</a> which is a lot easier to work with.
+You might have seen examples on how to find things in HTML using regular expressions. This is by most experienced developers regarded as [A Bad Idea™](http://blog.codinghorror.com/parsing-html-the-cthulhu-way/). What we can, and probably should, use instead is the [DOMDocument](http://php.net/manual/en/class.domdocument.php) class you find in PHP. This class can parse XML and HTML into a neat [DOM](http://en.wiktionary.org/wiki/Document_Object_Model 'Document Object Model') which is a lot easier to work with.
 
 ```php
 $document = new DOMDocument();
@@ -73,13 +73,13 @@ if($response)
 
 Not everyone writes perfectly formed HTML without errors so we load the HTML, the DOMDocument class will do its best to plow through the HTML and figure it all out. When it does come across things that are a bit out of wack, it will let us know by spitting out warnings. There's a big chance it managed to deal with it fine, but just for our information. However, like I mentioned earlier, we don't care about errors here and we definitely don't want those warnings messing up our output.
 
-So, what we do here is to tell libxml (which is used internally) to <a href="http://php.net/manual/en/function.libxml-use-internal-errors.php">enable user error handling</a> instead. When we now load the HTML, those errors and warnings are then instead collected quietly. We can get to them afterwards by calling <a href="http://php.net/manual/en/function.libxml-get-errors.php">libxml_get_errors</a>, but since we don't care about them at all we just <a href="http://php.net/manual/en/function.libxml-clear-errors.php">clear them out</a> instead. Easy peasy.
+So, what we do here is to tell libxml (which is used internally) to [enable user error handling](http://php.net/manual/en/function.libxml-use-internal-errors.php) instead. When we now load the HTML, those errors and warnings are then instead collected quietly. We can get to them afterwards by calling [libxml_get_errors](http://php.net/manual/en/function.libxml-get-errors.php), but since we don't care about them at all we just [clear them out](http://php.net/manual/en/function.libxml-clear-errors.php) instead. Easy peasy.
 
 ## Dealing with relative URLs
 
-As you perhaps know you can have both <a href="http://en.wikipedia.org/wiki/Uniform_Resource_Locator#Absolute_vs_relative_URLs">absolute and relative URLs</a> in HTML. The relative URLs are relative to the base path of the HTML page. Unless the HTML page has a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base">base tag</a>. In that case we need to use whatever that specifies instead. So, how do we deal with all of that?
+As you perhaps know you can have both [absolute and relative URLs](http://en.wikipedia.org/wiki/Uniform_Resource_Locator#Absolute_vs_relative_URLs) in HTML. The relative URLs are relative to the base path of the HTML page. Unless the HTML page has a [base tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base). In that case we need to use whatever that specifies instead. So, how do we deal with all of that?
 
-Well, I decided to stick that in <a href="/?p=1587" title="Dealing with absolute and relative URLs">a different post</a>. What's important here is that we can get the base tag from the DOM like this:
+Well, I decided to stick that in [a different post](/?p=1587 'Dealing with absolute and relative URLs'). What's important here is that we can get the base tag from the DOM like this:
 
 ```php
 $tags = $document->getElementsByTagName('base');
@@ -90,7 +90,7 @@ foreach($tags as $tag)
 
 Of course if there is a base tag, it should only be one, but since we get a collection back from `getElementsByTagName` I just use `foreach` for simplicity.
 
-Next up we have a function which turn a relative URL into an absolute one. The signature looks like the following and the content you can read more about in <a href="/?p=1587" title="Dealing with absolute and relative URLs">that earlier mentioned post</a>.
+Next up we have a function which turn a relative URL into an absolute one. The signature looks like the following and the content you can read more about in [that earlier mentioned post](/?p=1587 'Dealing with absolute and relative URLs').
 
 ```php
 private static function make_absolute($url, $base)
@@ -130,7 +130,7 @@ We could of course also get other stuff from the image tag here, like the height
 
 ## Echo it all out
 
-Now we just need to echo it all out in a format we can use easily on the client side. And we will, surprise, surprise, of course use <a href="/?p=1021" title="How to easily provide JSON and JSONP">our good friend JSON</a> for this 🙂
+Now we just need to echo it all out in a format we can use easily on the client side. And we will, surprise, surprise, of course use [our good friend JSON](/?p=1021 'How to easily provide JSON and JSONP') for this 🙂
 
 ```php
 header('content-type: application/json; charset=utf-8');
@@ -144,6 +144,6 @@ We set the appropriate header, wrap it up in a result array, encode it, and spit
 
 When I implemented this I decided to wrap most of this up in a class I called Image_Finder. I have also created a tiny interface for this so you can test it out for yourself. Will go through that interface (or a variant of it) later, but since that's all HTML and JavaScript you are of course more than welcome to have a peek at the source of it 🙂
 
-Either way, you can find it all, code and sample, at <a href="http://samples.geekality.net/image-fetcher/">samples.geekality.net/image-fetcher</a>. Let me know if you like it. And definitely let me know if you find any bugs 😉
+Either way, you can find it all, code and sample, at [samples.geekality.net/image-fetcher](http://samples.geekality.net/image-fetcher/). Let me know if you like it. And definitely let me know if you find any bugs 😉
 
 Bugs, improvements, suggestions, praise; please leave a comment. I like to learn 🙂

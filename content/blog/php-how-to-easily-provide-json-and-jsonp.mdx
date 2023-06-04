@@ -18,11 +18,11 @@ tags:
 
 Would you like to grab some server-side data through an AJAX call? For example by using the handy [`jQuery.ajax`](http://api.jquery.com/jQuery.ajax/) method?
 
-A good data format to use then is <a href="http://en.wikipedia.org/wiki/JSON">JavaScript Object Notation</a>, more commonly known as JSON. Providing data in the JSON format with PHP is super duper simple 😎
+A good data format to use then is [JavaScript Object Notation](http://en.wikipedia.org/wiki/JSON), more commonly known as JSON. Providing data in the JSON format with PHP is super duper simple 😎
 
 ## JSON
 
-All you need to do on the server side is to set the `content-type` to `application/json`, encode your data using the <a href="http://php.net/json_encode">`json_encode`</a> function and output it.
+All you need to do on the server side is to set the `content-type` to `application/json`, encode your data using the [`json_encode`](http://php.net/json_encode) function and output it.
 
 ```php
 <?php header('content-type: application/json; charset=utf-8');
@@ -32,7 +32,7 @@ $data = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
 echo json_encode($data);
 ```
 
-You can test it out for example in the <a href="http://getfirebug.com/">FireBug</a> console by running this line:
+You can test it out for example in the [FireBug](http://getfirebug.com/) console by running this line:
 
 ```js
 $.ajax({ url: 'data.php' })
@@ -41,13 +41,13 @@ $.ajax({ url: 'data.php' })
 
 You should see the request being done in the console and also in the Net tab. If it didn't work, you might be subject to the following:
 
-> Due to browser security restrictions, most "Ajax" requests are subject to the <a title="Same Origin Policy on Wikipedia" href="http://en.wikipedia.org/wiki/Same_origin_policy">same origin policy</a>; the request can not successfully retrieve data from a different domain, subdomain, or protocol.
+> Due to browser security restrictions, most "Ajax" requests are subject to the [same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy 'Same Origin Policy on Wikipedia'); the request can not successfully retrieve data from a different domain, subdomain, or protocol.
 
 A nice and simple solution to that problem is JSON with padding, also known as JSONP.
 
 ## JSONP
 
-As stated on <a href="http://en.wikipedia.org/wiki/JSON#JSONP">Wikipedia</a>,
+As stated on [Wikipedia](http://en.wikipedia.org/wiki/JSON#JSONP),
 
 > JSONP or "JSON with padding" is a complement to the base JSON data format, a
 > usage pattern that allows a page to request and more meaningfully use JSON
@@ -99,9 +99,9 @@ When testing this you might have noticed it will not work cross-domain. This is 
 > open access across domain-boundaries. ... CORS defines how browsers and
 > servers communicate when accessing sources across origins using HTTP headers
 > to allow both the browser and the server to know enough about each other to
-> determine if the request or response should succeed or fail. -- <a href="http://enable-cors.org">enable-cors.org</a>
+> determine if the request or response should succeed or fail. -- [enable-cors.org](http://enable-cors.org)
 
-You can read more about it on the <a href="http://enable-cors.org">enable-cors.org</a> website, but all you should need to do if you want your JSON data accessible from everywhere is to add a single header.
+You can read more about it on the [enable-cors.org](http://enable-cors.org) website, but all you should need to do if you want your JSON data accessible from everywhere is to add a single header.
 
 ```php
 <?php
@@ -115,7 +115,7 @@ It should now be accessible from everywhere 🙂
 
 ## Added security
 
-Since the sender can send whatever they want as a callback, you could potentially have someone injecting malicious code there. I'm not sure how likely this is to happen, but it is a possibility. Could for example be used to steal cookies. Not the baked kind... So, although it does make things a bit uglier, it's better to be safe than sorry I suppose? So I did <a href="/?p=1739">some research</a> and ended up with a function I could use to check that the callback is indeed a valid JavaScript identifier. Here's the code with the added security.
+Since the sender can send whatever they want as a callback, you could potentially have someone injecting malicious code there. I'm not sure how likely this is to happen, but it is a possibility. Could for example be used to steal cookies. Not the baked kind... So, although it does make things a bit uglier, it's better to be safe than sorry I suppose? So I did [some research](/?p=1739) and ended up with a function I could use to check that the callback is indeed a valid JavaScript identifier. Here's the code with the added security.
 
 ```php
 <?php header('content-type: application/json; charset=utf-8');

@@ -13,9 +13,9 @@ tags:
   - php
 ---
 
-Have a PHP project, and want to re-use some classes in a new project. Moving them to their own repository and turning them into a <a href="https://getcomposer.org">Composer</a> dependency is a clean way to do that. If hosted on GitHub/BitBucket, it's even quite simple to publish the package on <a href="https://packagist.org">Packagist</a> with <a href="https://packagist.org/about#how-to-update-packages">automatic updates based on git tags</a>. However, if still heavily developing both the project and the dependency, the round trip through repo/packagist is a pain.
+Have a PHP project, and want to re-use some classes in a new project. Moving them to their own repository and turning them into a [Composer](https://getcomposer.org) dependency is a clean way to do that. If hosted on GitHub/BitBucket, it's even quite simple to publish the package on [Packagist](https://packagist.org) with [automatic updates based on git tags](https://packagist.org/about#how-to-update-packages). However, if still heavily developing both the project and the dependency, the round trip through repo/packagist is a pain.
 
-But today I discovered there's an option called <a href="https://getcomposer.org/doc/03-cli.md#update">`--prefer-source`</a> which seems to solve most of this pain. And here's a basic note-to-self on how to get that to work...
+But today I discovered there's an option called [`--prefer-source`](https://getcomposer.org/doc/03-cli.md#update) which seems to solve most of this pain. And here's a basic note-to-self on how to get that to work...
 
 ## 0. Make sure dependency is a composer dependency
 

@@ -14,7 +14,7 @@ tags:
   - ssl
 ---
 
-Sending a basic email message in a C# application is quite easy thanks to a class called <a href="http://msdn.microsoft.com/en-us/library/system.net.mail.smtpclient.aspx">SmptClient</a>. We simply need an address to send to, an address to send from, the message we want to send and the address of an SMTP server, hand it all to the SMTP client, and you're done:
+Sending a basic email message in a C# application is quite easy thanks to a class called [SmptClient](http://msdn.microsoft.com/en-us/library/system.net.mail.smtpclient.aspx). We simply need an address to send to, an address to send from, the message we want to send and the address of an SMTP server, hand it all to the SMTP client, and you're done:
 
 ```csharp
 var from = new MailAddress("me@example.com", "Me");
@@ -47,7 +47,7 @@ That was pretty simple, wasn't it? But what if we need to authenticate with our 
 
 ## Authentication
 
-You will quite often find that an <a href="http://en.wikipedia.org/wiki/Smtp_server">SMTP server</a> requires you to authenticate yourself before it will let you do anything. This is however very simple to do. All we need, is to provide our credentials to the client:
+You will quite often find that an [SMTP server](http://en.wikipedia.org/wiki/Smtp_server) requires you to authenticate yourself before it will let you do anything. This is however very simple to do. All we need, is to provide our credentials to the client:
 
 ```csharp
 var client = new SmtpClient("smtp.example.com")
@@ -64,7 +64,7 @@ Now, when you try to send your message like before, it should be sent without pr
 
 ## Using SSL to encrypt the connection
 
-To send emails through an encrypted connection, all you have to do is to set the <a href="http://msdn.microsoft.com/en-us/library/system.net.mail.smtpclient.enablessl.aspx">EnableSSL</a> property of the SmtpClient to `true`:
+To send emails through an encrypted connection, all you have to do is to set the [EnableSSL](http://msdn.microsoft.com/en-us/library/system.net.mail.smtpclient.enablessl.aspx) property of the SmtpClient to `true`:
 
 ```csharp
 var client = new SmtpClient("smtp.example.com")
@@ -78,17 +78,17 @@ var client = new SmtpClient("smtp.example.com")
 };
 ```
 
-When you now try to send your email, it will use the <a href="http://en.wikipedia.org/wiki/Transport_Layer_Security">Secure Socket Layer</a> to encrypt the connection. Like me, you might run into a problem though; an <a href="http://msdn.microsoft.com/en-us/library/system.security.authentication.authenticationexception.aspx">AuthenticationException</a> with the following message: <cite>The remote certificate is invalid according to the validation procedure.</cite>
+When you now try to send your email, it will use the [Secure Socket Layer](http://en.wikipedia.org/wiki/Transport_Layer_Security) to encrypt the connection. Like me, you might run into a problem though; an [AuthenticationException](http://msdn.microsoft.com/en-us/library/system.security.authentication.authenticationexception.aspx) with the following message: <cite>The remote certificate is invalid according to the validation procedure.</cite>
 
 ## Imperfect certificates
 
-After reading about <a href="https://www.symantec.com/page.jsp?id=how-ssl-works">how these certificates work</a> and some more digging around I found out that the certificate of the SMTP server I use is considered invalid for two reasons: Firstly it was not issued by a trusted Certification Authority (like VeriSign or Thawte), but by my host (<a href="http://www.dreamhost.com/r.cgi?322827">Dreamhost</a>) themselves. And finally there is a mismatch between the domain I'm connecting to (smtp.example.com) and the domain the certificate was issued to (mail.dreamhost.com).
+After reading about [how these certificates work](https://www.symantec.com/page.jsp?id=how-ssl-works) and some more digging around I found out that the certificate of the SMTP server I use is considered invalid for two reasons: Firstly it was not issued by a trusted Certification Authority (like VeriSign or Thawte), but by my host ([Dreamhost](http://www.dreamhost.com/r.cgi?322827)) themselves. And finally there is a mismatch between the domain I'm connecting to (smtp.example.com) and the domain the certificate was issued to (mail.dreamhost.com).
 
 ## Manual certificate validation
 
 SSL has two purposes: security and authentication. And the security will actually work fine and all the traffic will be encrypted even if the authentication fails. In other words, as long as we can look at the certificate ourselves and be sure that _we_ thrust it, we can go ahead and continue with our work.
 
-To check the certificate ourselves we can provide a <a href="http://msdn.microsoft.com/en-us/library/system.net.security.remotecertificatevalidationcallback.aspx">RemoteCertificate&shy;ValidationCallback</a> delegate to a class called the <a href="http://msdn.microsoft.com/en-us/library/system.net.servicepointmanager.aspx">ServicePoint&shy;Manager</a>.
+To check the certificate ourselves we can provide a [RemoteCertificate&shy;ValidationCallback](http://msdn.microsoft.com/en-us/library/system.net.security.remotecertificatevalidationcallback.aspx) delegate to a class called the [ServicePoint&shy;Manager](http://msdn.microsoft.com/en-us/library/system.net.servicepointmanager.aspx).
 
 ```csharp
   ServicePointManager.ServerCertificateValidationCallback = OurCertificateValidation;

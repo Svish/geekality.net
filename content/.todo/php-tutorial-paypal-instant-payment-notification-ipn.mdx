@@ -14,32 +14,20 @@ tags:
   - tutorial
 ---
 
-<a href="http://www.rgbstock.com/photo/mswM744/got+a+letter">
-  <img
-    src="http://www.geekality.net/wp-content/uploads/2011/05/Got-a-letter-300x225.jpg"
-    alt="Got a letter"
-    title="rgbstock.com"
-    width="300"
-    height="225"
-    className="alignright size-medium wp-image-1674"
-  />
-</a>
-In <a href="/?p=1210">a previous post</a> I tried to give an introduction on how
-to get started with PayPal Payment Data Transfers (PDT). PDT is very handy in several
-cases, but you can't always rely on it since it requires the user to return to your
-page after doing the payment. That will _often_, but it's not guaranteed to happen.
-If you for example want to mark an order in your system as paid or something like
-that, you most likely want to use PayPal Instant Payment Notifications (IPN) in addition
-to PDT.
+In [a previous post](/?p=1210) I tried to give an introduction on how to get started
+with PayPal Payment Data Transfers (PDT). PDT is very handy in several cases, but
+you can't always rely on it since it requires the user to return to your page after
+doing the payment. That will _often_, but it's not guaranteed to happen. If you for
+example want to mark an order in your system as paid or something like that, you
+most likely want to use PayPal Instant Payment Notifications (IPN) in addition to
+PDT.
 
 <blockquote>
   Instant Payment Notification (IPN) is a message service that notifies you of
   events related to PayPal transactions. You can use it to automate back-office
   and administrative functions, such as fulfilling orders, tracking customers,
   and providing status and other information related to a transaction. --{' '}
-  <a href="https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/">
-    PayPal
-  </a>
+  [PayPal](https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/)
 </blockquote>
 
 Once again the documentation, tutorials and code samples I found on this was a bit all over the place. Sort of messy and outdated. So, once again I decided to do my own thing and just follow the steps required and implement them myself. And since the tutorial on PDT turned out to be a bit of a success, I decided to share this too. Hopefully it can make the lives of fellow developers easier 🙂
@@ -50,11 +38,11 @@ Once again the documentation, tutorials and code samples I found on this was a b
 
 The concept is pretty simple. You first give PayPal an address to a listener, for example `http://business.example.com/ipn/listener.php`. Then, whenever something happens, PayPal will post information about the event to that address. So for example if someone completes a payment, your listener will be notified shortly after with the transaction details and all you need to know.
 
-This tutorial will focus on the listener part, as the setting up part on PayPal is very simple (Leave a comment if you disagree). Just go to the PayPal account settings, find the IPN settings and give the URL to your IPN listener. For testing we don't even need to do that. All we need to do is to set up a PayPal Developer Account. We can then use their very handy <a href="https://developer.paypal.com/developer/ipnSimulator/">Instant Payment Notification (IPN) simulator</a>. So let's get started!
+This tutorial will focus on the listener part, as the setting up part on PayPal is very simple (Leave a comment if you disagree). Just go to the PayPal account settings, find the IPN settings and give the URL to your IPN listener. For testing we don't even need to do that. All we need to do is to set up a PayPal Developer Account. We can then use their very handy [Instant Payment Notification (IPN) simulator](https://developer.paypal.com/developer/ipnSimulator/). So let's get started!
 
 ## Step 0: Sign up for a Developer Account
 
-To access the <a href="https://developer.paypal.com/developer/ipnSimulator/">IPN simulator</a>, you need to login at <a href="https://developer.paypal.com/">developer.paypal.com</a>. Seems to be connected with the regular PayPal accounts now, so just try login with your actual PayPal credentials. If you don't have a PayPal account, sign up for one 🙂
+To access the [IPN simulator](https://developer.paypal.com/developer/ipnSimulator/), you need to login at [developer.paypal.com](https://developer.paypal.com/). Seems to be connected with the regular PayPal accounts now, so just try login with your actual PayPal credentials. If you don't have a PayPal account, sign up for one 🙂
 
 Using the simulator is super simple, just enter the absolute URL to your listener and choose a transaction type. You can then fill out all the data that should be in this fake transaction and then just hit "Send IPN" at the bottom. Luckily PayPal actually fills out all the fields with random test data, so unless you are trying to test something specific, you can just ignore the data and hit the button right away 🙂
 
@@ -110,8 +98,8 @@ Note that in the very beginning actually check for a field called `test_ipn`. If
 
 <i>
   <b>Note:</b> If the call to doesn't work at all, curl might have problems with
-  the SSL verification. This happened to me on one of my hosts, so{' '}
-  <a href="http://www.geekality.net/?p=1413">documented it here</a>.
+  the SSL verification. This happened to me on one of my hosts, so [documented
+  it here](http://www.geekality.net/?p=1413).
 </i>
 
 ## Step 3: Fix character set
@@ -171,13 +159,13 @@ What you at least should do is the following:
 
 And then finally you should of course make sure your customer gets what they paid for 🙂
 
-You can read more about PayPal Instant Payment Notifications in their <a href="https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/">IPN Guide</a>.
+You can read more about PayPal Instant Payment Notifications in their [IPN Guide](https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/).
 
 ## Working sample
 
-I have put together a working sample you can check out over at <a href="http://samples.geekality.net/ipn/">samples.geekality.net/ipn</a>. Hopefully this tutorial and that sample can help you get started with all of this 🙂
+I have put together a working sample you can check out over at [samples.geekality.net/ipn](http://samples.geekality.net/ipn/). Hopefully this tutorial and that sample can help you get started with all of this 🙂
 
-The sample uses an <a href="http://samples.geekality.net/view-source.php?file=ipn/ipn_handler.class.php">IPN handler class</a> I put together, that should be usable pretty much out of the box. Just extend the class, override the `process` method and do what you need. Below is the <a href="http://samples.geekality.net/view-source.php?file=ipn/listener.php">simple sample</a> which just appends the incoming messages to a file.
+The sample uses an [IPN handler class](http://samples.geekality.net/view-source.php?file=ipn/ipn_handler.class.php) I put together, that should be usable pretty much out of the box. Just extend the class, override the `process` method and do what you need. Below is the [simple sample](http://samples.geekality.net/view-source.php?file=ipn/listener.php) which just appends the incoming messages to a file.
 
 <code lang="php"><?php // example listener.php
 

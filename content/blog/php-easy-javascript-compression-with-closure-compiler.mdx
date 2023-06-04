@@ -13,9 +13,9 @@ tags:
   - php
 ---
 
-Here's how to fairly easily compress/minify Javascript by using the <a href="https://developers.google.com/closure/compiler/docs/api-tutorial1">Closure Compiler Service API</a>.
+Here's how to fairly easily compress/minify Javascript by using the [Closure Compiler Service API](https://developers.google.com/closure/compiler/docs/api-tutorial1).
 
-More or less verbatim how I'm currently doing it over at <a href="http://bibelstudiet.no">bibelstudiet.no</a> in my <a href="https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/Controller/Javascript.php">script controller class</a>, and so far it's been working great. Just remember to cache the result on your server so that you're not calling the API more than necessary. In my case it's handled further up the chain by <a href="https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/CachedController.php">the parent class</a> 🙂
+More or less verbatim how I'm currently doing it over at [bibelstudiet.no](http://bibelstudiet.no) in my [script controller class](https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/Controller/Javascript.php), and so far it's been working great. Just remember to cache the result on your server so that you're not calling the API more than necessary. In my case it's handled further up the chain by [the parent class](https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/CachedController.php) 🙂
 
 ```php
 <?php
@@ -52,4 +52,4 @@ curl_close($ch);
 
 Note that if the compilation fails for any reason, the response will be empty. In that case I've chosen to output the original Javascript instead so the site doesn't suddenly break. To check what went wrong, you need to repeat the request, but `output_info` set to `errors` instead of `compiled_code`.
 
-See <a href="https://developers.google.com/closure/compiler/docs/api-ref">their API documentation</a> for more information about the parameters.
+See [their API documentation](https://developers.google.com/closure/compiler/docs/api-ref) for more information about the parameters.

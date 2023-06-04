@@ -12,11 +12,11 @@ tags:
   - windows
 ---
 
-I have an Excel sheet where I not down the time I arrive at work and the time I leave. It tends to vary a bit, and on a regular basis I forget noting down the time I arrived. At my previous job I used a simple tool called <a href="https://www.nirsoft.net/utils/computer_turned_on_times.html">TurnedOnTimesView</a> for this, but because the laptops here are managed differently, it isn't as reliable as it was. So, I figured I could try to enter the scary world of the Event Viewer.
+I have an Excel sheet where I not down the time I arrive at work and the time I leave. It tends to vary a bit, and on a regular basis I forget noting down the time I arrived. At my previous job I used a simple tool called [TurnedOnTimesView](https://www.nirsoft.net/utils/computer_turned_on_times.html) for this, but because the laptops here are managed differently, it isn't as reliable as it was. So, I figured I could try to enter the scary world of the Event Viewer.
 
-In the Event Viewer you can create custom filtered views, and I first thought it would be as simple as looking for "Logon" events... but that filter gave me a mountain of logon events, most of which seemed to be various system events, and even <a href="https://en.wikipedia.org/wiki/Integrated_Windows_Authentication">IWA</a> events from browsers logging on to company websites. Basically, there was _a lot_ of noise.
+In the Event Viewer you can create custom filtered views, and I first thought it would be as simple as looking for "Logon" events... but that filter gave me a mountain of logon events, most of which seemed to be various system events, and even [IWA](https://en.wikipedia.org/wiki/Integrated_Windows_Authentication) events from browsers logging on to company websites. Basically, there was _a lot_ of noise.
 
-Eventually though, digging out some old XPath skills, and identifying some key identifiers (EventID=<a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4648">4648</a> and ProcessName=<a href="https://en.wikipedia.org/wiki/Local_Security_Authority_Subsystem_Service#:~:text=Local%20Security%20Authority%20Subsystem%20Service%20(LSASS)%20is%20a%20process%20in,changes%2C%20and%20creates%20access%20tokens.">lsass</a>), I managed to come up with a query that actually seem to be quite accurate:
+Eventually though, digging out some old XPath skills, and identifying some key identifiers (EventID=[4648](https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4648) and ProcessName=[lsass](<https://en.wikipedia.org/wiki/Local_Security_Authority_Subsystem_Service#:~:text=Local%20Security%20Authority%20Subsystem%20Service%20(LSASS)%20is%20a%20process%20in,changes%2C%20and%20creates%20access%20tokens.>)), I managed to come up with a query that actually seem to be quite accurate:
 
 ```xml
 <QueryList>

@@ -12,14 +12,14 @@ tags:
   - string
 ---
 
-In PHP there is a very handy function called <a href="http://php.net/ucfirst">ucfirst</a> which
+In PHP there is a very handy function called [`ucfirst`](http://php.net/ucfirst) which
 
 > Returns a string with the first character of str capitalized, if that
 > character is alphabetic.
 
 Needed that in JavaScript, but discovered there was no such thing.
 
-Luckily, I quickly found <a href="http://stackoverflow.com/q/1026069/39321#1026087">a function</a> over at StackOverflow that I adjusted slightly and added to the string class:
+Luckily, I quickly found [a function](http://stackoverflow.com/q/1026069/39321#1026087) over at StackOverflow that I adjusted slightly and added to the string class:
 
 ```js
 String.prototype.ucfirst = function () {

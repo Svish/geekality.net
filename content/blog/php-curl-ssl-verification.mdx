@@ -12,9 +12,9 @@ tags:
   - ssl
 ---
 
-While trying to figure out of <a href="/?p=1210">PayPal Payment Data Transfers</a> I came over an issue that caused my <a href="http://php.net/manual/en/book.curl.php">cURL</a> requests to fail.
+While trying to figure out of [PayPal Payment Data Transfers](/?p=1210) I came over an issue that caused my [cURL](http://php.net/manual/en/book.curl.php) requests to fail.
 
-These were the <a href="http://php.net/manual/en/function.curl-setopt.php">cURL options</a> I used:
+These were the [cURL options](http://php.net/manual/en/function.curl-setopt.php) I used:
 
 ```php
 curl_setopt_array($request, array
@@ -36,8 +36,8 @@ Worked great on my web host, but locally didn't get any response. Turned out I w
 
 ### Globally via `php.ini`
 
-1. Go to <a href="http://curl.haxx.se/docs/caextract.html">curl.haxx.se/docs/caextract.html</a>
-2. Download the <a href="http://curl.haxx.se/ca/cacert.pem">cacert.pem</a> and put it somwhere, for example `C:\wamp\cacert.pem`
+1. Go to [curl.haxx.se/docs/caextract.html](http://curl.haxx.se/docs/caextract.html)
+2. Download the [cacert.pem](http://curl.haxx.se/ca/cacert.pem) and put it somwhere, for example `C:\wamp\cacert.pem`
 3. Edit the curl.cainfo property in the curl section:
 
 ```ini
@@ -51,8 +51,8 @@ curl.cainfo = C:\wamp\cacert.pem
 
 ### Locally via `curl` option
 
-1. Go to <a href="http://curl.haxx.se/docs/caextract.html">curl.haxx.se/docs/caextract.html</a>
-2. Download the <a href="http://curl.haxx.se/ca/cacert.pem">cacert.pem</a> and put it for example next to your script.
+1. Go to [curl.haxx.se/docs/caextract.html](http://curl.haxx.se/docs/caextract.html)
+2. Download the [cacert.pem](http://curl.haxx.se/ca/cacert.pem) and put it for example next to your script.
 3. Set the `CURLTOPT_SSL_VERIFYPEER` and CURLOPT_CAINFO options when you're executing a curl request
 
 ```php
@@ -66,7 +66,7 @@ curl_setopt_array($request, array
 
 ## Why?
 
-Since we are using the <a href="http://en.wikipedia.org/wiki/Https">HTTPS</a> protocol we need to somehow verify the one we are talking to. Your browser does this by checking their certificate against several built-in certificate stores from trusted certificate suppliers, like for example VeriSign.
+Since we are using the [HTTPS](http://en.wikipedia.org/wiki/Https) protocol we need to somehow verify the one we are talking to. Your browser does this by checking their certificate against several built-in certificate stores from trusted certificate suppliers, like for example VeriSign.
 
 cURL does this verification automatically as well, except on my local machine PHP wasn't configured with a default store to use.
 

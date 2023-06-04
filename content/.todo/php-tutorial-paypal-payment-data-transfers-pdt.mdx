@@ -37,9 +37,7 @@ a simple flag in the address bar...
   in combination with Website Payments Standard, so that after a customer
   returns to your website after paying on the PayPal site, they can instantly
   view a confirmation message with the details of the transaction. --{' '}
-  <a href="https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/paymentdatatransfer/">
-    PayPal
-  </a>
+  [PayPal](https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/paymentdatatransfer/)
 </blockquote>
 
 I've tried to figure out how to use PDT and found that most samples and classes to build from are usually quite ugly, old or outdated. I didn't find them too useful anyways... So, therefore, I've tried to do my own thing based on the documentation found on the PayPal Developer websites. (Seriously, how many versions of documents and developer websites do they have anyways? It's like a complete jungle...)
@@ -50,15 +48,13 @@ Since the documentation was a bit of a mess, I thought I make a small tutorial o
 
 ## Step 0: Sign up for a Developer Account
 
-Before you start playing around with PayPal stuff, I would recommend that you <a href="https://developer.paypal.com/docs/classic/lifecycle/ug_sandbox/">get a PayPal developer account</a>. You should also set up a business account in the PayPal Sandbox which you can then use instead of your real account. A lot safer, cheaper and easier than using a real one...
+Before you start playing around with PayPal stuff, I would recommend that you [get a PayPal developer account](https://developer.paypal.com/docs/classic/lifecycle/ug_sandbox/). You should also set up a business account in the PayPal Sandbox which you can then use instead of your real account. A lot safer, cheaper and easier than using a real one...
 
 ## Step 1: Enable PDT for your PayPal account
 
 <del dateTime="2011-08-01T18:52:38+00:00">
-  For this step I'll just quote their{' '}
-  <a href="https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/paymentdatatransfer/">
-    PDT page
-  </a>{' '}
+  For this step I'll just quote their [PDT
+  page](https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/paymentdatatransfer/){' '}
   (one of many, it seems):
 </del>
 
@@ -101,16 +97,15 @@ Follow these steps to configure your account for PDT:
 
 The last point is particularly important and you should not only view the token, but note it down. Reason being that you need this in your code when we're going to talk to PayPal later.
 
-<a href="http://www.geekality.net/wp-content/uploads/2010/10/Capture.jpg">
-  <img
-    src="http://www.geekality.net/wp-content/uploads/2010/10/Capture-122x300.jpg"
-    alt="Screenshot of PayPal Payment Preferences"
-    title="PayPal Payment Preferences"
-    width="122"
-    height="300"
-    className="alignright size-medium wp-image-1214"
-  />
-</a>
+<img
+  src="http://www.geekality.net/wp-content/uploads/2010/10/Capture.jpg"
+  alt="Screenshot of PayPal Payment Preferences"
+  title="PayPal Payment Preferences"
+  width="122"
+  height="300"
+  className="alignright size-medium wp-image-1214"
+/>
+
 As an aside, I would also recommend you turn off the "Block Non-encrypted Website
 Payment", at least while testing, since it's a lot easier to make PayPal buttons
 on the fly without encrypting them. I currently don't know how, but I'll probably
@@ -121,7 +116,7 @@ the mentioned options marked in yellow. Click on it for full-size view 🙂
 
 ## Step 2: Create a button
 
-The PayPal buttons consist of a form which has a number of hidden key/value pairs and a submit button. You can find info on how to make those in their <a href="https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/">Website Payments Standard Integration Guide</a> so I won't explain how to do that here. What I would like to mention in this case though, is that you can, if you need to, override the return URL that you set in the previous step for specific buttons. For example you can return them to the order they paid for rather than just a general return page.
+The PayPal buttons consist of a form which has a number of hidden key/value pairs and a submit button. You can find info on how to make those in their [Website Payments Standard Integration Guide](https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/wp_standard_overview/) so I won't explain how to do that here. What I would like to mention in this case though, is that you can, if you need to, override the return URL that you set in the previous step for specific buttons. For example you can return them to the order they paid for rather than just a general return page.
 
 <code lang="html">
   <input
@@ -204,7 +199,7 @@ To get good and trustworthy data we need to send this transaction id back to Pay
 
 ## Step 4: Do a POST request back to PayPal
 
-Sending the Transaction ID and our PDT Identity Token back to PayPal can be done in various ways from PHP. I used <a href="http://php.net/manual/en/ref.curl.php">cURL</a> which I found to be pretty clean and easy to use.
+Sending the Transaction ID and our PDT Identity Token back to PayPal can be done in various ways from PHP. I used [cURL](http://php.net/manual/en/ref.curl.php) which I found to be pretty clean and easy to use.
 
 <code lang="php">
 // Init cURL
@@ -236,7 +231,7 @@ curl_close($request);
 
 </code>
 
-The cURL options we set means roughly: Use this URL, do a POST, send these variables, return the transfer as a string when I call `curl_exec` and do not include the HTTP headers in that string. The reason behind the last two are in <a href="/?p=1413">this post</a>. I've commented them out, and if it works without them, just leave them out. For me it worked fine on one server, while on another I had to add them.
+The cURL options we set means roughly: Use this URL, do a POST, send these variables, return the transfer as a string when I call `curl_exec` and do not include the HTTP headers in that string. The reason behind the last two are in [this post](/?p=1413). I've commented them out, and if it works without them, just leave them out. For me it worked fine on one server, while on another I had to add them.
 
 📝 <b>Note:</b> For security reasons, PayPal will only allow you to use
 the transaction id to get a response up to 5 times. After that it will be
@@ -321,21 +316,20 @@ What you do with the validated and cleaned up data depends on what you need and 
 
 You are actually _not guaranteed_ to get this PDT data. Unless the user clicks that last button in the payment process at PayPal and returns to your page, you will get nothing. They could for example close the browser tab when the payment is done or the power could go out just before they had the opportunity to. Theoretically it could happen!
 
-If you want something that is fully reliable, you need to have a look at <a href="https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/">PayPal Instant Payment Notifications</a> (IPN). PayPal sends these notifications to a certain URL you have provided behind the scenes and it is not part what the user does or does not do. They may not be instantaneous, but you are guaranteed to eventually get them.
+If you want something that is fully reliable, you need to have a look at [PayPal Instant Payment Notifications](https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/) (IPN). PayPal sends these notifications to a certain URL you have provided behind the scenes and it is not part what the user does or does not do. They may not be instantaneous, but you are guaranteed to eventually get them.
 
 What you most likely want is a combination of these two. Use PDT to give the returning users a quick response and store what you can/need in the database. Then use IPN to fill out the gaps of missed PDTs or missing transaction details (IPN will give you many more details than PDT does).
 
 <ins dateTime="2011-05-28T21:14:32+00:00">
-  It took some time, but I have finally finished a{' '}
-  <a href="http://www.geekality.net/?p=1420">tutorial on IPN</a> Check it out if
-  you're interested 😎
+  It took some time, but I have finally finished a [tutorial on
+  IPN](http://www.geekality.net/?p=1420) Check it out if you're interested 😎
 </ins>
 
 ## Working sample
 
-Since the code above was a bit broken up, I have gathered it all in a single example page that should be operational. It contains a simple Buy Now button and it will display the PDT response when you return from the fake purchase. Since it uses the PayPal Sandbox you need to be logged in to your developer account. For the payment you can use one of your existing test accounts or you can pretend to be a person that just wants to use his credit card without an account (If you need help coming up with a fake credit card number that validates, have a look at <a href="http://www.darkcoding.net/credit-card-numbers/">darkcoding.net/credit-card-numbers</a>).
+Since the code above was a bit broken up, I have gathered it all in a single example page that should be operational. It contains a simple Buy Now button and it will display the PDT response when you return from the fake purchase. Since it uses the PayPal Sandbox you need to be logged in to your developer account. For the payment you can use one of your existing test accounts or you can pretend to be a person that just wants to use his credit card without an account (If you need help coming up with a fake credit card number that validates, have a look at [darkcoding.net/credit-card-numbers](http://www.darkcoding.net/credit-card-numbers/)).
 
-You find it over at <a href="http://samples.geekality.net/pdt/">samples.geekality.net/pdt</a>.
+You find it over at [samples.geekality.net/pdt](http://samples.geekality.net/pdt/).
 
 The `process_pdt` function you can see in the source code should be pretty self-contained and you should be able to just drop it in to whatever you are working on and use it out of the box. Just remember to fill in _your_ actual identity token 😉
 

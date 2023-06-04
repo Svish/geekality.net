@@ -23,7 +23,7 @@ The third Euler problem has to do with prime factorization:
 
 ## Solution
 
-This one I struggled with a bit, cause I wasn't sure exactly how to do this prime factorization. I knew what it was, and how to do it by hand, but wasn't quite sure how to do it effective in code. Either way I ended up using something called the <a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a>. Not the most efficient algorithm for this, if I have understood correctly, but it worked well enough for this use, and it was fairly straight forward to implement with some help from <a href="http://www.blackwasp.co.uk/Eratosthenes.aspx">Black</a> <a href="http://www.blackwasp.co.uk/PrimeFactors.aspx">Wasp</a>.
+This one I struggled with a bit, cause I wasn't sure exactly how to do this prime factorization. I knew what it was, and how to do it by hand, but wasn't quite sure how to do it effective in code. Either way I ended up using something called the [Sieve of Eratosthenes](http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes). Not the most efficient algorithm for this, if I have understood correctly, but it worked well enough for this use, and it was fairly straight forward to implement with some help from [Black](http://www.blackwasp.co.uk/Eratosthenes.aspx) [Wasp](http://www.blackwasp.co.uk/PrimeFactors.aspx).
 
 I started to make a prime number generator similar to the one I created for Fibonacci numbers in Problem 2.
 
@@ -74,7 +74,7 @@ public class Eratosthenes : IPrimeSequence
 
 It basically starts with the 2 first primes. And for each new requested prime number, it goes through the following odd numbers until it finds one that is not dividable by any of the primes ones we know so far.
 
-📝 <b>Note:</b> I've created <a href="/?p=626">a separate post</a>{' '}
+📝 <b>Note:</b> I've created [a separate post](/?p=626){' '}
 about the Sieve of Eratosthenes, which might be updated with some
 optimizations, et cetera. 🙂
 

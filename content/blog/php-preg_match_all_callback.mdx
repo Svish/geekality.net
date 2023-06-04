@@ -12,9 +12,9 @@ tags:
   - regular-expression
 ---
 
-There are several <a href="http://php.net/manual/ref.pcre.php"><abbr title="Regular Expressions (Perl-Compatible)">PCRE</abbr> functions</a> available, but today I looked for one that just wasn't there: `preg_match_all_callback()`.
+There are several [<abbr title="Perl-Compatible Regular Expressions">PCRE</abbr> functions](http://php.net/manual/ref.pcre.php) available, but today I looked for one that just wasn't there: `preg_match_all_callback()`.
 
-Could've maybe used <a href="http://php.net/manual/function.preg-replace-callback.php">`preg_replace_callback()`</a>, but felt wrong since I didn't actually want to do any _replacing_. I just needed my function to be called for each match.
+Could've maybe used [`preg_replace_callback()`](http://php.net/manual/function.preg-replace-callback.php), but felt wrong since I didn't actually want to do any _replacing_. I just needed my function to be called for each match.
 
 So I wrote it myself. Noting it here, in case I (or someone else) needs it again.
 

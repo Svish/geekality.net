@@ -13,11 +13,11 @@ tags:
   - unicode
 ---
 
-Ok, so I was happily reading CSV files from an SFTP server. The file content is returned as an <a href="http://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html">InputStream</a> and I I used a <a href="http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html">BufferedReader</a> to read it line by line. Each line contained either a header or an order. The header lines started with the string "HDR".
+Ok, so I was happily reading CSV files from an SFTP server. The file content is returned as an [InputStream](http://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html) and I I used a [BufferedReader](http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html) to read it line by line. Each line contained either a header or an order. The header lines started with the string "HDR".
 
-However, I suddenly discovered that my code was consistently skipping the first header (and as a result the orders belonging to it). The reason, I found, was simple. The first header, on the first line, didn't start with "HDR", it started with "□HDR"! And that undisplayable square turned out to be a <a href="http://en.wikipedia.org/wiki/Unicode">Unicode</a> <a href="http://en.wikipedia.org/wiki/Byte-order_mark">Byte Order Mark</a> (BOM).
+However, I suddenly discovered that my code was consistently skipping the first header (and as a result the orders belonging to it). The reason, I found, was simple. The first header, on the first line, didn't start with "HDR", it started with "□HDR"! And that undisplayable square turned out to be a [Unicode](http://en.wikipedia.org/wiki/Unicode) [Byte Order Mark](http://en.wikipedia.org/wiki/Byte-order_mark) (BOM).
 
-To deal with the BOM, we can use a simple class I found <a href="http://stackoverflow.com/q/1835430/39321#1835529">at StackOverflow</a> which handles it for us. Here it is 🙂
+To deal with the BOM, we can use a simple class I found [at StackOverflow](http://stackoverflow.com/q/1835430/39321#1835529) which handles it for us. Here it is 🙂
 
 ```java
 import java.io.IOException;
@@ -28,10 +28,10 @@ import java.io.PushbackInputStream;
  * The {@link UnicodeBOMInputStream} class wraps any
  * {@link InputStream} and detects the presence of any Unicode BOM
  * (Byte Order Mark) at its beginning, as defined by
- * <a href="http://www.faqs.org/rfcs/rfc3629.html">RFC 3629 - UTF-8, a transformation format of ISO 10646</a>
+ * [RFC 3629 - UTF-8, a transformation format of ISO 10646](http://www.faqs.org/rfcs/rfc3629.html)
  *
  * <p>The
- * <a href="http://www.unicode.org/unicode/faq/utf_bom.html">Unicode FAQ</a>
+ * [Unicode FAQ](http://www.unicode.org/unicode/faq/utf_bom.html)
  * defines 5 types of BOMs:<ul>
  * <li><pre>00 00 FE FF  = UTF-32, big-endian</pre></li>
  * <li><pre>FF FE 00 00  = UTF-32, little-endian</pre></li>
@@ -326,7 +326,7 @@ Looks long, but it's simple to use.
 InputStream cleanStream = new UnicodeBOMInputStream(stream).skipBOM();
 ```
 
-When reading the stream, remember to also use an <a href="http://docs.oracle.com/javase/6/docs/api/java/io/InputStreamReader.html">InputStreamReader</a> with the correct character set. For example something like this:
+When reading the stream, remember to also use an [InputStreamReader](http://docs.oracle.com/javase/6/docs/api/java/io/InputStreamReader.html) with the correct character set. For example something like this:
 
 ```java
 BufferedReader reader = new BufferedReader(new InputStreamReader(cleanStream,

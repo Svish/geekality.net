@@ -11,7 +11,7 @@ tags:
   - powershell
 ---
 
-Made an export from <a href="http://www.splunk.com">Splunk</a> containing all IP addresses who had called a method on a companies ESB servers. This gave me a large CSV with two columns, Method and IP, which I then needed to filter to remove duplicate rows. Additionally I wanted to try a reverse lookup of the address to identify what system in our environment was actually doing the call us.
+Made an export from [Splunk](http://www.splunk.com) containing all IP addresses who had called a method on a companies ESB servers. This gave me a large CSV with two columns, Method and IP, which I then needed to filter to remove duplicate rows. Additionally I wanted to try a reverse lookup of the address to identify what system in our environment was actually doing the call us.
 
 ```powershell
 Import-Csv .\requests.csv |

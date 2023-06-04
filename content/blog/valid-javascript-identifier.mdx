@@ -15,11 +15,11 @@ tags:
   - unicode
 ---
 
-After another reply to <a href="http://stackoverflow.com/a/6892827/39321" title="PHP: Is this safe for providing JSONP?">a question</a> I've had on StackOverflow for a while, I decided that I perhaps should add another level of security to my method of <a href="/?p=1021" title="How to easily provide JSON and JSONP">providing JSONP</a> from PHP. The way I did it before, I didn't do any checking on the provided callback. This means that someone could technically put whatever they wanted in there, including malicious code. So, therefore it might be a good idea to check if the callback, which should be a function name, actually _is_ a valid function name. But ...
+After another reply to [a question](http://stackoverflow.com/a/6892827/39321 'PHP: Is this safe for providing JSONP?') I've had on StackOverflow for a while, I decided that I perhaps should add another level of security to my method of [providing JSONP](/?p=1021 'How to easily provide JSON and JSONP') from PHP. The way I did it before, I didn't do any checking on the provided callback. This means that someone could technically put whatever they wanted in there, including malicious code. So, therefore it might be a good idea to check if the callback, which should be a function name, actually _is_ a valid function name. But ...
 
 ## What is valid?
 
-To figure that out, we need a look in the <a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf" title="ECMA-262, 5.1 Edition / June 2011">ECMAScript Language Specification</a>. In chapter 13 on functions, we find that a function name is a so-called identifier, which is described in chapter 7.6. There we can find the following facts:
+To figure that out, we need a look in the [ECMAScript Language Specification](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf 'ECMA-262, 5.1 Edition / June 2011'). In chapter 13 on functions, we find that a function name is a so-called identifier, which is described in chapter 7.6. There we can find the following facts:
 
 <table>
   <tbody>
@@ -71,16 +71,12 @@ To figure that out, we need a look in the <a href="http://www.ecma-international
     <tr>
       <th scope="row">ZWNJ</th>
       <td>
-        U+200C (
-        <a href="http://en.wikipedia.org/wiki/ZWNJ">Zero-width non-joiner</a>)
+        U+200C ( [Zero-width non-joiner](http://en.wikipedia.org/wiki/ZWNJ))
       </td>
     </tr>
     <tr>
       <th scope="row">ZWJ</th>
-      <td>
-        U+200D (<a href="http://en.wikipedia.org/wiki/ZWJ">Zero-width joiner</a>
-        )
-      </td>
+      <td>U+200D ([Zero-width joiner](http://en.wikipedia.org/wiki/ZWJ))</td>
     </tr>
     <tr>
       <th scope="row">ReservedWord</th>
@@ -139,7 +135,7 @@ function is_valid_identifier($subject)
 
 Not too complex, although the regular expression might look a bit nuts at first because of all the Unicode character groups. You might find regular expressions other places to do this that uses a-z for the letters, but as you saw from the specification that won't cover much of what's actually valid.
 
-I built the expression using the very helpful <a href="http://www.regexbuddy.com/">RegexBuddy</a> and exported an HTML explanation of it. Also threw together a tiny identifier validator thing where you can test it out with. You find it all at <a href="http://samples.geekality.net/js-identifiers/">samples.geekality.net/js-identifiers</a>.
+I built the expression using the very helpful [RegexBuddy](http://www.regexbuddy.com/) and exported an HTML explanation of it. Also threw together a tiny identifier validator thing where you can test it out with. You find it all at [samples.geekality.net/js-identifiers](http://samples.geekality.net/js-identifiers/).
 
 And that's that. Hope that might be helpful for someone and please let me know if you find any issues with it!
 

@@ -25,11 +25,11 @@ public static T NewIfNull<T>(this T subject, Func<T> createNew)
 }
 ```
 
-Not claiming this is a very useful method, but it was the simplest thing I could come up with 😛 Anyways, in Visual Studio you will now probably have a blue (is blue here at least) squiggly line under the <a href="http://msdn.microsoft.com/en-us/library/53k8ybth.aspx">equality operator</a>. It states you are doing a <cite>Possible compare of value type with 'null'</cite>, which of course is reasonable and correct. We _could_ just ignore it and move on... but we don't really like squiggly lines, do we? I sure don't... so lets get rid of it.
+Not claiming this is a very useful method, but it was the simplest thing I could come up with 😛 Anyways, in Visual Studio you will now probably have a blue (is blue here at least) squiggly line under the [equality operator](http://msdn.microsoft.com/en-us/library/53k8ybth.aspx). It states you are doing a <cite>Possible compare of value type with 'null'</cite>, which of course is reasonable and correct. We _could_ just ignore it and move on... but we don't really like squiggly lines, do we? I sure don't... so lets get rid of it.
 
 ## Faulty solution
 
-ReSharper suggests that I use <a href="http://msdn.microsoft.com/en-us/library/xwth0h0d(VS.80).aspx">default(T)</a> instead of null, like this:
+ReSharper suggests that I use [`default(T)`](<http://msdn.microsoft.com/en-us/library/xwth0h0d(VS.80).aspx>) instead of null, like this:
 
 ```csharp
 public static T NewIfNull<T>(T subject, Func<T> createNew)
@@ -40,7 +40,7 @@ public static T NewIfNull<T>(T subject, Func<T> createNew)
 }
 ```
 
-Now, this won't do at all. First of all, we don't really want to check for <a href="http://msdn.microsoft.com/en-us/library/xwth0h0d(VS.80).aspx">default(T)</a>, we want to check for null. And second of all, we now have a long red squiggly line under the whole equality statement! It says that it <cite>Cannot apply operator '==' to operands of type 'T' and 'T'</cite>. That messages doesn't really make much sense to me, to be honest, but I trust that it is true. Either way, we have to get rid of it.
+Now, this won't do at all. First of all, we don't really want to check for [default(T)](<http://msdn.microsoft.com/en-us/library/xwth0h0d(VS.80).aspx>), we want to check for null. And second of all, we now have a long red squiggly line under the whole equality statement! It says that it <cite>Cannot apply operator '==' to operands of type 'T' and 'T'</cite>. That messages doesn't really make much sense to me, to be honest, but I trust that it is true. Either way, we have to get rid of it.
 
 ## Good solution
 

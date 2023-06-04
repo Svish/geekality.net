@@ -40,7 +40,7 @@ tags:
 
 ## Solution
 
-We touched on the Fibonacci sequence a while ago in the <a href="/?p=165">second euler problem</a>. This time, however, we are in a whole different league. That time we were supposed to sum up all even Fibonacci numbers below 4 million, which might sound like a lot, but not when we compare it to the number we are asked for this time! The last Fibonacci number below 4 million is 3524578. That would be 7 digits. The maximum value of the datatype I used in the generator I made for that (ulong) is 18446744073709551615. That would be 20 digits. Quite a distance left to a thousand!
+We touched on the Fibonacci sequence a while ago in the [second euler problem](/?p=165). This time, however, we are in a whole different league. That time we were supposed to sum up all even Fibonacci numbers below 4 million, which might sound like a lot, but not when we compare it to the number we are asked for this time! The last Fibonacci number below 4 million is 3524578. That would be 7 digits. The maximum value of the datatype I used in the generator I made for that (ulong) is 18446744073709551615. That would be 20 digits. Quite a distance left to a thousand!
 
 So, once again we turn to our big integer class, [`IntX`](https://www.nuget.org/packages/IntX). And since we have that, a solution to this problem is actually pretty straight forward. We simply have to make a new generator that uses the IntX data type instead of tiny ulong (it's all relative...).
 
@@ -90,7 +90,7 @@ Very brute-force, not very fast (takes around 500 ms) and not very interesting, 
 
 ## Take two!
 
-Alright, while reading up on Fibonacci numbers I found some interesting mathematical formulas and such. I'm not going to come with an in-depth explanation or lots proofs here, but I will share the formulas that matters and go through how we use them. If you want the elaborate explanations you can find them where smarter people than I reign. For example at <a href="http://en.wikipedia.org/wiki/Fibonacci_series">Wikipedia</a>, or at <a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibFormula.html">this site</a>. Anyways, here we go. Take cover if you fear math...
+Alright, while reading up on Fibonacci numbers I found some interesting mathematical formulas and such. I'm not going to come with an in-depth explanation or lots proofs here, but I will share the formulas that matters and go through how we use them. If you want the elaborate explanations you can find them where smarter people than I reign. For example at [Wikipedia](http://en.wikipedia.org/wiki/Fibonacci_series), or at [this site](http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibFormula.html). Anyways, here we go. Take cover if you fear math...
 
 ### The Fibonacci sequence
 
@@ -102,7 +102,7 @@ $$
 
 with the seed values $F_0=0$ and $F_1 = 1$.
 
-This recurrence, since it is linear, can be expressed by a <a href="http://en.wikipedia.org/wiki/Closed-form_expression">closed-form solution</a> known as the Binet's formula:
+This recurrence, since it is linear, can be expressed by a [closed-form solution](http://en.wikipedia.org/wiki/Closed-form_expression) known as the Binet's formula:
 
 $$
 \begin{align*}
@@ -121,7 +121,7 @@ $$
 
 ### The length of a number
 
-How do you calculate the length of a number? I actually had to do this in an earlier post and then I kind of cheated. I just converted the number into a string and just count the characters (In C#, `string.Length`). But, I recently discovered that there actually is a way you can do this mathematically! I had no idea... The key lays in the <a href="http://en.wikipedia.org/wiki/Log10">logarithm to base 10</a>.
+How do you calculate the length of a number? I actually had to do this in an earlier post and then I kind of cheated. I just converted the number into a string and just count the characters (In C#, `string.Length`). But, I recently discovered that there actually is a way you can do this mathematically! I had no idea... The key lays in the [logarithm to base 10](http://en.wikipedia.org/wiki/Log10).
 
 $\log_{10}{n}$ (often written as just $\log{n}$) for any
 1-digit number will give you 0.something. For any 2-digit number it gives you
@@ -131,7 +131,7 @@ $$
 Len(n)=\lfloor\log{n}\rfloor+1
 $$
 
-In case you were wondering, those weird square brackets are called the <a href="http://en.wikipedia.org/wiki/Floor_function">floor function</a>.
+In case you were wondering, those weird square brackets are called the [floor function](http://en.wikipedia.org/wiki/Floor_function).
 
 ### The length of a Fibonacci number
 

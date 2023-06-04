@@ -15,7 +15,7 @@ tags:
 
 Always struggle with calculating age in PHP for some reason. And there seems to be quite varying ideas on how this should be done. So decided to once and for all sit down and figure out how I could do this.
 
-Found <a href="http://00f.net/2007/06/04/an-age-is-not-a-duration/">an article</a> which explained pretty well why I was a bit confused. It also had a code example in Perl(?).
+Found [an article](http://00f.net/2007/06/04/an-age-is-not-a-duration/) which explained pretty well why I was a bit confused. It also had a code example in Perl(?).
 
 So, thought I could stick a PHP version here in case that page dies or I forget. Actually there are two. The first calculates the age kind of manually, and can be used in PHP 4 and PHP 5. The second is a lot shorter and simpler, but requires PHP 5.3.
 
@@ -40,7 +40,7 @@ function getAge($birth, $now = NULL)
 }
 ```
 
-This next function uses the <a href="http://php.net/manual/en/datetime.diff.php">DateTime::diff</a> method available in PHP 5.3.
+This next function uses the [DateTime::diff](http://php.net/manual/en/datetime.diff.php) method available in PHP 5.3.
 
 ```php
 // Takes dates like 'yyyy-mm-dd'
@@ -53,4 +53,4 @@ function getAge($birth, $now = NULL)
 }
 ```
 
-You can test them out at <a href="http://samples.geekality.net/age/">samples.geekality.net/age</a> 🙂
+You can test them out at [samples.geekality.net/age](http://samples.geekality.net/age/) 🙂

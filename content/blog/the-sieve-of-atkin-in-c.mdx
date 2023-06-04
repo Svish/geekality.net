@@ -13,9 +13,9 @@ tags:
   - sieve-of-atkin
 ---
 
-I have previously written about the <a href="/?p=626">Sieve of Eratosthenes</a>, which is an algorithm for finding primes. This algorithm worked very well for most of the prime related Euler Problems. However, for one of them it just didn't do it. Well, it did it, but it did it kind of slow. <a href="/?p=543" title="Problem 10">The problem</a> was to calculate the sum of all the primes below two million, and with that algorithm this took close to 2 seconds on my machine. Not too long you might think, but compared to my other solutions it is ages and ages. So I started to see if I could find a more efficient algorithm to use for that problem.
+I have previously written about the [Sieve of Eratosthenes](/?p=626), which is an algorithm for finding primes. This algorithm worked very well for most of the prime related Euler Problems. However, for one of them it just didn't do it. Well, it did it, but it did it kind of slow. [The problem](/?p=543 'Problem 10') was to calculate the sum of all the primes below two million, and with that algorithm this took close to 2 seconds on my machine. Not too long you might think, but compared to my other solutions it is ages and ages. So I started to see if I could find a more efficient algorithm to use for that problem.
 
-I quickly found one called the <a href="http://en.wikipedia.org/wiki/Sieve_of_Atkin">Sieve of Atkin</a>. The Atkin algorithm works similarly to the original Eratosthenes one, but has a more fancy way of sieving out numbers which means it can work a lot faster. However, this also means that it needs to work towards an upper limit and that it have to find all the primes up to that limit in advance. In other words it cannot work incrementally and <a href="http://en.wikipedia.org/wiki/Lazy_loading">lazily</a> like my Eratosthenes implementation.
+I quickly found one called the [Sieve of Atkin](http://en.wikipedia.org/wiki/Sieve_of_Atkin). The Atkin algorithm works similarly to the original Eratosthenes one, but has a more fancy way of sieving out numbers which means it can work a lot faster. However, this also means that it needs to work towards an upper limit and that it have to find all the primes up to that limit in advance. In other words it cannot work incrementally and [lazily](http://en.wikipedia.org/wiki/Lazy_loading) like my Eratosthenes implementation.
 
 Anyways, without further ado, here is my C# implementation of the Sieve of Atkin:
 
@@ -83,7 +83,7 @@ public class Atkin : IEnumerable<ulong>
 }
 ```
 
-I am not going to explain my code. Instead I will just tell you to look at the <a href="http://en.wikipedia.org/wiki/Sieve_of_Atkin#Algorithm">algorithm at Wikipedia</a> and look at my code while reading the pseudocode provided there. Why? Because it is pretty much a direct copy of it, just translated into C# 🙂
+I am not going to explain my code. Instead I will just tell you to look at the [algorithm at Wikipedia](http://en.wikipedia.org/wiki/Sieve_of_Atkin#Algorithm) and look at my code while reading the pseudocode provided there. Why? Because it is pretty much a direct copy of it, just translated into C# 🙂
 
 As a usage example, we can sum up all the primes below a 1000 like so:
 
