@@ -34,10 +34,10 @@ module.exports = {
             'th, td': {
               marginTrim: 'block',
               '& > *:first-child': {
-                borderTop: 0,
+                marginTop: 0,
               },
               '& > *:last-child': {
-                borderBottom: 0,
+                marginBottom: 0,
               },
             },
             // Adjustments to inline code style
