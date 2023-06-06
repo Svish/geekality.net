@@ -22,17 +22,13 @@ example want to mark an order in your system as paid or something like that, you
 most likely want to use PayPal Instant Payment Notifications (IPN) in addition to
 PDT.
 
-<blockquote>
-  Instant Payment Notification (IPN) is a message service that notifies you of
-  events related to PayPal transactions. You can use it to automate back-office
-  and administrative functions, such as fulfilling orders, tracking customers,
-  and providing status and other information related to a transaction. --{' '}
-  [PayPal](https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/)
-</blockquote>
+> Instant Payment Notification (IPN) is a message service that notifies you of
+> events related to PayPal transactions. You can use it to automate back-office
+> and administrative functions, such as fulfilling orders, tracking customers,
+> and providing status and other information related to a transaction. --{' '}
+> [PayPal](https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/)
 
-Once again the documentation, tutorials and code samples I found on this was a bit all over the place. Sort of messy and outdated. So, once again I decided to do my own thing and just follow the steps required and implement them myself. And since the tutorial on PDT turned out to be a bit of a success, I decided to share this too. Hopefully it can make the lives of fellow developers easier 🙂
-
-<hr className="fix" />
+Once again the documentation, tutorials and code samples I found on this was a bit all over the place. Sort of messy and outdated. So, once again I decided to do my own thing and just follow the steps required and implement them myself. And since the tutorial on PDT turned out to be a bit of a success, I decided to share this too. Hopefully it can make the lives of fellow developers easier. 🙂
 
 ## How it works
 
@@ -52,13 +48,15 @@ Now, to implement the actual listener...
 
 First thing we need to do in our listener is of course to catch the data we get from PayPal. The data is sent as a POST request, so PHP has actually done that for us. We just need to grab it 🙂
 
-<code lang="php">$ipn_post_data = $_POST;</code>
+```php
+$ipn_post_data = $_POST;
+```
 
 ## Step 2: Verification
 
 Since what we got could just be plain bogus from some stranger, we need to verify it with PayPal. This is done by taking all the POST data in its unaltered state, add one field to the beginning, and then send it back. In return we should then get one word, `VERIFIED` or `INVALID`. To do that, we can use our old buddy cURL.
 
-<code lang="php">
+```php
 // Choose url
 if(array_key_exists('test_ipn', $ipn_post_data) && 1 === (int) $ipn_post_data['test_ipn'])
 	$url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
@@ -91,8 +89,7 @@ else
 {
 // Not good. Ignore, or log for investigation...
 }
-
-</code>
+```
 
 Note that in the very beginning actually check for a field called `test_ipn`. If that exists with a value of 1, it means it's a request from the sandbox. In other words, we can choose the correct PayPal interface by just looking for that.
 
@@ -106,7 +103,7 @@ Note that in the very beginning actually check for a field called `test_ipn`. If
 
 Now that we know the data is valid, we can start to deal with it. What you get could be in a different character set than what you want though, so we should fix that first. The data should contain a key called `charset` which specifies what character set the data is using. We just need to check for that and if needed convert from that to what we want, for example UTF-8.
 
-<code lang="php">
+```php
 if(array_key_exists('charset', $ipn_data) && ($charset = $ipn_data['charset']))
 {
 	// Ignore if same as our default
@@ -124,8 +121,7 @@ if(array_key_exists('charset', $ipn_data) && ($charset = $ipn_data['charset']))
     $ipn_data['charset_original'] = $charset;
 
 }
-
-</code>
+```
 
 ## Step 4: Use the data!
 
@@ -133,29 +129,18 @@ Yup, believe it or not, that was everything that was needed to catch an IPN mess
 
 What you at least should do is the following:
 
-<ol>
-  <li>
-    Confirm that the payment status is Completed.
-    <br />
-    PayPal sends IPN messages for pending and denied payments as well, so don't
-    ship stuff or anything until the payment has cleared.
-  </li>
-  <li>
-    Use the transaction ID to verify that the transaction has not already been
-    processed.
-    <br />
-    This prevents you from processing the same transaction twice. You can for
-    example store the transaction id in a database and check against those
-    before you do anything with incoming IPNs. If you're smart you could also
-    store the time the IPN came in and the raw IPN data. This way you have a log
-    of all incoming messages you can use if you need to reprocess something or
-    for debugging if something weird is going on.
-  </li>
-  <li>Make sure the receiver's email address is the one you expected.</li>
-  <li>
-    Make sure the price, item description, et cetera, match what it should be.
-  </li>
-</ol>
+1. Confirm that the payment status is Completed.  
+   PayPal sends IPN messages for pending and denied payments as well, so don't
+   ship stuff or anything until the payment has cleared.
+1. Use the transaction ID to verify that the transaction has not already been processed.  
+   This prevents you from processing the same transaction twice. You can for
+   example store the transaction id in a database and check against those
+   before you do anything with incoming IPNs. If you're smart you could also
+   store the time the IPN came in and the raw IPN data. This way you have a log
+   of all incoming messages you can use if you need to reprocess something or
+   for debugging if something weird is going on.
+1. Make sure the receiver's email address is the one you expected.
+1. Make sure the price, item description, et cetera, match what it should be.
 
 And then finally you should of course make sure your customer gets what they paid for 🙂
 
@@ -167,7 +152,8 @@ I have put together a working sample you can check out over at [samples.geekalit
 
 The sample uses an [IPN handler class](http://samples.geekality.net/view-source.php?file=ipn/ipn_handler.class.php) I put together, that should be usable pretty much out of the box. Just extend the class, override the `process` method and do what you need. Below is the [simple sample](http://samples.geekality.net/view-source.php?file=ipn/listener.php) which just appends the incoming messages to a file.
 
-<code lang="php"><?php // example listener.php
+```php
+<?php // example listener.php
 
 require 'ipn_handler.class.php';
 
@@ -195,7 +181,6 @@ public function process(array $post_data)
 
 $handler = new My_Ipn_Handler();
 $handler->process($\_POST);
-
-</code>
+```
 
 That's all! Hopefully someone find this useful. Learned a lot writing it at least! Please leave a comment if it was helpful, if it wasn't helpful, if there are mistakes, typos, etc. 🙂

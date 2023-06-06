@@ -41,7 +41,7 @@ plink -v git@bitbucket.org
 plink -v git@ssh.dev.azure.com
 ```
 
-7. Set the <b>`GIT_SSH`</b> environment variable to <code>C:\Program Files\PuTTY\plink.exe</code>  
+7. Set the <b>`GIT_SSH`</b> environment variable to `C:\Program Files\PuTTY\plink.exe`  
    ⬆ This is the detail that _so_ many StackOverflow answers and blog/forum
    posts _didn't_ mention. Without this, <var>plink</var> worked fine,
    but <var>git</var> commands still failed with authentication errors.

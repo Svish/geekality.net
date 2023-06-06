@@ -18,8 +18,6 @@ tags:
 
 Used [Page Speed](http://code.google.com/speed/page-speed/docs/using_firefox.html) for FireFox the other day to analyze my blog. Found a couple of issues and a couple were very simple to fix. If these will work for you, depends a bit on where your WordPress site is hosted and what your web server does already. So, be brave and analyze your own site. Look through the results and see if you can fix some of it without too much hassle 🙂
 
-<hr className="fix" />
-
 ## Missing expiration date and unnecessary `ETag`
 
 The browser caches stuff, and to do that it needs some information. When we have stuff that doesn't change very often (if ever) we should tell the browser that, once you've downloaded this, you don't really need to check back for a new version for a while. To do this we add an expiration date. In addition you have two headers called Last-Modified and one called `ETag`. you can read more about that and all the rest of this in the link earlier in this paragraph, but the short story is you should have one. Having both is just not necessary. When I checked the headers sent with my images, I found that both were sent. So I decided to turn off the `FileETag`. To do all of this, for images, javascript files and stylesheets, I added the following lines to the [`.htaccess`](http://en.wikipedia.org/wiki/.htaccess) file in the root of my WordPress blog:

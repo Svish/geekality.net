@@ -16,9 +16,9 @@ tags:
 
 What I did to get from [working GPG](/?p=3077) to [green and verified signatures](https://github.com/blog/2144-gpg-signature-verification) for Git commits and tags on GitHub.
 
-<ol>
-<li>Find the long id of the <b>S</b>igning key we want to use:<br/>
-<code lang="bash">
+1. Find the long id of the <b>S</b>igning key we want to use:
+
+```dos
 🔶 > gpg --edit-key alice
 gpg (GnuPG) 2.0.30; Copyright (C) 2015 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
@@ -42,11 +42,15 @@ uid Alice Person (alice) <alice@example.org>
 ssb 4096R/6ADB9D4262275E24 2017-08-23 👈
 ssb 4096R/33F2E1644AEA9524 2017-08-23
 
-</code><br/>
-<i><b>Note:</b> So in this case we want `6ADB9D4262275E24`</i>
+```
 
-<li>Configure git and (optionally) make it sign commits and tags by default:<br/>
-<code lang="bash">
+<i>
+  <b>Note:</b> So in this case we want `6ADB9D4262275E24`
+</i>
+
+2. Configure git and (optionally) make it sign commits and tags by default:
+
+```dos
 🔷 > git config --global user.name "Alice Person"
 🔷 > git config --global user.email "alice.person@example.com"
 🔶 > git config --global user.signingkey "6ADB9D4262275E24"
@@ -57,16 +61,18 @@ ssb 4096R/33F2E1644AEA9524 2017-08-23
 C:\Program Files (x86)\GNU\GnuPG\pub\gpg.exe
 🔶 > git config --global gpg.program "C:/Program Files (x86)/GNU/GnuPG/pub/gpg.exe"
 🔶 > echo no-tty >> %APPDATA%\gnupg\gpg.conf
-</code><br/>
-<i><b>Note:</b> If repo specific, just skip `--global` and run the command in the repo instead.</i>
+```
 
-</ol>
+<i>
+  <b>Note:</b> If repo specific, just skip `--global` and run the command in the
+  repo instead.
+</i>
 
 ## Test it...
 
-<ol start="3">
-<li>Do a commit:<br/>
-<code lang="bash">
+3. Do a commit:
+
+```dos
 🔷 > git init gpg-test
 🔷 > cd gpg-test
 🔷 > touch file.txt
@@ -74,11 +80,16 @@ C:\Program Files (x86)\GNU\GnuPG\pub\gpg.exe
 [master (root-commit) 2814856] Signed commit
  1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 file.txt
-</code><br/>
-<i><b>Note:</b> If not using `commit.gpgsign true`, one can also use `-S` to explicitly sign a commit.</i>
+```
 
-<li>Verify commit was signed:<br/>
-<code lang="bash">
+<i>
+  <b>Note:</b> If not using `commit.gpgsign true`, one can also use `-S` to
+  explicitly sign a commit.
+</i>
+
+4. Verify commit was signed:
+
+```dos
 🔷 > git log --show-signature
 commit 2814856365a07b3deb374f1337258102c06b77ef
 gpg: Signature made 08/23/17 06:18:50 W. Europe Daylight Time^M
@@ -90,16 +101,22 @@ Date:   Wed Aug 23 06:18:48 2017 +0200
 
     Signed commit
 
-</code>
+```
 
-<li>Add a signed tag, using `-s`:
-<code lang="bash">
+5. Add a signed tag, using `-s`:
+
+```dos
 🔶 > git tag v1 -m "Signed tag"
-</code><br/>
-<i><b>Note:</b> If not using `tag.forceSignAnnotated true`, one can also use `-s` to explicitly sign a tag.</i>
+```
 
-<li>Verify tag was signed:
-<code lang="bash">
+<i>
+  <b>Note:</b> If not using `tag.forceSignAnnotated true`, one can also use `-s`
+  to explicitly sign a tag.
+</i>
+
+6. Verify tag was signed:
+
+```dos
 🔷 > git tag -v v1
 gpg: Signature made 08/23/17 06:34:18 W. Europe Daylight Time
 gpg:                using RSA key 6ADB9D4262275E24
@@ -111,25 +128,23 @@ tag v1
 tagger Alice Person <alice.person@example.com> 1503462856 +0200
 
 Signed tag
-
-</code>
-
-</ol>
+```
 
 ## Add GPG key to GitHub
 
-<ol start="7">
-<li>Export the public key:<br/>
-<code lang="bash">
+7. Export the public key:
+
+```dos
 🔶 gpg -a --export alice > public.txt
-</code>
-<li>Copy it.
-<li>Go to [GPG keys](https://github.com/settings/keys) on GitHub.
-<li>New GPG Key.
-<li>Paste it.
-<li>Add GPG Key.
-<li>Pushed commits and tags should now look verified, as in this post: [GPG signature verification](https://github.com/blog/2144-gpg-signature-verification)...
-</ol>
+```
+
+8. Copy it.
+9. Go to [GPG keys](https://github.com/settings/keys) on GitHub.
+10. New GPG Key.
+11. Paste it.
+12. Add GPG Key.
+13. Pushed commits and tags should now look verified, as in this post:
+    [GPG signature verification](https://github.com/blog/2144-gpg-signature-verification)...
 
 <i>
   <b>Sources:</b>{' '}

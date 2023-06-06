@@ -15,13 +15,12 @@ tags:
   - windows
 ---
 
-What I did to get from zero to a good working (hopefully) secure GPG key set, usable for [signing](/?p=3086) and encrypting stuff on Windows...
+What I did to get from zero to a working (hopefully) secure GPG key set, usable for [signing](/?p=3086) and encrypting stuff on Windows...
 
-<ol>
-<li>Install [Gpg4win](https://www.gpg4win.org).
+1. Install [Gpg4win](https://www.gpg4win.org).
+2. Create main/root key:
 
-<li>Create main/root key:<br/>
-<code lang="bash">
+```bash
 🔶 $ gpg --gen-key
 gpg (GnuPG) 2.0.30; Copyright (C) 2015 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
@@ -75,11 +74,11 @@ uid [ultimate] Alice Person (alice) <alice.person@example.com>
 
 Note that this key cannot be used for encryption. You may want to use
 the command "--edit-key" to generate a subkey for this purpose.
+```
 
-</code>
+3. Open the key for editing:
 
-<li>Open the key for editing:<br/>
-<code lang="bash">
+```bash
 🔶 $ gpg --edit-key alice
 gpg (GnuPG) 2.0.30; Copyright (C) 2015 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
@@ -90,11 +89,11 @@ Secret key is available.
 pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
 trust: ultimate validity: ultimate
 [ultimate] (1). Alice Person (alice) <alice.person@example.com>
+```
 
-</code>
+4. (Optionally) Add other user ids, and set the right one as primary:
 
-<li>(Optionally) Add other user ids, and set the right one as primary:<br/>
-<code lang="bash">
+```bash
 🔷 gpg> adduid
 🔷 Real name: Alice Person
 🔷 Email address: alice@example.org
@@ -132,11 +131,11 @@ pub 4096R/AA79CCAE created: 2017-08-23 expires: never usage: SC
 trust: ultimate validity: ultimate
 [ultimate] (1)\* Alice Person (alice) <alice.person@example.com>
 [ unknown] (2) Alice Person (alice) <alice@example.org>
+```
 
-</code>
+5. Add subkeys for signing and encryption:
 
-<li>Add subkeys for signing and encryption:<br/>
-<code lang="bash">
+```bash
 🔶 gpg> addkey
 Key is protected.
 
@@ -213,24 +212,26 @@ sub 4096R/62275E24 created: 2017-08-23 expires: never usage: S
 sub 4096R/4AEA9524 created: 2017-08-23 expires: never usage: E
 [ultimate] (1)\* Alice Person (alice) <alice.person@example.com>
 [ unknown] (2) Alice Person (alice) <alice@example.org>
+```
 
-</code>
+6. Save (and quit):
 
-<li>Save (and quit):<br/>
-<code lang="bash">
+```bash
 🔶 gpg> save
-</code>
+```
 
-<li>Export keys for (safe!) storage:<br/>
-<code lang="bash">
+7. Export keys for (safe!) storage:
+
+```bash
 🔶 $ set id=AA79CCAE
 🔶 $ gpg -a --export %id% > %id%_public.asc
 🔶 $ gpg -a --export-secret-keys %id% > %id%_private.asc
 🔶 $ gpg -a --export-secret-subkeys %id% > %id%_subkeys.asc
-</code>
+```
 
-<li>Export revocation file:<br/>
-<code lang="bash">
+8. Export revocation file:
+
+```bash
 🔶 $ gpg -a --gen-revoke %id% > %id%_revoke_cert.asc
 
 sec 4096R/AA79CCAE 2017-08-23 Alice Person (alice) <alice.person@example.com>
@@ -261,9 +262,7 @@ access to this certificate he can use it to make your key unusable.
 It is smart to print this certificate and store it away, just in case
 your media become unreadable. But have some caution: The print system of
 your machine might store the data and make it available to others!
-
-</code>
-</ol>
+```
 
 <i>
   <b>Source(s):</b> [blog.bravi.org](https://blog.bravi.org/?p=1135)

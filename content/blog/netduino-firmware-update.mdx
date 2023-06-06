@@ -15,7 +15,7 @@ Got a [Netduino](http://netduino.com/netduino/) for Christmas from my older brot
 
 This post ended up being a bit of a rant, so I apologize for that. For the step by step guide on how to (hopefully) do this firmware update on Windows 8 with Visual Studio 2012 without problems, click the link below to skip ahead to it 🙂
 
-➙ [**Quick link to the fix**](#the-fix)
+➙ [**Quick link to the fix**](#how-to-do-it-properly)
 
 ## Failing to upgrade the .NET Micro Framework SDK v4.2
 
@@ -29,7 +29,7 @@ This just didn't happen. First of all, when I connected the device it installed 
 
 So I booted into safe mode and uninstalled this AT91 USB to Serial Converter device and its driver. Another boot and I was luckily back up. But my Netduino was still without firmware of course, since I had erased it. I did manage to fix it though. The solution was to just completely ignore the driver stuff. So here's more or less how I ended up fixing my Netduino and get its firmware updated to version 4.2.
 
-<h2 id="the-fix">How to do it properly</h2>
+## How to do it properly
 
 ### Remove old stuff (if you have it installed)
 
@@ -39,38 +39,49 @@ So I booted into safe mode and uninstalled this AT91 USB to Serial Converter dev
 ### Get new stuff
 
 1. Install Visual Studio 2012, if you haven't already
-1. Download and install the latest [_.NET Micro Framework SDK 4.3_](http://netmf.codeplex.com/).<br/>(the 4.2 available from Netduino doesn't support VS 2012)
-1. Download and install the [_Netduino SDK v4.2.1.0_](http://netduino.com/downloads/).<br/>(32-bit or 64-bit depending on your Windows version)
-1. Download and install [_SAM-BA 2.13 for Windows_](http://www.atmel.com/tools/ATMELSAM-BAIN-SYSTEMPROGRAMMER.aspx).<br/>(you'll have to register and log in, but it's free)
+1. Download and install the latest [_.NET Micro Framework SDK 4.3_](http://netmf.codeplex.com/).  
+   (the 4.2 available from Netduino doesn't support VS 2012)
+1. Download and install the [_Netduino SDK v4.2.1.0_](http://netduino.com/downloads/).  
+   (32-bit or 64-bit depending on your Windows version)
+1. Download and install [_SAM-BA 2.13 for Windows_](http://www.atmel.com/tools/ATMELSAM-BAIN-SYSTEMPROGRAMMER.aspx).  
+   (you'll have to register and log in, but it's free)
 1. Download and unzip the new [_Netduino firmware_](http://wiki.netduino.com/Firmware.ashx). [Netduino_Firmware_4.2.0.1](http://www.geekality.net/wp-content/uploads/2013/01/Netduino_Firmware_4.2.0.1.7z)
 
 ### Erase the Netduino
 
 1. Connect your Netduino so it has power.
-1. Find a jumper wire and connect one end to the 3V3 pin and touch the small golden square next to the GPIO 0 pin with the other end. Keep touching it for at least 2-3 seconds.<br/>**WARNING:** This _completely_ erases the Netduino and _there is no undo. If you do this, the only way to get it working again is to successfully complete the rest of these steps._
+1. Find a jumper wire and connect one end to the 3V3 pin and touch the small golden square next to the GPIO 0 pin with the other end. Keep touching it for at least 2-3 seconds.  
+   **WARNING:** This _completely_ erases the Netduino and _there is no undo. If you do this, the only way to get it working again is to successfully complete the rest of these steps._
 1. Disconnect the Netduino, wait a few seconds and reconnect it.
 
 It should now be recognized to Windows as a new device called GPS Camera Detect. We will just ignore this and move on.
 
 ### Load the TinyBooterDecompressor image
 
-1. Start the SAM-BA 2.13 tool.<br/>(should be at C:\Program Files (x86)\Atmel\sam-ba_2.13\sam-ba.exe)
-1. Select the connection.<br/>(for me it was just one selection available)
-1. Select your board.<br/>(should be at91sam7x512-ek for the regular Netduino)
+1. Start the SAM-BA 2.13 tool.  
+   (should be at C:\Program Files (x86)\Atmel\sam-ba_2.13\sam-ba.exe)
+1. Select the connection.  
+   (for me it was just one selection available)
+1. Select your board.  
+   (should be at91sam7x512-ek for the regular Netduino)
 1. Press Connect.
 1. Run the 'Boot from Flash' script.
 1. Run the 'Enable Flash access' script.
-1. Make sure you're on the Flash tab and send the 'TinyBooterDecompressor.bin' file.<br/>(came with the Netduino firmware you downloaded earlier)
+1. Make sure you're on the Flash tab and send the 'TinyBooterDecompressor.bin' file.  
+   (came with the Netduino firmware you downloaded earlier)
 1. Select 'No' on the question about locked regions.
 1. When done, close the SAM-BA tool.
 1. Disconnect and reconnect the Netduino.
 
 ### Install the new firmware
 
-1. Start the MFDeploy tool.<br/>(should be at C:\Program Files (x86)\Microsoft .NET Micro Framework\v4.3\Tools\MFDeploy.exe)
+1. Start the MFDeploy tool.  
+   (should be at C:\Program Files (x86)\Microsoft .NET Micro Framework\v4.3\Tools\MFDeploy.exe)
 1. Select USB as device and you should get a Netduino_Netduino device.
-1. Click the Ping button to see if it answers.<br/>(should answer with TinyBooter)
-1. Browse and select _both_ the ER*CONFIG \_and* the ER_FLASH files under Image File and click Deploy (takes a while).<br/>(came with the Netduino firmware you downloaded earlier. Use the ctrl key to select both files in the file dialog)
+1. Click the Ping button to see if it answers.  
+   (should answer with TinyBooter)
+1. Browse and select _both_ the ER*CONFIG \_and* the ER_FLASH files under Image File and click Deploy (takes a while).  
+   (came with the Netduino firmware you downloaded earlier. Use the ctrl key to select both files in the file dialog)
 1. Finally, disconnect and reconnect the Netduino.
 
 To confirm the update, in the MFDeploy tool, go to the Target menu and select Device Capabilities. You should get bunch of info, and among that something which says "Netduino (v4.2.0.1) by Secret Labs LLC". And that _should_ be it. All left then is to open up your Netduino project in Visual Studio and changing the target framework from 4.1 to 4.2 in the project settings.
