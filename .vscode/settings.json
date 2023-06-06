@@ -4,6 +4,7 @@
   "files.exclude": {
     "**/.contentlayer": true,
     "**/.next": true,
+    "**/.vercel": true,
     "next-env.d.ts": true
   },
   "[mdx]": {
