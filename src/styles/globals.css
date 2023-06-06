@@ -61,7 +61,7 @@ footer {
   }
 
   ins {
-    @apply inline-block no-underline bg-yellow-200;
+    @apply decoration-dashed;
   }
 
   del {
@@ -69,11 +69,10 @@ footer {
   }
 
   kbd {
+    @apply bg-gray-200 dark:bg-gray-700 dark:border-gray-300 rounded-sm border-gray-700 px-1 py-[0.05rem];
     font: inherit;
-    background: #0001;
-    border: 1px outset #0008;
-    padding: 0.05em 0.25em;
-    border-radius: 0.2em;
+    border-width: 1px;
+    border-style: dashed;
   }
 
   :not(pre) > code {
@@ -91,6 +90,18 @@ footer {
       padding-right: 1.1428571em;
       padding-bottom: 0.8571429em;
       padding-left: 1.1428571em;
+    }
+  }
+
+  .anchor {
+    @apply no-underline;
+
+    span.icon.icon-link {
+      font-size: 0.8em;
+
+      &::after {
+        content: ' 🔗';
+      }
     }
   }
 }

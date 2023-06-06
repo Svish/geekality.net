@@ -20,7 +20,7 @@ export default makeSource({
   contentDirPath: 'content',
   documentTypes: [
     defineDocumentType(() => ({
-      name: 'BlogPost',
+      name: 'Post',
       filePathPattern: `blog/*.mdx`,
       contentType: 'mdx',
       fields: {

@@ -1,13 +1,11 @@
 import { notFound, redirect } from 'next/navigation'
-import { allBlogPosts } from 'contentlayer/generated'
+import { allPosts } from '@/content'
 
 /**
  * Redirects to a blog post if one with given permalink exists.
  */
 export function handlePermalink(permalink: string): never {
-  const post = allBlogPosts.find(
-    (p) => p.permalinks?.includes(permalink) ?? false
-  )
+  const post = allPosts.find((p) => p.permalinks?.includes(permalink) ?? false)
   return post != null
     ? redirect(`/blog/${post.slug}`)
     : permalink.startsWith('/?')

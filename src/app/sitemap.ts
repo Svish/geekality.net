@@ -1,7 +1,7 @@
 import { type MetadataRoute } from 'next'
 import invariant from 'tiny-invariant'
 
-import { postsByPublished } from '@/content'
+import { allPosts } from '@/content'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   invariant(process.env.ORIGIN != null)
@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
     },
 
-    ...postsByPublished.map((p) => ({
+    ...allPosts.map((p) => ({
       url: origin + p.pathname,
       lastModified: lastModified,
     })),

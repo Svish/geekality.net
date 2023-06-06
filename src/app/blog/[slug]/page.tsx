@@ -1,4 +1,4 @@
-import '@/styles/blogPage.css'
+import '@/styles/post.css'
 
 import { postsByPublished, findSiblings } from '@/content'
 
@@ -37,7 +37,7 @@ export function generateMetadata({ params }: Props) {
   }
 }
 
-export default async function BlogPage({ params }: Props) {
+export default async function BlogPostPage({ params }: Props) {
   const post = postsByPublished.find(({ slug }) => slug === params.slug)
   if (post == null) notFound()
 
@@ -52,7 +52,7 @@ export default async function BlogPage({ params }: Props) {
         <MDXContent components={mdxComponents} />
       </Prose>
 
-      <div className="max-w-[65ch]">
+      <div className="mt-12 max-w-[65ch]">
         <aside
           aria-label="Post meta"
           className="mt-4 text-xs text-gray-600 dark:text-gray-400"

@@ -1,4 +1,4 @@
-import { postsByTitle } from '@/content'
+import { allPosts } from '@/content'
 import { notFound } from 'next/navigation'
 
 import H1 from '@/components/H1'
@@ -8,7 +8,7 @@ interface Props {
   params: { slug: string }
 }
 export function generateMetadata({ params }: Props) {
-  const categoryHasPosts = postsByTitle.some(
+  const categoryHasPosts = allPosts.some(
     ({ categories }) => categories?.includes(params.slug) === true
   )
   if (!categoryHasPosts) notFound()
@@ -22,7 +22,7 @@ export function generateMetadata({ params }: Props) {
 }
 
 export default async function BlogCategoriesCategoryPage({ params }: Props) {
-  const postsInCategory = postsByTitle.filter(
+  const postsInCategory = allPosts.filter(
     ({ categories }) => categories?.includes(params.slug) === true
   )
   if (postsInCategory.length === 0) notFound()

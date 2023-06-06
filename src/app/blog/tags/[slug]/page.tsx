@@ -1,4 +1,4 @@
-import { postsByTitle } from '@/content'
+import { allPosts } from '@/content'
 import { notFound } from 'next/navigation'
 
 import H1 from '@/components/H1'
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function generateMetadata({ params }: Props) {
-  const tagHasPosts = postsByTitle.some(
+  const tagHasPosts = allPosts.some(
     ({ tags }) => tags?.includes(params.slug) === true
   )
   if (!tagHasPosts) notFound()
@@ -23,7 +23,7 @@ export function generateMetadata({ params }: Props) {
 }
 
 export default async function BlogTagsTagPage({ params }: Props) {
-  const postsInTag = postsByTitle.filter(
+  const postsInTag = allPosts.filter(
     ({ tags }) => tags?.includes(params.slug) === true
   )
   if (postsInTag.length === 0) notFound()
