@@ -1,4 +1,5 @@
-import type { MDXComponents } from 'mdx/types'
+import { type MDXComponents } from 'mdx/types'
+import { type Route } from 'next'
 import invariant from 'tiny-invariant'
 
 import Link, { ExternalLink } from '@/components/Link'
@@ -15,7 +16,7 @@ const mdxComponents: MDXComponents = {
     return isExternal ? (
       <ExternalLink href={href}>{children}</ExternalLink>
     ) : (
-      <Link href={{ ...url }}>{children}</Link>
+      <Link href={href as Route<string>}>{children}</Link>
     )
   },
 }

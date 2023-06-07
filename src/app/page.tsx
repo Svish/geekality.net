@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { handlePermalink } from '@/util/wordpress'
+import { handlePermalink } from '@/content/wordpress'
 import { postsByPublished } from '@/content'
 
 import H1 from '@/components/H1'

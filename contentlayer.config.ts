@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import rehypeSlug from 'rehype-slug'
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+// import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 import rehypeHighlight from 'rehype-highlight'
 import apache from 'highlight.js/lib/languages/apache'
@@ -66,17 +66,18 @@ export default makeSource({
   mdx: {
     remarkPlugins: [remarkMath, remarkGfm],
     rehypePlugins: [
+      rehypeKatex,
       rehypeSlug,
-      [
+      // TODO: Figure out how to make autolinks work, and styled...
+      /*[
         rehypeAutolinkHeadings,
         {
-          behavoir: 'wrap',
+          behavior: 'append',
           properties: {
-            // ariaLabel: 'Link to section',
+            className: ['header-anchor'],
           },
         },
-      ],
-      rehypeKatex,
+      ],*/
       [
         rehypeHighlight,
         {

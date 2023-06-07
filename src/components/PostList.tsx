@@ -2,14 +2,16 @@ import Link from '@/components/Link'
 import { formatDate } from '@/util/format'
 
 import { type Post } from '@/content'
+import clsx from 'clsx'
 
 interface Props {
   posts: Post[]
+  className?: string
 }
 
-export default function PostList({ posts }: Props) {
+export default function PostList({ className, posts }: Props) {
   return (
-    <ul className="flex flex-col gap-4">
+    <ul className={clsx('flex flex-col gap-4', className)}>
       {posts.map((post) => (
         <li key={post._id} className="flex flex-col">
           <div>
