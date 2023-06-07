@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './content/**/*.mdx'],
+  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],
   theme: {
     container: {
       center: true,
@@ -53,5 +54,4 @@ module.exports = {
       }),
     },
   },
-  plugins: [require('@tailwindcss/typography')],
 }
