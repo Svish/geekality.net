@@ -44,10 +44,10 @@ module.exports = {
             // Adjustments to inline code style
             // @see https://nikitagoncharuk.com/blog/my-custom-code-style-for-typography-by-tailwindcss-highlightjs/
             'code::before': {
-              content: '""',
+              content: '" "',
             },
             'code::after': {
-              content: '""',
+              content: '" "',
             },
           },
         },

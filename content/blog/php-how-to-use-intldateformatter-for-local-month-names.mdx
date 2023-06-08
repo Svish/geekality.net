@@ -27,10 +27,10 @@ echo $f->format(new DateTime("2013-01-01"));
 
 In this case I just use a hardcoded norwegian long date format, but check out the [IntlDateFormatter constructor](http://php.net/manual/en/intldateformatter.create.php) and you will find various date and time constants for various formats.
 
-<div className="note">
-  **Note:** Requires PHP version >= 5.3 and the intl.so extension active. If on
-  Dreamhost you can do this by adding the following to your `~/.php/5.3/phprc`
-</div>
+<Note>
+  📝 Requires PHP version `>= 5.3` and the intl.so extension active. If on
+  Dreamhost you can do this by adding the following to your `~/.php/5.3/phprc`.
+</Note>
 
 ```ini
 extension = intl.so

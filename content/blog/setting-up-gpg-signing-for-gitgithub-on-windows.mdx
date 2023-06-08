@@ -41,12 +41,9 @@ uid Alice Person (alice) <alice.person@example.com>
 uid Alice Person (alice) <alice@example.org>
 ssb 4096R/6ADB9D4262275E24 2017-08-23 👈
 ssb 4096R/33F2E1644AEA9524 2017-08-23
-
 ```
 
-<i>
-  <b>Note:</b> So in this case we want `6ADB9D4262275E24`
-</i>
+<Note>📝 In this case we want `6ADB9D4262275E24`</Note>
 
 2. Configure git and (optionally) make it sign commits and tags by default:
 
@@ -63,10 +60,10 @@ C:\Program Files (x86)\GNU\GnuPG\pub\gpg.exe
 🔶 > echo no-tty >> %APPDATA%\gnupg\gpg.conf
 ```
 
-<i>
-  <b>Note:</b> If repo specific, just skip `--global` and run the command in the
-  repo instead.
-</i>
+<Note>
+  📝 If repo specific, just skip `--global` and run the command in the repo
+  instead.
+</Note>
 
 ## Test it...
 
@@ -82,10 +79,10 @@ C:\Program Files (x86)\GNU\GnuPG\pub\gpg.exe
  create mode 100644 file.txt
 ```
 
-<i>
-  <b>Note:</b> If not using `commit.gpgsign true`, one can also use `-S` to
-  explicitly sign a commit.
-</i>
+<Note>
+  📝 If not using `commit.gpgsign true`, one can also use `-S` to explicitly
+  sign a commit.
+</Note>
 
 4. Verify commit was signed:
 
@@ -100,7 +97,6 @@ Author: Alice Person <alice.person@example.com>
 Date:   Wed Aug 23 06:18:48 2017 +0200
 
     Signed commit
-
 ```
 
 5. Add a signed tag, using `-s`:
@@ -109,10 +105,10 @@ Date:   Wed Aug 23 06:18:48 2017 +0200
 🔶 > git tag v1 -m "Signed tag"
 ```
 
-<i>
-  <b>Note:</b> If not using `tag.forceSignAnnotated true`, one can also use `-s`
-  to explicitly sign a tag.
-</i>
+<Note>
+  📝 If not using `tag.forceSignAnnotated true`, one can also use `-s` to
+  explicitly sign a tag.
+</Note>
 
 6. Verify tag was signed:
 

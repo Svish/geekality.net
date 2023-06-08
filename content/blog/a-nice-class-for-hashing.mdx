@@ -31,7 +31,6 @@ string hashed = BCrypt.HashPassword(password, BCrypt.GenerateSalt(12));
 
 // Check the password.
 bool matches = BCrypt.CheckPassword(candidate, hashed);
-
 ```
 
 In case the source disappears, you can [find the BCrypt class in this gist](https://gist.github.com/Svish/6c31084a20702a196ae54dda296a6be5).

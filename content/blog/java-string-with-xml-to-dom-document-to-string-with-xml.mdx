@@ -50,18 +50,16 @@ public static String toString(Node subject, boolean omitXmlDeclaration, boolean 
     return writer.toString();
 
 }
-
 ```
 
 Here we take advantage of the [`newTransformer()`](<http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/TransformerFactory.html#newTransformer()>) method which returns a [`Transformer`](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/Transformer.html) which does a simple copy of source to result ([identity transform](http://en.wikipedia.org/wiki/Identity_transform)). So to get the string representation of the xml we just feed the transformation result into a StringWriter and voilà 🙂
 
 Here, like when parsing, you should avoid recreating the [`TransformerFactory`](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/TransformerFactory.html) instance unless absolutely necessary. The Transformer itself can also be reused, but not across threads.
 
-<div className="note">
-  **Note:** I have ignored all exceptions in both examples here for less
-  clutter, but in real code you should of course deal with those a bit more
-  wisely 😉
-</div>
+<Note>
+  📝 I have ignored all exceptions in both examples here for less clutter, but
+  in real code you should of course deal with those a bit more wisely. 😉
+</Note>
 
 ## Simple usage test
 
@@ -73,7 +71,6 @@ public static void main(String[] args) throws Exception
     out.println(toString(node, true, true));
 
 }
-
 ```
 
 Easy peasy. You might want to stick these methods in a helper class or something, and maybe even add some more versions of the methods. If you for example take a look at the API of the DocumentBuilder.parse method you'll find that it can take files, streams, uris, et cetera, so there are good alternatives if your XML isn't in a string 🙂

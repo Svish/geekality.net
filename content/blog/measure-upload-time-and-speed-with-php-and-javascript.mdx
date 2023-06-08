@@ -57,7 +57,7 @@ And then we need the Javascript which does the AJAX request (using [jQuery](http
 </script>
 ```
 
-The start timer simply stores a timestamp in a session variable.
+The start script simply stores a timestamp in a session variable.
 
 ```php
 <?php session_start();
@@ -73,4 +73,4 @@ $upload_time = microtime(true) - $_SESSION['time'];
 // You should of course probably also check if the upload was OK and all that 😉
 ```
 
-And that's pretty much all there is to it! Working sample at [samples.geekality.net/upload-timer](http://samples.geekality.net/upload-timer/).
+And that's pretty much all there is to it.

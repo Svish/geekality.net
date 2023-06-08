@@ -53,10 +53,12 @@ We should now have the package downloaded and, more importantly, if you check <b
 
 <hr />
 
-**Note:** I'm a bit fuzzy on what composer does to keep track on whatever
-different happens through `--prefer-source`, and it's an option for both
-`composer install` and `composer update`. For example, at first attempt, I
-tried to use `composer update --prefer-source` on a dependency that had
-already been downloaded, and the .git directory did not turn up, but if I just
-deleted the vendor directory for that package and then re-ran the command,
-then the .git was there. So, feel free to comment if you have some light on that topic 😛🤓
+<Note>
+  📝 I'm a bit fuzzy on what composer does to keep track on whatever different
+  happens through `--prefer-source`, and it's an option for both `composer
+  install` and `composer update`. For example, at first attempt, I tried to use
+  `composer update --prefer-source` on a dependency that had already been
+  downloaded, and the .git directory did not turn up, but if I just deleted the
+  vendor directory for that package and then re-ran the command, then the .git
+  was there. So, feel free to comment if you have some light on that topic. 😛🤓
+</Note>

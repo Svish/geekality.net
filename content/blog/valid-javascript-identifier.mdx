@@ -135,13 +135,45 @@ function is_valid_identifier($subject)
 
 Not too complex, although the regular expression might look a bit nuts at first because of all the Unicode character groups. You might find regular expressions other places to do this that uses a-z for the letters, but as you saw from the specification that won't cover much of what's actually valid.
 
-I built the expression using the very helpful [RegexBuddy](http://www.regexbuddy.com/) and exported an HTML explanation of it. Also threw together a tiny identifier validator thing where you can test it out with. You find it all at [samples.geekality.net/js-identifiers](http://samples.geekality.net/js-identifiers/).
+<Note>
+  To build the regex I used [RegexBuddy](http://www.regexbuddy.com/) which is a
+  very helpful tool to both write, test, and understand regular expressions.
+</Note>
 
-And that's that. Hope that might be helpful for someone and please let me know if you find any issues with it!
+## Complete code
 
-📝 **Note:** I have ignored the issue with the Unicode escape sequences
-for now as I'm not quite sure how to best handle those. From the
-specification:
+```php
+<?php
+
+/**
+ * Checks if the given subject is a valid js callback function.
+ *
+ * @author     Torleif Berger
+ * @link       http://www.geekality.net/?p=1739
+ * @return     TRUE if the subject is valid; otherwise FALSE.
+ */
+function is_valid_callback($subject)
+{
+    $identifier_syntax
+        = '/^[$_\p{L}][$_\p{L}\p{Mn}\p{Mc}\p{Nd}\p{Pc}\x{200C}\x{200D}]*+$/u';
+
+    $reserved_words = array('break', 'do', 'instanceof', 'typeof', 'case',
+        'else', 'new', 'var', 'catch', 'finally', 'return', 'void', 'continue',
+        'for', 'switch', 'while', 'debugger', 'function', 'this', 'with',
+        'default', 'if', 'throw', 'delete', 'in', 'try', 'class', 'enum',
+        'extends', 'super', 'const', 'export', 'import', 'implements', 'let',
+        'private', 'public', 'yield', 'interface', 'package', 'protected',
+        'static', 'null', 'true', 'false');
+
+    return preg_match($identifier_syntax, $subject)
+        && ! in_array(mb_strtolower($subject, 'UTF-8'), $reserved_words);
+}
+```
+
+<Note>
+  📝 I have ignored the issue with the Unicode escape sequences
+  for now as I'm not quite sure how to best handle those. From the
+  specification:
 
 > A UnicodeEscapeSequence cannot be used to put a character into an
 > IdentifierName that would otherwise be illegal. In other words, if a
@@ -157,4 +189,6 @@ So, I'm not sure if there is a way to just convert those sequences into actual
 characters or if this is done automatically by PHP as they come in as GET
 parameters or what. Either way, my code above there is ignoring them. This
 means, identifiers with escape sequences will not be considered valid. If you
-have some good ideas on how to handle it, please leave a comment 🙂
+have some good ideas on how to handle it, please leave a comment. 🙂
+
+</Note>

@@ -17,7 +17,10 @@ Figured out you can change this by setting a stream context, so wrapped it in a 
 
 Also added a cleanup of the returned array, as I found it a bit ugly when the request included redirects. See difference below code.
 
-**Note:** I silence the `get_headers` call because it throws several warnings, e.g. if the hostname fails lookup, and I'm not really interested in _why_ it fails.
+<Note>
+  📝 I silence the `get_headers` call because it throws several warnings, e.g.
+  if the hostname fails lookup, and I'm not really interested in _why_ it fails.
+</Note>
 
 ```php
 function get_head(string $url, array $opts = [])

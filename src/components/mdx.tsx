@@ -19,6 +19,7 @@ const mdxComponents: MDXComponents = {
       <Link href={href as Route<string>}>{children}</Link>
     )
   },
+  Note: ({ children }) => <div className="note">{children}</div>,
 }
 
 export default mdxComponents

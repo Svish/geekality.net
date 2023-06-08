@@ -186,11 +186,13 @@ curl_close($request);
 
 The cURL options we set means roughly: Use this URL, do a POST, send these variables, return the transfer as a string when I call `curl_exec` and do not include the HTTP headers in that string. The reason behind the last two are in [this post](/?p=1413). I've commented them out, and if it works without them, just leave them out. For me it worked fine on one server, while on another I had to add them.
 
-📝 <b>Note:</b> For security reasons, PayPal will only allow you to use
-the transaction id to get a response up to 5 times. After that it will be
-invalidated and you will get an error back instead of the transaction data.
-Fair enough for regular use, but found it a bit annoying while developing
-since it took some tries to get the result I wanted. 😛
+<Note>
+  📝 For security reasons, PayPal will only allow you to use the transaction id
+  to get a response up to 5 times. After that it will be invalidated and you
+  will get an error back instead of the transaction data. Fair enough for
+  regular use, but found it a bit annoying while developing since it took some
+  tries to get the result I wanted. 😛
+</Note>
 
 ## Step 5: Check the response
 
@@ -273,18 +275,119 @@ If you want something that is fully reliable, you need to have a look at [PayPal
 What you most likely want is a combination of these two. Use PDT to give the returning users a quick response and store what you can/need in the database. Then use IPN to fill out the gaps of missed PDTs or missing transaction details (IPN will give you many more details than PDT does).
 
 <ins dateTime="2011-05-28T21:14:32+00:00">
-  It took some time, but I have finally finished a [tutorial on
-  IPN](http://www.geekality.net/?p=1420) Check it out if you're interested 😎
+  **Update 2011-05-28:** It took some time, but I have finally finished a
+  [tutorial on IPN](http://www.geekality.net/?p=1420) Check it out if you're
+  interested 😎
 </ins>
 
-## Working sample
+## Complete code
 
-Since the code above was a bit broken up, I have gathered it all in a single example page that should be operational. It contains a simple Buy Now button and it will display the PDT response when you return from the fake purchase. Since it uses the PayPal Sandbox you need to be logged in to your developer account. For the payment you can use one of your existing test accounts or you can pretend to be a person that just wants to use his credit card without an account (If you need help coming up with a fake credit card number that validates, have a look at [darkcoding.net/credit-card-numbers](http://www.darkcoding.net/credit-card-numbers/)).
+Since the code above is a bit broken up, I have gathered it all in a single function here:
 
-You find it over at [samples.geekality.net/pdt](http://samples.geekality.net/pdt/).
+```php
+<?php include 'token';
 
-The `process_pdt` function you can see in the source code should be pretty self-contained and you should be able to just drop it in to whatever you are working on and use it out of the box. Just remember to fill in _your_ actual identity token 😉
+/**
+ * Processes a PDT transaction id.
+ *
+ * @author     Torleif Berger
+ * @link       http://www.geekality.net/?p=1210
+ * @return     The payment data if $tx was valid; otherwise FALSE.
+ */
+function process_pdt($tx)
+{
+    // Init cURL
+    $request = curl_init();
 
-And that's the end of this tutorial!
+    // Set request options
+    curl_setopt_array($request, array
+    (
+        CURLOPT_URL => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+        CURLOPT_POST => TRUE,
+        CURLOPT_POSTFIELDS => http_build_query(array
+        (
+            'cmd' => '_notify-synch',
+            'tx' => $tx,
+            'at' => TOKEN,
+        )),
+        CURLOPT_RETURNTRANSFER => TRUE,
+        CURLOPT_HEADER => FALSE,
+        CURLOPT_SSL_VERIFYPEER => TRUE,
+        CURLOPT_CAINFO => 'cacert.pem',
+    ));
 
-Think this was my first longish in-depth post, so if you have any feedback, found it helpful, please leave a comment. Also do that if something is unclear, could be improved or is flat out wrong. Especially if it's flat out wrong. There's _a lot_ of _wrong_ stuff on the Internet, and I don't want to contribute to that 😛
+    // Execute request and get response and status code
+    $response = curl_exec($request);
+    $status   = curl_getinfo($request, CURLINFO_HTTP_CODE);
+
+    // Close connection
+    curl_close($request);
+
+    // Validate response
+    if($status == 200 AND strpos($response, 'SUCCESS') === 0)
+    {
+        // Remove SUCCESS part (7 characters long)
+        $response = substr($response, 7);
+
+        // Urldecode it
+        $response = urldecode($response);
+
+        // Turn it into associative array
+        preg_match_all('/^([^=\r\n]++)=(.*+)/m', $response, $m, PREG_PATTERN_ORDER);
+        $response = array_combine($m[1], $m[2]);
+
+        // Fix character encoding if needed
+        if(isset($response['charset']) AND strtoupper($response['charset']) !== 'UTF-8')
+        {
+            foreach($response as $key => &$value)
+            {
+                $value = mb_convert_encoding($value, 'UTF-8', $response['charset']);
+            }
+
+            $response['charset_original'] = $response['charset'];
+            $response['charset'] = 'UTF-8';
+        }
+
+        // Sort on keys
+        ksort($response);
+
+        // Done!
+        return $response;
+    }
+
+    return FALSE;
+}
+```
+
+You can test it with a form similar to the one below, with a Buy Now button from PayPal and a return URL set to redirect back to the same script.
+
+```php
+<?PHP
+$payment_data = isset($_GET['tx'])
+    ? process_pdt($_GET['tx'])
+    : FALSE;
+
+$current_url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
+?>
+<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" accept-charset="utf-8">
+    <p>
+        <input type="hidden" name="cmd" value="_xclick" />
+        <input type="hidden" name="charset" value="utf-8" />
+        <input type="hidden" name="business" value="paypal@business.example.com" />
+        <input type="hidden" name="item_name" value="Stuffed bear" />
+        <input type="hidden" name="item_number" value="BEAR05" />
+        <input type="hidden" name="amount" value="20.00" />
+        <input type="hidden" name="currency_code" value="USD" />
+        <input type="hidden" name="return" value="<?php echo $current_url ?>" />
+        <input type="hidden" name="cancel_return" value="<?php echo $current_url ?>" />
+        <input type="hidden" name="bn" value="Business_BuyNow_WPS_SE" />
+        <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" name="submit" alt="Buy Now" />
+    </p>
+</form>
+<?php if($payment_data): ?>
+    <p>Thank you <?php echo $payment_data['first_name'] ?> and welcome back. We will pretend to ship that stuffed bear to you ASAP.</p>
+
+    <pre>GET: <?php print_r($_GET) ?></pre>
+    <pre>PDT: <?php print_r($payment_data) ?></pre>
+<?php endif ?>
+```
