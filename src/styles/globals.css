@@ -113,6 +113,7 @@ footer {
     padding: 0.125rem 0;
   }
 
+  /* FireFox: about:config => layout.css.has-selector.enabled */
   pre:has(.hljs) {
     margin-block: var(--prose-block-margin);
     background-color: initial;
