@@ -50,9 +50,9 @@ public class OrderedPredicateComparer<T> : IComparer<T>
 }
 ```
 
-One issue here might be that the predicates will be called several times per item, which could be bad if working on a huge list. Haven't really benchmarked it though so could be fine for all I know. For smaller uses it shouldn't matter much either way. _Very curious to know about ways to optimize this though, so do let me know in the comments below if you have any good ideas!_
+One issue here might be that the predicates will be called several times per item, which could be bad if working on a huge list. Haven't really benchmarked it though so who knows. For smaller uses it shouldn't matter much either way.
 
-The nice thing about it being an IComparer is that you could push this into both OrderBy and ThenBy, and also use it in for example ordered dictionaries, priority queues, etc, and since it uses a list of fully generic predicates you could order things by pretty much anything with a yes/no answer 🙂
+The nice thing about it being an `IComparer` is that you could push this into both `OrderBy` and `ThenBy`, and also use it in for example ordered dictionaries, priority queues, etc, and since it uses a list of fully generic predicates you could order things by pretty much anything with a yes/no answer 🙂
 
 ### Usage
 

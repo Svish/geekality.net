@@ -29,14 +29,14 @@ Voila. Clean output.
 
 <Note>
   ⚠ Remember that when you do this _all_ errors will be sent to nowhere. So if
-  there was any other errors, they would also be gone. In this case I don't
+  there were any _other_ errors, they would also be gone. In this case I don't
   care, but in other instances you might want to do something else. For example
   direct it to a log file rather than to oblivion.
 </Note>
 
 ## Alternative
 
-If you do care about other error messages, you could do as suggested by Richard in the comments. Redirect stderr to stdout and then use grep to filter out what you don't want to see.
+If you do care about other error messages, you could do as suggested by Richard in the comments: Redirect `stderr` to `stdout` and then use `grep` to filter out what you don't want to see.
 
 ```bash
 $ find / -name "tar" 2>&1 | grep -v "Permission denied"
