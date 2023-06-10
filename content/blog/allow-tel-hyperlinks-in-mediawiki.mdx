@@ -1,5 +1,5 @@
 ---
-title: 'Allow tel: protocol hyperlinks in MediaWiki'
+title: 'Allow `tel:` protocol hyperlinks in MediaWiki'
 published: '2013-06-17'
 permalinks:
   - /2013/06/17/allow-tel-hyperlinks-in-mediawiki/
@@ -23,7 +23,8 @@ array_push($wgUrlProtocols, 'tel:');
 The links will get same icon as external links, which is a bit annoying, but that can be fixed as well. Find the main CSS file for your theme, in our case `/skins/monobook/main.css`, and look for a section which looks like the following.
 
 ```php
-#bodyContent a.external[href^="mailto:"], .link-mailto {
+#bodyContent a.external[href^="mailto:"],
+.link-mailto {
     background: url("mail_icon.gif") no-repeat scroll right center transparent;
     padding: 0 18px;
 }

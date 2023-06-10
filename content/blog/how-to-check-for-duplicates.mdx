@@ -31,7 +31,7 @@ Why is it bad? Because we have to go through the collection 3 times. First to co
 
 The much better solution is to use a `HashSet<T>`.
 
-> The [HashSet&lt;T&gt;](http://msdn.microsoft.com/en-us/library/bb359438.aspx) class provides high performance set operations. A set is a collection that contains no duplicate elements, and whose elements are in no particular order.
+> The [`HashSet<T>`](http://msdn.microsoft.com/en-us/library/bb359438.aspx) class provides high performance set operations. A set is a collection that contains no duplicate elements, and whose elements are in no particular order.
 
 In addition to the fact that it cannot contain duplicate items, it also has a very nice add-method which returns false if the item is already in the set.
 
@@ -82,7 +82,6 @@ namespace Geekality.Snippets
         return false;
     }
   }
-
 }
 ```
 

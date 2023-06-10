@@ -89,7 +89,7 @@ SSL has two purposes: security and authentication. And the security will actuall
 To check the certificate ourselves we can provide a [RemoteCertificate&shy;ValidationCallback](http://msdn.microsoft.com/en-us/library/system.net.security.remotecertificatevalidationcallback.aspx) delegate to a class called the [ServicePoint&shy;Manager](http://msdn.microsoft.com/en-us/library/system.net.servicepointmanager.aspx).
 
 ```csharp
-  ServicePointManager.ServerCertificateValidationCallback = OurCertificateValidation;
+ServicePointManager.ServerCertificateValidationCallback = OurCertificateValidation;
 ```
 
 But how can we decide if we should trust the certificate or not? Well, I have found three ways that works nicely. Well, actually just two since the first is just to cover your eyes and let anything pass...

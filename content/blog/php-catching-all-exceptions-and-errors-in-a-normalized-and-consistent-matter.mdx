@@ -11,7 +11,13 @@ tags:
   - php
 ---
 
-For my small website [myhymnal.net](https://github.com/Svish/myhymnal) I wanted a nice error handler that caught _all_ errors and presented them as nice error pages. The problem is that you have at least three kinds of errors which you have to handle in PHP. Uncaught exceptions, regular errors and fatal errors. After some experimenting I think I've found a way to catch them all in a close to consistent matter so that they are easy to deal with.
+For my small website [myhymnal.net](https://github.com/Svish/myhymnal) I wanted a nice error handler that caught _all_ errors and presented them as nice error pages. The problem is that you have at least three kinds of errors which you have to handle in PHP:
+
+- Uncaught exceptions
+- Regular errors
+- Fatal errors
+
+After some experimenting I think I've found a way to catch them all in a close to consistent matter so that they are easy to deal with.
 
 ```php
 error_reporting(ENV === 'dev' ? E_ALL : 0);

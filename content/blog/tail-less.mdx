@@ -19,9 +19,9 @@ $ tail /path/to/some.log
 $ tail -f /path/to/some.log
 ```
 
-This is often a dumb thing to do. Why? Because you can't really do anything with tail. What if you discovered you needed to look at something right above the lines you got printed out? Or what if you were -f'ing and something flew past you that you needed to investigate further? You'd have to leave tail and run it again with more lines or use a different tool instead. Not very practical.
+This is often a dumb thing to do. Why? Because you can't really do anything with tail. What if you discovered you needed to look at something right above the lines you got printed out? Or what if you were following (`-f`) and something flew past you that you needed to investigate further? You'd have to leave tail and run it again with more lines or use a different tool instead. Not very practical.
 
-What more people should do is to use less tail and more less 🙂
+What more people should do is to use less `tail` and more `less`. 👍
 
 ```bash
 $ less /path/to/some.log
@@ -45,4 +45,4 @@ $ less /path/to/some.log
 | <kbd>n</kbd>                   | Next search result     |
 | <kbd>N</kbd>                   | Previous search result |
 
-Much more flexible and handy than tail! Know your tools 😉 Now back to work...
+Much more flexible and handy than tail! Know your tools. 😉 Now, back to work...

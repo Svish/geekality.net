@@ -15,8 +15,6 @@ tags:
 
 Just a copy of a function I found in [a blog post](http://jayteknews.blogspot.no/2011/08/excel-user-defined-function-nslookup.html) for doing nslookup calls in a worksheet, in case I need it again in the future. I've changed the return value for failing lookups to a blank string, "", rather than "NotFound", but otherwise it's unchanged.
 
-Usage, given an IP in cell A1, to get the hostname: `=NSLookup(A1; 2)`
-
 ```vb
 Public Function NSLookup(lookupVal As String, Optional addressOpt As Integer) As String
    Const ADDRESS_LOOKUP = 1
@@ -97,6 +95,12 @@ Function FindIP(strTest As String) As String
         FindIP = ""
     End If
 End Function
+```
+
+Usage, given an IP in cell `A1`, to get the hostname:
+
+```txt
+=NSLookup(A1; 2)
 ```
 
 <Note>

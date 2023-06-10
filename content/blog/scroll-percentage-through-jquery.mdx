@@ -19,8 +19,8 @@ $(function()
 
 function onWindowScroll()
 {
-    var scrollPercentage = ($(window).height() + $(document).scrollTop())
-        / $(document).height();
+    var scrollPercentage
+      = ($(window).height() + $(document).scrollTop()) / $(document).height();
     console.info(scrollPercentage);
 }
 ```

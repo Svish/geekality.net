@@ -11,16 +11,11 @@ tags:
   - php
 ---
 
-PHP has a function called [`get_headers`](http://php.net/manual/en/function.get-headers.php) which, as you'd guess, gives you the headers returned from an HTTP request. _However_ it actually uses a GET, rather than HEAD, request.
+PHP has a function called [`get_headers`](http://php.net/manual/en/function.get-headers.php) which, as you'd guess, gives you the headers returned from an HTTP request. _However_ it actually uses a `GET`, rather than a `HEAD`, request.
 
-Figured out you can change this by setting a stream context, so wrapped it in a function. And posting it here in case I need it again.
+Figured out you can change this by setting a stream context, so I wrapped it in a function and posting it here in case I need it again.
 
-Also added a cleanup of the returned array, as I found it a bit ugly when the request included redirects. See difference below code.
-
-<Note>
-  📝 I silence the `get_headers` call because it throws several warnings, e.g.
-  if the hostname fails lookup, and I'm not really interested in _why_ it fails.
-</Note>
+Also added a cleanup of the returned array, as I found it a bit ugly and hard to deal with when the request included redirects.
 
 ```php
 function get_head(string $url, array $opts = [])
@@ -40,7 +35,7 @@ function get_head(string $url, array $opts = [])
     if( ! $req)
         return false;
 
-    // Make more sane response
+    // Cleanup the response to make it easier to deal with
     foreach($req as $h => $v)
     {
         if(is_int($h))
@@ -62,7 +57,12 @@ function get_head(string $url, array $opts = [])
 }
 ```
 
-## Example response:
+<Note>
+  📝 I silence the `get_headers` call because it throws several warnings, e.g.
+  if the hostname fails lookup, and I'm not really interested in _why_ it fails.
+</Note>
+
+## Example response
 
 ```php
 <?php get_head('http://geekality.net');
@@ -90,7 +90,7 @@ array (size=2)
       'Status' => string 'HTTP/1.1 200 OK' (length=15)
 ```
 
-## Example response without my cleanup:
+The following is an example of what you'd get without the cleanup:
 
 ```php
 <?php get_head('http://geekality.net');

@@ -30,8 +30,6 @@ The browser caches stuff, and to do that it needs some information. When we have
 </FilesMatch>
 ```
 
-[More info](http://code.google.com/speed/page-speed/docs/caching.html#LeverageBrowserCaching)
-
 ## Enable Compression
 
 Compressing stuff means less data has to go across the wire between the browser and the web server. Which is generally a nice thing. And as long as the web server supports it, enabling it is pretty simple. Just add the following line to your [.htaccess](http://en.wikipedia.org/wiki/.htaccess) file.
@@ -39,8 +37,6 @@ Compressing stuff means less data has to go across the wire between the browser 
 ```apache
 AddOutputFilterByType DEFLATE text/html text/plain text/xml text/javascript text/css application/javascript
 ```
-
-[More info](http://code.google.com/speed/page-speed/docs/payload.html#GzipCompression)
 
 ## Don't touch the default stuff
 

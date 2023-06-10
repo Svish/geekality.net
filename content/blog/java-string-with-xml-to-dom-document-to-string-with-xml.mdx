@@ -32,7 +32,7 @@ public static Document parse(String subject) throws Exception
 
 Fairly straight forward when you just know what classes to use.
 
-If you do this more than seldom you should avoid creating new instances of the [DocumentBuilderFactory](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/parsers/DocumentBuilderFactory.html) unless you have to. The [DocumentBuilder](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/parsers/DocumentBuilder.html) can also be reused if you call the reset method between uses, but not across threads 🙂
+If you do this more than seldom you should avoid creating new instances of the [`DocumentBuilderFactory`](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/parsers/DocumentBuilderFactory.html) unless you have to. The [`DocumentBuilder`](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/parsers/DocumentBuilder.html) can also be reused if you call the reset method between uses, but not across threads 🙂
 
 ## Document (or any Node really) to String
 
@@ -52,9 +52,9 @@ public static String toString(Node subject, boolean omitXmlDeclaration, boolean 
 }
 ```
 
-Here we take advantage of the [`newTransformer()`](<http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/TransformerFactory.html#newTransformer()>) method which returns a [`Transformer`](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/Transformer.html) which does a simple copy of source to result ([identity transform](http://en.wikipedia.org/wiki/Identity_transform)). So to get the string representation of the xml we just feed the transformation result into a StringWriter and voilà 🙂
+Here we take advantage of the [`newTransformer()`](<http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/TransformerFactory.html#newTransformer()>) method which returns a [`Transformer`](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/Transformer.html) which does a simple copy of source to result ([identity transform](http://en.wikipedia.org/wiki/Identity_transform)). So to get the string representation of the xml we just feed the transformation result into a `StringWriter` and voilà. 🙂
 
-Here, like when parsing, you should avoid recreating the [`TransformerFactory`](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/TransformerFactory.html) instance unless absolutely necessary. The Transformer itself can also be reused, but not across threads.
+Here, like when parsing, you should avoid recreating the [`TransformerFactory`](http://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/transform/TransformerFactory.html) instance unless absolutely necessary. The `Transformer` itself can also be reused, but not across threads.
 
 <Note>
   📝 I have ignored all exceptions in both examples here for less clutter, but
@@ -69,10 +69,9 @@ public static void main(String[] args) throws Exception
     String xml = "<foo>bar</foo>";
     Node node = parse(xml);
     out.println(toString(node, true, true));
-
 }
 ```
 
-Easy peasy. You might want to stick these methods in a helper class or something, and maybe even add some more versions of the methods. If you for example take a look at the API of the DocumentBuilder.parse method you'll find that it can take files, streams, uris, et cetera, so there are good alternatives if your XML isn't in a string 🙂
+Easy peasy. You might want to stick these methods in a helper class or something, and maybe even add some more versions of the methods. If you for example take a look at the API of the `DocumentBuilder.parse` method you'll find that it can take files, streams, uris, et cetera, so there are good alternatives if your XML isn't in a string. 🙂
 
 Either way, have fun! And if you sit there, stuck with Java 1.5, hating dealing with XML and the ugly Java API in general, unable to use 3rd party libraries... at least you can know that you're not alone 😉

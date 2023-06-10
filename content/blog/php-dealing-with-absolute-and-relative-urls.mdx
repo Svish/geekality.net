@@ -22,25 +22,30 @@ Luckily, I found a function on [nashruddin.com](http://nashruddin.com/PHP_Script
 function make_absolute($url, $base)
 {
     // Return base if no url
-    if( ! $url) return $base;
+    if( ! $url)
+      return $base;
 
     // Return if already absolute URL
-    if(parse_url($url, PHP_URL_SCHEME) != '') return $url;
+    if(parse_url($url, PHP_URL_SCHEME) != '')
+      return $url;
 
     // Urls only containing query or anchor
-    if($url[0] == '#' || $url[0] == '?') return $base.$url;
+    if($url[0] == '#' || $url[0] == '?')
+      return $base.$url;
 
     // Parse base URL and convert to local variables: $scheme, $host, $path
     extract(parse_url($base));
 
     // If no path, use /
-    if( ! isset($path)) $path = '/';
+    if( ! isset($path))
+      $path = '/';
 
     // Remove non-directory element from path
     $path = preg_replace('#/[^/]*$#', '', $path);
 
     // Destroy path if relative url points to root
-    if($url[0] == '/') $path = '';
+    if($url[0] == '/')
+      $path = '';
 
     // Dirty absolute URL
     $abs = "$host$path/$url";
@@ -56,7 +61,12 @@ function make_absolute($url, $base)
 
 I can sort of read through and see what it does, but I can't explain it very well. So, I'll just leave it at that. So far it has worked fine for me. Maybe some corner cases that are missing, and if there are, please let me know!
 
-:idea: What I added to the original function was line 5 and 17. The first to prevent it from crashing if the url is null or empty, and the second to prevent it from crashing if parse_url finds no path. For example if the url is `http://www.example.com` (No /whatever at the end).
+<Note>
+  💡 What I added to the original function was line `5` and `17`. The first to
+  prevent it from crashing if the url is null or empty, and the second to
+  prevent it from crashing if `parse_url` finds no path. For example if the url
+  is `http://www.example.com` (no `/whatever` at the end).
+</Note>
 
 ## The base tag
 

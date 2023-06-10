@@ -13,9 +13,9 @@ tags:
   - unicode
 ---
 
-Ok, so I was happily reading CSV files from an SFTP server. The file content is returned as an [InputStream](http://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html) and I I used a [BufferedReader](http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html) to read it line by line. Each line contained either a header or an order. The header lines started with the string "HDR".
+Ok, so I was happily reading CSV files from an SFTP server. The file content is returned as an [`InputStream`](http://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html) and I I used a [`BufferedReader`](http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html) to read it line by line. Each line contained either a header or an order. The header lines started with the string `"HDR"`.
 
-However, I suddenly discovered that my code was consistently skipping the first header (and as a result the orders belonging to it). The reason, I found, was simple. The first header, on the first line, didn't start with "HDR", it started with "□HDR"! And that undisplayable square turned out to be a [Unicode](http://en.wikipedia.org/wiki/Unicode) [Byte Order Mark](http://en.wikipedia.org/wiki/Byte-order_mark) (BOM).
+However, I suddenly discovered that my code was consistently skipping the first header (and as a result the orders belonging to it). The reason, I found, was simple. The first header, on the first line, didn't start with `"HDR"`, it started with `"□HDR"`! And that undisplayable square turned out to be a [Unicode](http://en.wikipedia.org/wiki/Unicode) [Byte Order Mark](http://en.wikipedia.org/wiki/Byte-order_mark) (BOM).
 
 To deal with the BOM, we can use a simple class I found [at StackOverflow](http://stackoverflow.com/q/1835430/39321#1835529) which handles it for us. Here it is 🙂
 

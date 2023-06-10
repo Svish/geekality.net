@@ -21,7 +21,13 @@ Found a nice way of doing that in the [heroku devcenter](https://devcenter.herok
 We'll start with deploying an artifact to a repo folder in our project by using the following command. I split it up so it's easier to read, but it should of course all be a single command.
 
 ```dos
-mvn deploy:deploy-file -Durl=file:///dev/project/repo/ -Dfile=somelib-1.0.jar -DgroupId=com.example -DartifactId=somelib -Dpackaging=jar -Dversion=1.0
+mvn deploy:deploy-file ^
+  -Durl=file:///dev/project/repo/ ^
+  -Dfile=somelib-1.0.jar ^
+  -DgroupId=com.example ^
+  -DartifactId=somelib ^
+  -Dpackaging=jar ^
+  -Dversion=1.0
 ```
 
 The group and artifact id you'd have to make up yourself of course. For example pull the artifact id from the library name and the group id from the main package used inside the library.

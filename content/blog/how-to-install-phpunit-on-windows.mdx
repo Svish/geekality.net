@@ -20,19 +20,19 @@ Commands assumes the PHP install is in `C:\wamp\bin\php\php5.3.13` and that this
 
 1. Download [`go-pear.phar`](http://pear.php.net/go-pear.phar) and Save it as `C:\wamp\bin\php\php5.3.13\pear\go-pear.phar`.
 2. Open an elevated command prompt.
-3. Go to the PHP directory.
+3. Go to the PHP directory:
 
 ```dos
 cd \wamp\bin\php\php5.3.13
 ```
 
-4. Install PEAR, pressing enter to accept defaults and Y to alter php.ini.
+4. Install PEAR, pressing enter to accept defaults and Y to alter `php.ini`:
 
 ```dos
 php .\pear\go-pear.phar
 ```
 
-5. Add environment variables.
+5. Add environment variables:
 
 ```dos
 start PEAR_ENV.reg
@@ -40,13 +40,13 @@ start PEAR_ENV.reg
 
 ## Install PhpUnit
 
-1. Make sure pear is fully up to date (should be if we just installed it)
+1. Make sure pear is fully up to date (should be if we just installed it):
 
 ```dos
 pear upgrade-all
 ```
 
-2. Add pear channels.
+2. Add pear channels:
 
 ```dos
 pear channel-discover components.ez.no
@@ -54,13 +54,13 @@ pear channel-discover pear.phpunit.de
 pear channel-discover pear.symfony.com
 ```
 
-3. Install PHPUnit with all dependencies.
+3. Install PHPUnit with all dependencies:
 
 ```dos
 pear install --alldeps phpunit/PHPUnit
 ```
 
-4. Verify installation by checking version.
+4. Verify installation by checking version:
 
 ```dos
 phpunit --version

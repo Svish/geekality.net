@@ -15,7 +15,7 @@ tags:
 
 This function will "stream" a file line-by-line, as a [`Generator`](http://php.net/manual/en/language.generators.php).
 
-Can be very useful if for example you need to process a big file, don't want to read the whole thing into memory, but only process each line by itself.
+This can be very useful if you need to process a big file, line by line, without reading the whole thing into memory all at once.
 
 ```php
 function read($file)
@@ -27,8 +27,11 @@ function read($file)
 
     fclose($fp);
 }
+```
 
-// Usage
+Usage:
+
+```php
 foreach(read('http://example.com') as $line)
 {
     var_dump($line);

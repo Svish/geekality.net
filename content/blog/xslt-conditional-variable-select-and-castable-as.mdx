@@ -14,5 +14,8 @@ tags:
 Quick simple conditional select when creating a variable in XSLT 2.0. Also shows the `castable as` check.
 
 ```xml
-<variable name="id" select="if(id castable as xs:integer) then id else 0" />
+<variable
+  name="id"
+  select="if(id castable as xs:integer) then id else 0"
+  />
 ```

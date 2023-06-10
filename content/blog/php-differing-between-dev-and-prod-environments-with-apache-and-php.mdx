@@ -2,8 +2,7 @@
 title: 'PHP: Differing between DEV and PROD environments with Apache and PHP'
 published: '2012-01-12'
 permalinks:
-  - >-
-    /2012/01/12/php-one-way-of-differing-between-dev-and-prod-environments-with-kohana/
+  - /2012/01/12/php-one-way-of-differing-between-dev-and-prod-environments-with-kohana/
   - /?p=1904
 categories:
   - software-development
@@ -18,9 +17,14 @@ tags:
 
 Usually when I develop websites, they will be deployed to a domain, for example `www.geekality.net`. But when I develop this site locally, I usually want it to be in some sub-folder of `localhost`, since I usually have more than one website going on, and I don't want the trouble with virtual-hosts. So, to solve this for my Kohana websites I do the following simple thing. This technique would work for other websites programmed in PHP as well, but the PHP part would probably be a bit different.
 
-## Apache httpd.conf
+<Note>
+  📝 Although written for a Kohana website, this technique can be used for other
+  PHP websites as well. Just ignore the Kohana specific parts.
+</Note>
 
-First of all, I add this to the end of my httpd.conf.
+## Apache `httpd.conf`
+
+First of all, I add this to the end of my `httpd.conf`.
 
 ```apache
 # Custom htaccess file
@@ -29,11 +33,11 @@ AccessFileName .htaccess.local .htaccess
 
 Make sure to check if there is already a line with `AccessFileName` though, and if it is, just edit that instead of adding another one 🙂
 
-With that done, you can have one regular `.htaccess` which would be used in production and a .htaccess.local to override it on your machine.
+With that done, you can have one regular `.htaccess` which would be used in production and a `.htaccess.local` to override it on your machine.
 
 ## Kohana `.htaccess` files
 
-Set environment variables for the Kohana environment and for the base_url. Also make sure the RewriteBase is set to the same.
+Set environment variables for the Kohana environment and for the `base_url`. Also make sure the RewriteBase is set to the same.
 
 ```apache
 SetEnv KOHANA_ENV production

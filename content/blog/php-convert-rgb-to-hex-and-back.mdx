@@ -42,9 +42,6 @@ function hex2rgb(string $hex): array
  */
 function rgb2hex(array $rgb): string
 {
-    return '#'
-        . sprintf('%02x', $rgb[0])
-        . sprintf('%02x', $rgb[1])
-        . sprintf('%02x', $rgb[2]);
+    return sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
 }
 ```

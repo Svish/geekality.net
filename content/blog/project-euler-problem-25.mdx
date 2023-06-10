@@ -40,9 +40,9 @@ tags:
 
 ## Solution
 
-We touched on the Fibonacci sequence a while ago in the [second euler problem](/?p=165). This time, however, we are in a whole different league. That time we were supposed to sum up all even Fibonacci numbers below 4 million, which might sound like a lot, but not when we compare it to the number we are asked for this time! The last Fibonacci number below 4 million is 3524578. That would be 7 digits. The maximum value of the datatype I used in the generator I made for that (ulong) is 18446744073709551615. That would be 20 digits. Quite a distance left to a thousand!
+We touched on the Fibonacci sequence a while ago in the [second euler problem](/?p=165). This time, however, we are in a whole different league. That time we were supposed to sum up all even Fibonacci numbers below 4 million, which might sound like a lot, but not when we compare it to the number we are asked for this time! The last Fibonacci number below 4 million is 3524578. That would be 7 digits. The maximum value of the datatype I used in the generator I made for that (`ulong`) is 18446744073709551615. That would be 20 digits. Quite a distance left to a thousand!
 
-So, once again we turn to our big integer class, [`IntX`](https://www.nuget.org/packages/IntX). And since we have that, a solution to this problem is actually pretty straight forward. We simply have to make a new generator that uses the IntX data type instead of tiny ulong (it's all relative...).
+So, once again we turn to our big integer class, [`IntX`](https://www.nuget.org/packages/IntX). And since we have that, a solution to this problem is actually pretty straight forward. We simply have to make a new generator that uses the `IntX` data type instead of tiny ulong (it's all relative...).
 
 ```csharp
 public class LargeFibonacciSequence : IEnumerable<IntX>
@@ -124,8 +124,8 @@ $$
 How do you calculate the length of a number? I actually had to do this in an earlier post and then I kind of cheated. I just converted the number into a string and just count the characters (In C#, `string.Length`). But, I recently discovered that there actually is a way you can do this mathematically! I had no idea... The key lays in the [logarithm to base 10](http://en.wikipedia.org/wiki/Log10).
 
 $\log_{10}{n}$ (often written as just $\log{n}$) for any
-1-digit number will give you 0.something. For any 2-digit number it gives you
-1.something, and so on. So a formula for getting the length of any number:
+1-digit number will give you $0.\text{something}$. For any 2-digit number it gives you
+$1.\text{something}$, and so on. So a formula for getting the length of any number:
 
 $$
 Len(n)=\lfloor\log{n}\rfloor+1
@@ -135,7 +135,7 @@ In case you were wondering, those weird square brackets are called the [floor fu
 
 ### The length of a Fibonacci number
 
-Now we are able to calculate the length of a certain Fibonacci number by using the following formula, which I for no good reason will call G:
+Now we are able to calculate the length of a certain Fibonacci number by using the following formula, which I for no good reason will call $G$:
 
 $$
 G(n)=Len(Fib(n))=\lfloor\log{\dfrac{\varphi^n}{\sqrt{5}}}\rfloor+1

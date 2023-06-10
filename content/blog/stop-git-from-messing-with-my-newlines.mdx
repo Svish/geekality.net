@@ -18,14 +18,14 @@ I'm sorry, but I just _hate_ when Git is messing with my files... That's just no
 
 ## Local fix
 
-To fix it on your computer, set `core.autocrlf` to ``false`.
+The config responsible is `core.autocrlf`, and you can see where its set and to what value like this:
 
 ```bash
 # This shows what it's set to now, and where
 > git config --show-origin core.autocrlf
 ```
 
-Then either edit the file manually, or do one of the following:
+The solution is to set/change it to `false`, either by editing the file directly, or using the `git config` command:
 
 ```bash
 # System level (might disappear with git upgrades?)

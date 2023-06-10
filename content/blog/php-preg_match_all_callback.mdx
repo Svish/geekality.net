@@ -25,9 +25,9 @@ So I wrote it myself. Noting it here, in case I (or someone else) needs it again
  * and calls the callback for each match.
  */
 function preg_match_all_callback(
-        string $pattern,
-        string $subject,
-        callable $callback)
+    string $pattern,
+    string $subject,
+    callable $callback)
 {
     $r = preg_match_all($pattern, $subject, $matches, PREG_SET_ORDER);
     foreach($matches ?? [] as $match)

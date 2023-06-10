@@ -24,19 +24,15 @@ I have an unused laptop which I installed Ubuntu Server on, and this is what I u
 screen -dmS ${PWD##*/} java -Xmx3G -XX:MaxPermSize=256M -jar server.jar nogui
 
 # List screens
-
 screen -ls
 
 # Reattach to specific
-
 screen -r name
 
 # Reattatch to whatever (handy if just one running)
-
 screen -raAd
 
 # Detach (important, since Ctrl+c would shut down the server)
-
 Ctrl+a, Ctrl+d
 ```
 

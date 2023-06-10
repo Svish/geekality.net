@@ -21,13 +21,14 @@ private void SomeEventHandler(object sender, SomeEventArgs e)
     if (InvokeRequired)
     {
         // And if it is, call Invoke on the form with a delegate to this same method and return.
-        Invoke(new Action<object, SomeEventArgs>(SomeEventHandler),
-            new[] { sender, e });
+        Invoke(
+            new Action<object, SomeEventArgs>(SomeEventHandler),
+            new[] { sender, e }
+        );
         return;
     }
 
     // Second time around, InvokeRequired will be false and it will skip
     // here where you can update the controls you need to update
-
 }
 ```

@@ -21,13 +21,13 @@ tags:
 > \end{align*}
 > $$
 >
-> Using the rule above and starting with 13, we generate the following sequence:
+> Using the rule above and starting with $13$, we generate the following sequence:
 >
 > $$
 > 13 \to 40 \to 20 \to 10 \to 5 \to 16 \to 8 \to 4 \to 2 \to 1
 > $$
 >
-> It can be seen that this sequence (starting at 13 and finishing at 1) contains 10 terms. Although it has not been proved yet (Collatz Problem), it is thought that all starting numbers finish at 1.
+> It can be seen that this sequence (starting at $13$ and finishing at $1$) contains $10$ terms. Although it has not been proved yet (Collatz Problem), it is thought that all starting numbers finish at 1.
 >
 > Which starting number, under one million, produces the longest chain?
 >
@@ -39,9 +39,9 @@ tags:
 
 This problem has to do with the [Collatz conjecture](http://en.wikipedia.org/wiki/Collatz_conjecture). In short, from Wikipedia:
 
-> The Collatz conjecture is an unsolved conjecture in mathematics. It is named after Lothar Collatz, who first proposed it in 1937. The conjecture is also known as the 3n + 1 conjecture, as the Ulam conjecture (after Stanislaw Ulam), or as the Kakutani's Problem, or as the Syracuse problem; the sequence of numbers involved is referred to as the hailstone sequence or hailstone numbers, or as wondrous numbers.
+> The Collatz conjecture is an unsolved conjecture in mathematics. It is named after Lothar Collatz, who first proposed it in 1937. The conjecture is also known as the $3n + 1$ conjecture, as the Ulam conjecture (after Stanislaw Ulam), or as the Kakutani's Problem, or as the Syracuse problem; the sequence of numbers involved is referred to as the hailstone sequence or hailstone numbers, or as wondrous numbers.
 >
-> We take any whole number n greater than 0. If n is even, we halve it (n/2), else we do "triple plus one" and get 3n+1. The conjecture is that for all numbers this process converges to 1. Hence it has been called "Half Or Triple Plus One", sometimes called HOTPO.
+> We take any whole number n greater than $0$. If n is even, we halve it ($n/2$), else we do "triple plus one" and get $3n+1$. The conjecture is that for all numbers this process converges to $1$. Hence it has been called "Half Or Triple Plus One", sometimes called HOTPO.
 >
 > Paul Erdős said about the Collatz conjecture: "Mathematics is not yet ready for such confusing, troubling, and hard problems." He offered $500 for its solution. (Lagarias 1985)
 
@@ -75,7 +75,7 @@ for (var start = 1000000U; start > 0; start--)
 var answer = startOfLongest;
 ```
 
-I don´t know if there really is much to say about that code. It is pretty straight forward. For each number, do the chain stuff until you reach 1. If the chain was longer than what we have found so far, store it. Then move on to the next one.
+I don´t know if there really is much to say about that code. It is pretty straight forward. For each number, do the chain stuff until you reach $1$. If the chain was longer than what we have found so far, store it. Then move on to the next one.
 
 It runs in around 480 milliseconds so not among the fastest solutions I have had so far, but fast enough. I tried to come up with a more fancy solution, but they just took longer or didn´t work at all, so I´ll spare you the details of those 😛
 

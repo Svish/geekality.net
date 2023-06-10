@@ -17,12 +17,12 @@ To completely disable hibernation on Windows, open up an [elevated command promp
 powercfg –h off
 ```
 
-This will both disable hibernation completely and remove the enormous hiberfil.sys from your system.
+This will both disable hibernation completely and remove the enormous `hiberfil.sys` from your system.
 
-To enable it again, simply run it again with ON instead of OFF.
+To enable it again, simply run it again with `ON` instead of `OFF`.
 
 ```dos
 powercfg –h on
 ```
 
-Why disable it? If you never use it, the hiberfil.sys takes up a lot of necessary space. And if you happen to be on a slightly old unstable laptop where the hibernation often fails for weird reasons, it might be nice disable it so there's not even possible to enter it by accident 🙂
+Why disable it? If you never use it, the `hiberfil.sys` takes up a lot of necessary space. And if you happen to be on a slightly old unstable laptop where the hibernation often fails for weird reasons, it might be nice disable it so there's not even possible to enter it by accident 🙂

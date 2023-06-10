@@ -49,7 +49,7 @@ But today I discovered there's an option called [`--prefer-source`](https://getc
 $ composer require my/package dev-master --prefer-source
 ```
 
-We should now have the package downloaded and, more importantly, if you check <b>./vendor/my/package</b> it should have the <b>.git</b> directory, meaning you can make immediately working changes there directly, and commit when you're happy... Our other root project(s) depending on it should then get the update from the source repository after an easy composer update. 👍
+We should now have the package downloaded and, more importantly, if you check <b>./vendor/my/package</b> it should have the <b>.git</b> directory, meaning you can make changes there directly, and commit them when you're happy... Our other root project(s) depending on it should then get the update from the source repository after an easy composer update. 👍
 
 <hr />
 
@@ -58,7 +58,7 @@ We should now have the package downloaded and, more importantly, if you check <b
   happens through `--prefer-source`, and it's an option for both `composer
   install` and `composer update`. For example, at first attempt, I tried to use
   `composer update --prefer-source` on a dependency that had already been
-  downloaded, and the .git directory did not turn up, but if I just deleted the
-  vendor directory for that package and then re-ran the command, then the .git
-  was there. 🤷‍♂️
+  downloaded, and the `.git` directory did not turn up, but if I just deleted
+  the vendor directory for that package and then re-ran the command, then the
+  `.git` was there. 🤷‍♂️
 </Note>

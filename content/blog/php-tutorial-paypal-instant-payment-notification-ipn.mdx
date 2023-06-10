@@ -25,8 +25,9 @@ PDT.
 > Instant Payment Notification (IPN) is a message service that notifies you of
 > events related to PayPal transactions. You can use it to automate back-office
 > and administrative functions, such as fulfilling orders, tracking customers,
-> and providing status and other information related to a transaction. --{' '}
-> [PayPal](https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/)
+> and providing status and other information related to a transaction.
+>
+> — [PayPal](https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/)
 
 Once again the documentation, tutorials and code samples I found on this was a bit all over the place. Sort of messy and outdated. So, once again I decided to do my own thing and just follow the steps required and implement them myself. And since the tutorial on PDT turned out to be a bit of a success, I decided to share this too. Hopefully it can make the lives of fellow developers easier. 🙂
 
@@ -58,7 +59,8 @@ Since what we got could just be plain bogus from some stranger, we need to verif
 
 ```php
 // Choose url
-if(array_key_exists('test_ipn', $ipn_post_data) && 1 === (int) $ipn_post_data['test_ipn'])
+if(array_key_exists('test_ipn', $ipn_post_data)
+&& 1 === (int) $ipn_post_data['test_ipn'])
 	$url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 else
 	$url = 'https://www.paypal.com/cgi-bin/webscr';
@@ -67,11 +69,11 @@ else
 $request = curl_init();
 curl_setopt_array($request, array
 (
-CURLOPT_URL => $url,
-CURLOPT_POST => TRUE,
-CURLOPT_POSTFIELDS => http_build_query(array('cmd' => '\_notify-validate') + $ipn_post_data),
-CURLOPT_RETURNTRANSFER => TRUE,
-CURLOPT_HEADER => FALSE,
+    CURLOPT_URL => $url,
+    CURLOPT_POST => TRUE,
+    CURLOPT_POSTFIELDS => http_build_query(array('cmd' => '\_notify-validate') + $ipn_post_data),
+    CURLOPT_RETURNTRANSFER => TRUE,
+    CURLOPT_HEADER => FALSE,
 ));
 
 // Execute request and get response and status code
@@ -83,18 +85,18 @@ curl_close($request);
 
 if($status == 200 && $response == 'VERIFIED')
 {
-// All good! Proceed...
+    // All good! Proceed...
 }
 else
 {
-// Not good. Ignore, or log for investigation...
+    // Not good. Ignore, or log for investigation...
 }
 ```
 
 Note that in the very beginning actually check for a field called `test_ipn`. If that exists with a value of 1, it means it's a request from the sandbox. In other words, we can choose the correct PayPal interface by just looking for that.
 
 <Note>
-  📝 If the call to doesn't work at all, curl might have problems with the SSL
+  📝 If the call doesn't work at all, curl might have problems with the SSL
   verification. This happened to me on one of my hosts, so [documented it
   here](http://www.geekality.net/?p=1413).
 </Note>
@@ -112,9 +114,7 @@ if(array_key_exists('charset', $ipn_data) && ($charset = $ipn_data['charset']))
 
     // Otherwise convert all the values
     foreach($ipn_data as $key => &$value)
-    {
     	$value = mb_convert_encoding($value, 'utf-8', $charset);
-    }
 
     // And store the charset values for future reference
     $ipn_data['charset'] = 'utf-8';
@@ -256,9 +256,7 @@ abstract class IPN_Handler
 
             // Otherwise convert all the values
             foreach($ipn_data as $key => &$value)
-            {
                 $value = mb_convert_encoding($value, self::charset, $charset);
-            }
 
             // And store the charset values for future reference
             $ipn_data['charset'] = self::charset;

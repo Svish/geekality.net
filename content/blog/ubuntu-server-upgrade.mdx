@@ -20,25 +20,21 @@ Commands to update an Ubuntu server.
 sudo apt-get update
 
 # Upgrade packages
-
 sudo apt-get upgrade
 
 # Remove no longer needed packages
-
 sudo apt-get autoremove
 
 # Upgrade distro
-
 sudo apt-get dist-upgrade
 ```
 
-## Remove old kernels
+## Removing old kernels
 
 ```bash
 # Reboot into newest first, of course
 sudo shutdown -r now
 
 # Remove all old kernels
-
 sudo apt-get remove --purge $(dpkg -l 'linux-image-*' | sed '/^ii/!d;/'"$(uname -r | sed "s/\(._\)-\([^0-9]\+\)/\1/")"'/d;s/^[^ ]_ [^ ]_ \([^ ]_\).\*/\1/;/[0-9]/!d')
 ```

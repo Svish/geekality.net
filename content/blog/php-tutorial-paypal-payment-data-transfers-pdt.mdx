@@ -162,18 +162,18 @@ $request = curl_init();
 // Set request options
 curl_setopt_array($request, array
 (
-CURLOPT_URL => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
-CURLOPT_POST => TRUE,
-CURLOPT_POSTFIELDS => http_build_query(array
-(
-'cmd' => '\_notify-synch',
-'tx' => $tx,
-'at' => $your_pdt_identity_token,
-)),
-CURLOPT_RETURNTRANSFER => TRUE,
-CURLOPT_HEADER => FALSE,
-// CURLOPT_SSL_VERIFYPEER => TRUE,
-// CURLOPT_CAINFO => 'cacert.pem',
+  CURLOPT_URL => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+  CURLOPT_POST => TRUE,
+  CURLOPT_POSTFIELDS => http_build_query(array
+  (
+    'cmd' => '\_notify-synch',
+    'tx' => $tx,
+    'at' => $your_pdt_identity_token,
+  )),
+  CURLOPT_RETURNTRANSFER => TRUE,
+  CURLOPT_HEADER => FALSE,
+  // CURLOPT_SSL_VERIFYPEER => TRUE,
+  // CURLOPT_CAINFO => 'cacert.pem',
 ));
 
 // Execute request and get response and status code
@@ -249,9 +249,8 @@ $response = array_combine($m[1], $m[2]);
 if(isset($response['charset']) AND strtoupper($response['charset']) !== 'UTF-8')
 {
   foreach($response as $key => &$value)
-  {
     $value = mb_convert_encoding($value, 'UTF-8', $response['charset']);
-  }
+
   $response['charset_original'] = $response['charset'];
   $response['charset'] = 'UTF-8';
 }

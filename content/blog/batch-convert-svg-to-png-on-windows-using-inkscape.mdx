@@ -15,9 +15,9 @@ tags:
   - windows
 ---
 
-Needed to convert several SVGs to PNG, and discovered the free [Inkscape](https://inkscape.org) easily can be used in batch scripts.
+Needed to convert several SVGs to PNG, and discovered that the free [Inkscape](https://inkscape.org) easily can be used in batch scripts.
 
-The following .bat file will convert all SVGs dropped on it to a PNG with height 48 placed next to the original SVG. More options can be found in the [Inkscape manual](https://inkscape.org/sk/doc/inkscape-man.html).
+The following batch file will convert all SVGs dropped on it to a PNG with height 48 placed next to the original SVG. More options can be found in the [Inkscape manual](https://inkscape.org/sk/doc/inkscape-man.html).
 
 ```dos
 @echo off
@@ -29,6 +29,5 @@ for %%f in (%*) do (
     --export-height=48 ^
     --export-png="%%~dpnf.png" ^
     --file="%%~f"
-
 )
 ```

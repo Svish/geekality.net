@@ -1,42 +1,27 @@
----
-title: Nerd explained
-published: '2009-09-11'
-permalinks:
-  - /2009/09/11/nerd-explained/
-  - /?p=107
-categories:
-  - personal
-  - random
-tags:
-  - nerd
----
-
-I've always kind of thought of myself as a geek, or a nerd, or something in that genre. But I have never really understood the subtle differences between them. Recently I came over a good Venn diagram that explains it all! So from now on, this is the definition I will go by 😛
-
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="640"
   height="480"
-  fontSize="22px"
+  font-size="22px"
   role="img"
   aria-label="Venn diagram of a nerd"
 >
   <circle
     r="40"
     fill="#0ff"
-    fillOpacity="0.5"
+    fill-opacity="0.5"
     transform="matrix(3.53 0 0 3.53 141.2 141.2)"
   />
   <circle
     r="40"
     fill="#f0c"
-    fillOpacity="0.5"
+    fill-opacity="0.5"
     transform="matrix(3.54 0 0 3.54 340.6 145.4)"
   />
   <circle
     r="40"
     fill="#ff0"
-    fillOpacity="0.5"
+    fill-opacity="0.5"
     transform="matrix(3.54 0 0 3.54 246.6 306.83)"
   />
   <text transform="matrix(.71 -.71 .71 .71 97.11 122.28)">
@@ -61,5 +46,3 @@ I've always kind of thought of myself as a geek, or a nerd, or something in that
     <tspan x="-51.92" y="6.91">Nerd</tspan>
   </text>
 </svg>
-
-Yes, that diagram is also what my site title and tagline is based upon 😉

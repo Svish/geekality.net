@@ -11,7 +11,7 @@ tags:
   - sorting
 ---
 
-When you create an application that displays data in lists or tables, you often run into the problem of sorting. When dealing with only numbers it isn't a big deal, but when sorting text it can be. Regular sorting is often done by alphanumerically, which means that "bear" comes before "cat" and "5" comes before "7". The problem is that this is done letter by letter, which works for most of the time, except when you get numbers in with your text. Then you end up with for example "2" coming after "10", since "10" starts with a "1" which comes before "2". The solution to this is something called [natural sorting](http://blog.codinghorror.com/sorting-for-humans-natural-sort-order/).
+When you create an application that displays data in lists or tables, you often run into the problem of sorting. When dealing with only numbers it isn't a big deal, but when sorting text it can be. Regular sorting is often done by alphanumerically, which means that "bear" comes before "cat" and "5" comes before "7". The problem is that this is done letter by letter, which works most of the time, except when you get numbers mixed in with your text. Then you end up with for example "2" coming after "10", since "10" starts with a "1" which comes before "2". The solution to this is something called [natural sorting](http://blog.codinghorror.com/sorting-for-humans-natural-sort-order/).
 
 I won't write a lot about that here, but just say that it tries to sort things the way humans do. Anyways, below you find a C# class that handles this for you. I put it together by looking around and taking some bits and pieces from here and there, so I can't really take credit for it. I only post it here so that I won't lose it, cause it was really helpful.
 

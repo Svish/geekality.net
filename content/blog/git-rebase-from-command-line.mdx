@@ -1,5 +1,5 @@
 ---
-title: 'Git: Rebase changes from master'
+title: 'Git: Rebase changes from main branch'
 published: '2019-06-06'
 permalinks:
   - /2019/06/06/git-rebase-from-command-line/
@@ -12,14 +12,14 @@ tags:
   - rebase
 ---
 
-Just a note to self on how to do `git rebase` (in this case, to get new changes to master into current working branch) without gui...
+Just a note to self on how to get changes from a main branch into a feature branch via rebasing on the command-line.
 
 ```bash
 # Start
 git fetch origin
-git rebase origin/master
+git rebase origin/main
 
-# Continue after conflicts fixed
+# Continue after conflicts fixed and staged
 git rebase --continue
 
 # Abort if giving up

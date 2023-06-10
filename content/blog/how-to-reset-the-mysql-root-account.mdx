@@ -15,7 +15,7 @@ tags:
 I just managed to mess up the MySQL root account. Not a smart idea. After some MySQL manual reading and some serious Google-Fu, I figured out how to fix it.
 
 1. Stop the mysql server
-2. Add the following to the my.cnf file
+2. Add the following to the `my.cnf` file
 
 ```ini
 [mysqld]
@@ -31,7 +31,7 @@ REPLACE INTO mysql.user VALUES ('localhost','root',PASSWORD('blah'),'Y','Y','Y',
 
 5. Quit the mysql client
 6. Stop the mysql server
-7. Remove what we added to my.cnf in step 2
+7. Remove what we added to `my.cnf` in step 2
 8. Restart the mysql server
 
 Tadaa.

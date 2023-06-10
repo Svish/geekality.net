@@ -2,8 +2,7 @@
 title: How to run PowerShell scripts directly from Windows command line
 published: '2013-02-05'
 permalinks:
-  - >-
-    /2013/02/05/how-to-run-powershell-scripts-directly-from-windows-command-line/
+  - /2013/02/05/how-to-run-powershell-scripts-directly-from-windows-command-line/
   - /?p=2161
 categories:
   - technology
@@ -13,7 +12,7 @@ tags:
   - windows
 ---
 
-If you find yourself in the regular command line (cmd.exe) on Windows and you'd like to run a PowerShell script, you can do it like this:
+If you find yourself in the regular command line (`cmd.exe`) on Windows and you'd like to run a PowerShell script, you can do it like this:
 
 ```dos
 powershell ./example-script.ps1
@@ -33,7 +32,7 @@ This tells Windows that files with the .ps1 file extension should be considered 
 
 You might want to check if there is something registered for this file type already before you do this. To do that simply run `assoc .ps1` and `ftype Microsoft.PowerShellScript.1`. For me the file type was already associated with ps1 files, but the handler was set to notepad for some reason.
 
-Either way, after opening up a new command prompt (to make sure the new PATHEXT environment variable is loaded), you should be able to run PowerShell scripts directly just like .bat and .exe files:
+Either way, after opening up a new command prompt (to make sure the new `PATHEXT` environment variable is loaded), you should be able to run PowerShell scripts directly just like `.bat` and `.exe` files:
 
 ```dos
 example-script

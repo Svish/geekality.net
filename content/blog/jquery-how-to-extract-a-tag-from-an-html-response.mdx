@@ -14,7 +14,7 @@ tags:
 
 Making a website, and using ajax for some things. Sometimes things fail and return custom error pages. I made them to be helpful, but since you can only see them in the browser developer console, they were a bit of a hassle to look at.
 
-To see what the error was much easier, I figured I could just parse the returned HTML, extract the message I knew was there, and insert it into the page that way.
+To read the error much easier, I figured I could just parse the returned HTML, extract the message I knew was there, and insert it into the page that way.
 
 And you'd think the following would work fine:
 
@@ -30,7 +30,7 @@ $(document).ajaxError(function (event, jqxhr, settings, error) {
 })
 ```
 
-But... no... apparently, since the response was a complete HTML page, i.e. including html, head and body tags, jQuery was getting a bit tricked up when trying to parse it. Actually not sure if it's jQuery or native browser parsing behind that's causing it, but where there's a will, there's a way:
+But... no... apparently, since the response was a complete HTML page, i.e. including `<html>`, `<head>` and `<body>` tags, jQuery was getting a bit tricked up when trying to parse it. Actually not sure if it's jQuery or the native browser parsing behind that's causing it, but where there's a will, there's a way:
 
 ```js
 $(document).ajaxError(function (event, jqxhr, settings, error) {

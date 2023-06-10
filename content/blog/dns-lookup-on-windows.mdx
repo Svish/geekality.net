@@ -11,12 +11,60 @@ tags:
   - windows
 ---
 
+Using `nslookup` with the default DNS server:
+
 ```dos
-nslookup example.com nslookup example.com 8.8.8.8
+> nslookup example.com
+Server:  one.one.one.one
+Address:  1.1.1.1
+
+Non-authoritative answer:
+Name:    example.com
+Addresses:  2606:2800:220:1:248:1893:25c8:1946
+          93.184.216.34
+```
+
+Using `nslookup` with a specific one, in this case Google's DNS server with IP `8.8.8.8`:
+
+```dos
+> nslookup example.com 8.8.8.8
+Server:  dns.google
+Address:  8.8.8.8
+
+Non-authoritative answer:
+Name:    example.com
+Addresses:  2606:2800:220:1:248:1893:25c8:1946
+          93.184.216.34
 ```
 
 ## Reverse
 
+Using `nslookup`:
+
 ```dos
-ping -a 8.8.8.8
+> nslookup 8.8.8.8
+Server:  one.one.one.one
+Address:  1.1.1.1
+
+Name:    dns.google
+Address:  8.8.8.8
 ```
+
+Using `ping`:
+
+```dos
+> ping -n 1 -a 8.8.8.8
+
+Pinging dns.google [8.8.8.8] with 32 bytes of data:
+Reply from 8.8.8.8: bytes=32 time=10ms TTL=60
+
+Ping statistics for 8.8.8.8:
+    Packets: Sent = 1, Received = 1, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 10ms, Maximum = 10ms, Average = 10ms
+```
+
+<Note>
+  Reverse lookup doesn't always work; seems to depend on DNS records being setup
+  properly. 🤷‍♂️
+</Note>

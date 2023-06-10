@@ -13,7 +13,7 @@ tags:
   - temporary-files
 ---
 
-Wrote a class that worked with files and needed to unit test its methods. Created a simple TemporaryFile class to easily create and dispose of the files I used in those tests. Here it is:
+Wrote a class that worked with files and needed to unit test its methods. Created a simple `TemporaryFile` class to easily create and dispose of the files I used in those tests. Here it is:
 
 ```csharp
 using System;
@@ -69,7 +69,7 @@ namespace Geekality.IO
 }
 ```
 
-This class will create a temporary file and delete it on dispose (or when the finalizer is called). It also supports implicit casting to the FileInfo object it contains and to its full path string. This makes it easy to use with methods taking those types of parameters. For example:
+This class will create a temporary file and delete it on dispose (or when the finalizer is called). It also supports implicit casting to the `FileInfo` object it contains and to its full path string. This makes it easy to use with methods taking those types of parameters. For example:
 
 ```csharp
 using(var file = new TemporaryFile())
@@ -83,7 +83,9 @@ using(var file = new TemporaryFile())
 }
 ```
 
-For fun I also created a [Nuget](http://www.nuget.org/) package for this, so that it's easy to add to projects when I need it. Works pretty perfectly, if I may say so myself 🙂 Feedback is welcome!
+For fun I also created a [Nuget](http://www.nuget.org/) package for this, so that it's easy to add to projects when I need it. Works pretty perfectly, if I may say so myself. 🙂
+
+Feedback is welcome!
 
 <Note>
   <dl>

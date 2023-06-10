@@ -2,8 +2,7 @@
 title: How to level a rectangular area with a ComputerCraft Mining Turtle
 published: '2012-09-16'
 permalinks:
-  - >-
-    /2012/09/16/how-to-level-a-rectangular-area-with-a-computercraft-mining-turtle/
+  - /2012/09/16/how-to-level-a-rectangular-area-with-a-computercraft-mining-turtle/
   - /?p=2059
 categories:
   - software-development
@@ -109,7 +108,11 @@ Please let me know if you have a better way to do it. Either way, now the callba
 As you saw, the function requires three callbacks for moving. For turning left and right we can just use the turtle API directly. However, since I wanted to level an area, we need to do some digging if we hit any obstructions.
 
 ```lua
-function forward() while not turtle.forward() do sleep(0.5) turtle.dig() end
+function forward()
+    while not turtle.forward() do
+        sleep(0.5)
+        turtle.dig()
+    end
 end
 ```
 

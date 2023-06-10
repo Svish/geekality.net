@@ -21,7 +21,6 @@ where {$_.name -eq "Thumbs.db"} |
 foreach {ri $_.fullname -whatif}
 
 # Directories (and using regex for matching)
-
 gci -recurse -force |
 where {$_.name -match "^(bin|obj)$"} |
 foreach {ri $\_.fullname -recurse -whatif}

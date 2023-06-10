@@ -16,9 +16,15 @@ Sometimes curious about this, usually because I forgot to note what time I arriv
 ```dos
 > systeminfo | find /i "Boot Time"
 System Boot Time:          15.10.2021, 08:37:29
+```
+
+```dos
 > wmic os get lastbootuptime
 LastBootUpTime
 20211015083729.500000+120
+```
+
+```dos
 > net statistics workstation | find /i "Statistics since"
 Statistics since 15.10.2021 08:37:45
 ```

@@ -10,8 +10,30 @@ tags:
 
 A few times I've needed to download a full website. Some examples have been to download a full website for offline browsing, or to make a full static HTML backup/archive.
 
-`wget` usually comes built-in with unix systems, but it’s [available for Windows as well](http://www.gnu.org/software/wget/).
+Using `wget` makes it quite simple. It usually comes built-in with unix systems, and it’s [available for Windows as well](http://www.gnu.org/software/wget/).
 
 ```bash
-wget --timeout 5 --tries 0 --mirror --no-parent --wait 5 --random-wait --adjust-extension --convert-links --page-requisites --directory-prefix=output/dir http://example.com
+wget --wait 3 --random-wait --timeout 5 --tries 0 --mirror --no-parent --adjust-extension --convert-links --page-requisites --directory-prefix=output/dir http://example.com
 ```
+
+## Explanation of options
+
+| Option                        | Explanation                                                                                           |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------- |
+| --wait 3                      | Wait 3 seconds between each request to not punch the server too badly                                 |
+| --random-wait                 | Randomly vary the wait time to prevent potential identitfication and blocking by statistical analysis |
+| --timeout 5                   | Timeout before giving up                                                                              |
+| --tries 0                     | Retry ininitely                                                                                       |
+| --mirror                      | Enables several options suitable for mirroring, like recursion and time-stamping                      |
+| --no-parent                   | Don't traverse upwards to parent directories when mirroring                                           |
+| --adjust-extension            | Converts file extensions like `.php`and `.cgi` to `.html`                                             |
+| --convert-links               | Converts links in downloaded files to work better locally                                             |
+| --page-requisites             | Download things like images, stylesheets, etc. required by pages                                      |
+| --directory-prefix=output/dir | What directory out dump all the downloaded files in                                                   |
+
+<Note>
+  <dl>
+    <dt>`wget` manual page</dt>
+    <dd>https://www.man7.org/linux/man-pages/man1/wget.1.html</dd>
+  </dl>
+</Note>

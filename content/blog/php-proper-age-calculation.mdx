@@ -33,7 +33,6 @@ So, thought I could stick a PHP version here in case that page dies or I forget.
  * @param   timestamp  now, 'yyyy-mm-dd'. defaults to `time()`
  * @return  number     the age
  */
-
 function getAge($birth, $now = NULL)
 {
     $now = getdate($now === NULL ? time() : $now);
@@ -65,7 +64,6 @@ function getAge($birth, $now = NULL)
  * @param   string   now, 'yyyy-mm-dd'. defaults to `time()`
  * @return  number   the age
  */
-
 function getAge($birth, $now = NULL)
 {
     $now = new DateTime($now);

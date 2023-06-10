@@ -24,7 +24,7 @@ var filesInOrder = GetFiles()
 
 Found it a bit ugly though, and decided to ask [a question about other ways](http://stackoverflow.com/q/28855758/39321) on StackOverflow. Got several interesting answers and inspired by those and some further thinking I tried to make a generic solution myself, which I thought I could also blog here so I definitely know where to find it if I ever need it again...
 
-### My solution
+## My solution
 
 ```csharp
 public class OrderedPredicateComparer<T> : IComparer<T>
@@ -54,7 +54,7 @@ One issue here might be that the predicates will be called several times per ite
 
 The nice thing about it being an `IComparer` is that you could push this into both `OrderBy` and `ThenBy`, and also use it in for example ordered dictionaries, priority queues, etc, and since it uses a list of fully generic predicates you could order things by pretty much anything with a yes/no answer 🙂
 
-### Usage
+## Usage
 
 ```csharp
 var ordering = new Func<string, bool>[]

@@ -22,11 +22,14 @@ More or less verbatim how I'm currently doing it over at [bibelstudiet.no](http:
 ob_start('ob_gzhandler');
 header('Content-Type: text/javascript; charset=utf-8');
 
+// The files to compress
 $files = ['foo.js', 'bar.js'];
 
+// Input and merge them into a single string
 $js = array_map('file_get_contents', $files);
-$js = implode(PHP_EOL.PHP_EOL, $script);
+$js = implode(PHP_EOL.PHP_EOL, $js);
 
+// Setup the request
 $c = curl_init();
 curl_setopt_array($ch, array
 (
@@ -41,9 +44,11 @@ curl_setopt_array($ch, array
     ]),
 ));
 
+// Execute it, which also outputs the minified response
 if(curl_exec($ch) === FALSE)
     http_response_code(500) and exit("// ERROR: ".curl_error($c));
 
+// If the response was empty, it failed, so output the original files instead
 if(curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD ) <= 1)
     echo $js;
 

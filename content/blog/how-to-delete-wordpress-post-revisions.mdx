@@ -24,13 +24,13 @@ y.object_id) left join wp_postmeta z on (x.id = z.post_id) where x.post_type =
 
 You can swap `delete x,y,z` with `select \*` to check that it will delete what you really want to.
 
-Remember that if you have a table prefix other than 'wp\_' set in your wp-config.php, you need to change that in your SQL script before you run it. The line looks like this in my config file:
+Remember that if you have a table prefix other than 'wp\_' set in your `wp-config.php`, you need to change that in your SQL script before you run it. The line looks like this in my config file:
 
 ```php
 $table_prefix = 'wp_';
 ```
 
-I can also recommend setting WP_POST_REVISIONS to something in your wp-config.php file. Just search for REVISIONS in that file. If you don't find it, you can just add it somewhere. The line should look like the following, where N would be how many revisions you want to allow, or -1 if you want them all:
+I can also recommend setting `WP_POST_REVISIONS` to something in your `wp-config.php` file. Just search for `REVISIONS` in that file. If you don't find it, you can just add it somewhere. The line should look like the following, where `N` would be how many revisions you want to allow, or `-1` if you want them all:
 
 ```php
 define('WP_POST_REVISIONS', N);

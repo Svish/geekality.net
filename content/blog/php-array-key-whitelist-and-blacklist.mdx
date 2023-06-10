@@ -12,20 +12,28 @@ tags:
 
 Keep forgetting... writing it down so I can stop googling it...
 
+## Whitelist
+
 ```php
 function whitelist(array $array, array $whitelist)
 {
     return array_intersect_key($array, array_flip($whitelist));
 }
+```
 
+```php
 $filtered = whitelist($array, ['good1', 'good2', ... ]);
 ```
+
+## Blacklist
 
 ```php
 function blacklist(array $array, array $blacklist)
 {
     return array_diff_key($array, array_flip($blacklist));
 }
+```
 
+```php
 $filtered = blacklist($array, ['bad1', 'bad2', ...]);
 ```

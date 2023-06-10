@@ -25,8 +25,8 @@ Should be known by everyone really, but in case you don't. Prevents the commands
 ## Comments
 
 ```dos
-  REM Some comment REM Will still appear as a command if you haven't disabled
-  echoing
+REM A comment
+REM Will still appear as a command if you haven't disabled echoing
 ```
 
 ## Labels and goto
@@ -34,7 +34,9 @@ Should be known by everyone really, but in case you don't. Prevents the commands
 Trivial, but I keep forgetting about this since I never use it in other programming.
 
 ```dos
-goto end REM Will be skipped :end
+goto end
+REM Will be skipped
+:end
 ```
 
 ## Set title of command prompt
@@ -46,15 +48,17 @@ title MyScript: Doing x now
 ## Check command line arguments
 
 ```dos
-if "%~1"=="" (echo Usage: test.bat path && goto end) if not exist %~1 (echo
-%~1 does not exist && goto end)
+if "%~1"=="" (echo Usage: test.bat path && goto end)
+if not exist %~1 (echo %~1 does not exist && goto end)
 ```
 
 ## Simpe choices
 
 ```dos
-choice /c ny /n /d y /t 10 /m "Do you really want to do this? [y=10s,n] if
-ERRORLEVEL 2 ( echo Ok, I'll do it )
+choice /c ny /n /d y /t 10 /m "Do you really want to do this? [y=10s,n]
+if ERRORLEVEL 2 (
+    echo Ok, I'll do it
+)
 ```
 
 ## Run other batch scripts
