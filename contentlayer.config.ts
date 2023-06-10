@@ -2,6 +2,7 @@ import { defineDocumentType, makeSource } from 'contentlayer/source-files'
 
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+// import remarkOembed from 'remark-oembed'
 import rehypeKatex from 'rehype-katex'
 import rehypeSlug from 'rehype-slug'
 // import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -64,7 +65,12 @@ export default makeSource({
     })),
   ],
   mdx: {
-    remarkPlugins: [remarkMath, remarkGfm],
+    remarkPlugins: [
+      // TODO: Figure out how to make oembed work, and styled...
+      // [remarkOembed, { jsx: true }],
+      remarkMath,
+      remarkGfm,
+    ],
     rehypePlugins: [
       rehypeKatex,
       rehypeSlug,

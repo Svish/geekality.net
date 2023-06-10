@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
         <footer className="p-4 mt-8 text-xs border-t-2 border-gray-300 dark:border-gray-700">
           <div className="container flex">
-            <div>TODO</div>
+            <div>– With a hint of social ineptitude</div>
             <div className="ml-auto">
               Terribly designed by <Link href="/about">myself</Link>
             </div>

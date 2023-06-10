@@ -57,42 +57,49 @@ export default async function BlogPostPage({ params }: Props) {
           aria-label="Post meta"
           className="mt-4 text-xs text-gray-600 dark:text-gray-400"
         >
-          Published:{' '}
-          <time dateTime={post.published}>
-            {formatDate(post.published, 'long')}
-          </time>
-          <br />
-          Posted in
-          <ul className="inline-list">
-            {post.categories.map((category) => (
-              <li key={category}>
-                <Link href={`/blog/categories/${category}`}>{category}</Link>
-              </li>
-            ))}
-          </ul>
-          , tagged with
-          <ul className="inline-list">
-            {post.tags.map((tag) => (
-              <li key={tag}>
-                <Link href={`/blog/tags/${tag}`}>{tag}</Link>
-              </li>
-            ))}
-          </ul>
+          <div>
+            Published:{' '}
+            <time dateTime={post.published}>
+              {formatDate(post.published, 'long')}
+            </time>
+          </div>
+          <div>
+            Posted in
+            <ul className="inline-list">
+              {post.categories.map((category) => (
+                <li key={category}>
+                  <Link href={`/blog/categories/${category}`}>{category}</Link>
+                </li>
+              ))}
+            </ul>
+            , tagged with
+            <ul className="inline-list">
+              {post.tags.map((tag) => (
+                <li key={tag}>
+                  <Link href={`/blog/tags/${tag}`}>{tag}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            Index: {postsByPublished.indexOf(post) + 1} of{' '}
+            {postsByPublished.length}
+          </div>
           {prev && (
-            <p className="mt-2">
+            <div className="mt-2">
               Next post:{' '}
               <Link href={`/blog/${prev.slug}`} rel="prev">
                 {prev.title}
               </Link>
-            </p>
+            </div>
           )}
           {next && (
-            <p>
+            <div>
               Previous post:{' '}
               <Link href={`/blog/${next.slug}`} rel="next">
                 {next.title}
               </Link>
-            </p>
+            </div>
           )}
         </aside>
       </div>

@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 import { type ReactNode } from 'react'
 import NextLink, { type LinkProps } from 'next/link'
@@ -11,7 +11,7 @@ export default function Link<R extends string>({
   ...props
 }: LinkProps<R>) {
   return (
-    <NextLink className={clsx(linkClasses, className)} {...props}>
+    <NextLink className={twMerge(linkClasses, className)} {...props}>
       {children}
     </NextLink>
   )
@@ -27,7 +27,7 @@ export function ExternalLink({ href, className, children }: ExternalLinkProps) {
   return (
     <a
       href={href}
-      className={clsx(linkClasses, className)}
+      className={twMerge(linkClasses, className)}
       rel="external norefferer"
     >
       {children}

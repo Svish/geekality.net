@@ -1,8 +1,8 @@
-import Link from '@/components/Link'
+import { twMerge } from 'tailwind-merge'
 import { formatDate } from '@/util/format'
 
+import Link from '@/components/Link'
 import { type Post } from '@/content'
-import clsx from 'clsx'
 
 interface Props {
   posts: Post[]
@@ -11,7 +11,7 @@ interface Props {
 
 export default function PostList({ className, posts }: Props) {
   return (
-    <ul className={clsx('flex flex-col gap-4', className)}>
+    <ul className={twMerge('flex flex-col gap-4', className)}>
       {posts.map((post) => (
         <li key={post._id} className="flex flex-col">
           <div>

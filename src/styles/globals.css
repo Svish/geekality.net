@@ -45,9 +45,6 @@ footer {
     color: var(--tw-prose-links);
     text-decoration-line: underline;
     text-decoration-thickness: 0.1rem;
-    &:hover {
-      text-decoration-thickness: 0.175rem;
-    }
   }
 }
 
@@ -77,6 +74,11 @@ footer {
     font: inherit;
     border-width: 1px;
     border-style: dashed;
+  }
+
+  br {
+    /* Fixes breaks getting weird margin inside lists */
+    margin: 0 !important;
   }
 
   dl {
@@ -110,7 +112,7 @@ footer {
 
   :not(pre) > code {
     @apply bg-gray-200 rounded-sm dark:bg-gray-700;
-    padding: 0.125rem 0;
+    padding: 0.125rem 0.25rem;
   }
 
   /* FireFox: about:config => layout.css.has-selector.enabled */

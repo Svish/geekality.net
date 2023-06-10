@@ -21,16 +21,12 @@ module.exports = {
               'p:first-of-type::after': { content: 'none' },
             },
 
-            // Add top and bottom border to table, and make border more visible
-            tr: {
-              borderColor: theme('colors.gray.400'),
-              '&:first-child': {
-                borderTopWidth: '2px',
-              },
-              '&:last-child': {
-                borderBottomWidth: '2px',
-              },
-            },
+            // Table colors
+            '--tw-prose-th-borders': theme('colors.gray[500]'),
+            '--tw-prose-td-borders': theme('colors.gray[400]'),
+            '--tw-prose-invert-th-borders': theme('colors.gray[600]'),
+            '--tw-prose-invert-td-borders': theme('colors.gray[700]'),
+
             // Remove inner margin from table cells
             'th, td': {
               marginTrim: 'block',
@@ -41,13 +37,14 @@ module.exports = {
                 marginBottom: 0,
               },
             },
+
             // Adjustments to inline code style
             // @see https://nikitagoncharuk.com/blog/my-custom-code-style-for-typography-by-tailwindcss-highlightjs/
             'code::before': {
-              content: '" "',
+              content: '""',
             },
             'code::after': {
-              content: '" "',
+              content: '""',
             },
           },
         },

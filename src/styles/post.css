@@ -6,12 +6,13 @@
 .project-euler-problem-11 {
   td {
     @apply text-center py-[0.125rem] px-1;
+    border: 1px solid var(--tw-prose-td-borders);
 
     &.highlight {
-      @apply text-pink-900 bg-pink-100 dark:text-pink-100 dark:bg-pink-950;
+      @apply bg-pink-200 text-pink-950 dark:text-pink-50 dark:bg-pink-700;
 
       &.main {
-        @apply bg-pink-200 dark:bg-pink-800;
+        @apply bg-pink-400 dark:bg-pink-950;
       }
     }
 

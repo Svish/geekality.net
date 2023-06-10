@@ -9,10 +9,12 @@ export const postsByPublished = [...allPosts]
   .sort(byStringValue((p) => p.published))
   .reverse()
 
+// TODO: Add count of posts to each category
 export const categories = [
   ...new Set(allPosts.flatMap((p) => p.categories ?? [])),
 ].sort(byString())
 
+// TODO: Add count of posts to each tag
 export const tags = [...new Set(allPosts.flatMap((p) => p.tags ?? []))].sort(
   byString()
 )
