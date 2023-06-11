@@ -16,13 +16,13 @@ tags:
   - snippet
 ---
 
-Would you like to grab some server-side data through an AJAX call? For example by using the handy [`jQuery.ajax`](http://api.jquery.com/jQuery.ajax/) method?
+Would you like to grab some server-side data through an AJAX call? For example by using the handy [`jQuery.ajax`](https://api.jquery.com/jQuery.ajax/) method?
 
-A good data format to use then is [JavaScript Object Notation](http://en.wikipedia.org/wiki/JSON), more commonly known as JSON. Providing data in the JSON format with PHP is super duper simple 😎
+A good data format to use then is [JavaScript Object Notation](https://en.wikipedia.org/wiki/JSON), more commonly known as JSON. Providing data in the JSON format with PHP is super duper simple 😎
 
 ## JSON
 
-All you need to do on the server side is to set the `content-type` to `application/json`, encode your data using the [`json_encode`](http://php.net/json_encode) function and output it.
+All you need to do on the server side is to set the `content-type` to `application/json`, encode your data using the [`json_encode`](https://php.net/json_encode) function and output it.
 
 ```php
 <?php header('content-type: application/json; charset=utf-8');
@@ -32,7 +32,7 @@ $data = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
 echo json_encode($data);
 ```
 
-You can test it out for example in the [FireBug](http://getfirebug.com/) console by running this line:
+You can test it out for example in the [FireBug](https://getfirebug.com/) console by running this line:
 
 ```js
 $.ajax({ url: 'data.php' })
@@ -41,13 +41,13 @@ $.ajax({ url: 'data.php' })
 
 You should see the request being done in the console and also in the Net tab. If it didn't work, you might be subject to the following:
 
-> Due to browser security restrictions, most "Ajax" requests are subject to the [same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy 'Same Origin Policy on Wikipedia'); the request can not successfully retrieve data from a different domain, subdomain, or protocol.
+> Due to browser security restrictions, most "Ajax" requests are subject to the [same origin policy](https://en.wikipedia.org/wiki/Same_origin_policy 'Same Origin Policy on Wikipedia'); the request can not successfully retrieve data from a different domain, subdomain, or protocol.
 
 A nice and simple solution to that problem is JSON with padding, also known as JSONP.
 
 ## JSONP
 
-As stated on [Wikipedia](http://en.wikipedia.org/wiki/JSON#JSONP),
+As stated on [Wikipedia](https://en.wikipedia.org/wiki/JSON#JSONP),
 
 > JSONP or "JSON with padding" is a complement to the base JSON data format, a
 > usage pattern that allows a page to request and more meaningfully use JSON
@@ -99,9 +99,9 @@ When testing this you might have noticed it will not work cross-domain. This is 
 > open access across domain-boundaries. ... CORS defines how browsers and
 > servers communicate when accessing sources across origins using HTTP headers
 > to allow both the browser and the server to know enough about each other to
-> determine if the request or response should succeed or fail. -- [enable-cors.org](http://enable-cors.org)
+> determine if the request or response should succeed or fail. -- [enable-cors.org](https://enable-cors.org)
 
-You can read more about it on the [enable-cors.org](http://enable-cors.org) website, but all you should need to do if you want your JSON data accessible from everywhere is to add a single header.
+You can read more about it on the [enable-cors.org](https://enable-cors.org) website, but all you should need to do if you want your JSON data accessible from everywhere is to add a single header.
 
 ```php
 <?php
@@ -156,14 +156,14 @@ Please comment if you have any feedback 🙂
 
 <ins dateTime="2010-12-11T06:28:34+00:00">
   **Update 2010-12-11:** Added charset to the content-type header as recommended
-  in [an answer](http://stackoverflow.com/q/3128062/39321#3128948) to a question
-  I posted about this on StackOverflow.
+  in [an answer](https://stackoverflow.com/q/3128062/39321#3128948) to a
+  question I posted about this on StackOverflow.
 </ins>
 
 <ins dateTime="2011-08-03T15:14:15+00:00">
   **Update 2011-08-03:** Added stuff about callback checking. Recommended in new
   answers to [my question at
-  StackOverflow](http://stackoverflow.com/q/3128062/39321).
+  StackOverflow](https://stackoverflow.com/q/3128062/39321).
 </ins>
 
 <ins dateTime="2011-10-31T18:57:00+00:00">
@@ -173,5 +173,5 @@ Please comment if you have any feedback 🙂
 
 <ins dateTime="2012-01-08T13:23:18+00:00">
   **Update 2012-01-08:** Added some info about [cross-origin resource
-  sharing](http://enable-cors.org)
+  sharing](https://enable-cors.org)
 </ins>

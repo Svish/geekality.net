@@ -90,7 +90,7 @@ Very brute-force, not very fast (takes around 500 ms) and not very interesting, 
 
 ## Take two!
 
-Alright, while reading up on Fibonacci numbers I found some interesting mathematical formulas and such. I'm not going to come with an in-depth explanation or lots proofs here, but I will share the formulas that matters and go through how we use them. If you want the elaborate explanations you can find them where smarter people than I reign. For example at [Wikipedia](http://en.wikipedia.org/wiki/Fibonacci_series), or at [this site](http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibFormula.html). Anyways, here we go. Take cover if you fear math...
+Alright, while reading up on Fibonacci numbers I found some interesting mathematical formulas and such. I'm not going to come with an in-depth explanation or lots proofs here, but I will share the formulas that matters and go through how we use them. If you want the elaborate explanations you can find them where smarter people than I reign. For example at [Wikipedia](https://en.wikipedia.org/wiki/Fibonacci_series), or at [this site](https://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibFormula.html). Anyways, here we go. Take cover if you fear math...
 
 ### The Fibonacci sequence
 
@@ -102,7 +102,7 @@ $$
 
 with the seed values $F_0=0$ and $F_1 = 1$.
 
-This recurrence, since it is linear, can be expressed by a [closed-form solution](http://en.wikipedia.org/wiki/Closed-form_expression) known as the Binet's formula:
+This recurrence, since it is linear, can be expressed by a [closed-form solution](https://en.wikipedia.org/wiki/Closed-form_expression) known as the Binet's formula:
 
 $$
 \begin{align*}
@@ -121,7 +121,7 @@ $$
 
 ### The length of a number
 
-How do you calculate the length of a number? I actually had to do this in an earlier post and then I kind of cheated. I just converted the number into a string and just count the characters (In C#, `string.Length`). But, I recently discovered that there actually is a way you can do this mathematically! I had no idea... The key lays in the [logarithm to base 10](http://en.wikipedia.org/wiki/Log10).
+How do you calculate the length of a number? I actually had to do this in an earlier post and then I kind of cheated. I just converted the number into a string and just count the characters (In C#, `string.Length`). But, I recently discovered that there actually is a way you can do this mathematically! I had no idea... The key lays in the [logarithm to base 10](https://en.wikipedia.org/wiki/Log10).
 
 $\log_{10}{n}$ (often written as just $\log{n}$) for any
 1-digit number will give you $0.\text{something}$. For any 2-digit number it gives you
@@ -131,7 +131,7 @@ $$
 Len(n)=\lfloor\log{n}\rfloor+1
 $$
 
-In case you were wondering, those weird square brackets are called the [floor function](http://en.wikipedia.org/wiki/Floor_function).
+In case you were wondering, those weird square brackets are called the [floor function](https://en.wikipedia.org/wiki/Floor_function).
 
 ### The length of a Fibonacci number
 

@@ -26,11 +26,11 @@ However, with some reading around I found a better and faster solution.
 
 It apparently uses something called Folding, but I haven't quite managed to grasp what that means, so I will just give you my own explanation (which I think and hope is correct 😛 ).
 
-What we are looking for here is something called the [Lowest Common Multiple](http://en.wikipedia.org/wiki/Least_common_multiple) (LCM). The LCM of all the divisors, 1 to 20, is the answer to this problem. To calculate the LCM of all those numbers we first need two methods.
+What we are looking for here is something called the [Lowest Common Multiple](https://en.wikipedia.org/wiki/Least_common_multiple) (LCM). The LCM of all the divisors, 1 to 20, is the answer to this problem. To calculate the LCM of all those numbers we first need two methods.
 
-The first is one that finds the LCM of two numbers. The formula for that, however, is based on another method which finds the [Greatest Common Divisor](http://en.wikipedia.org/wiki/Greatest_common_divisor) (GCD) of two numbers. In other words we need to make that method first.
+The first is one that finds the LCM of two numbers. The formula for that, however, is based on another method which finds the [Greatest Common Divisor](https://en.wikipedia.org/wiki/Greatest_common_divisor) (GCD) of two numbers. In other words we need to make that method first.
 
-I implemented the GCD method using the [Euclidean algorithm](http://en.wikipedia.org/wiki/Euclidean_algorithm), and it goes like this:
+I implemented the GCD method using the [Euclidean algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm), and it goes like this:
 
 ```csharp
 public static ulong GetGreatestCommonDivisor(ulong a, ulong b)

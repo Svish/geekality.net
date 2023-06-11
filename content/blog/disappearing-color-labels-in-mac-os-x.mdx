@@ -25,7 +25,7 @@ It will give you back a number and if the number is greater than zero it means t
 
 ## But what to do about it?
 
-After some digging I found that it might have to do with some [XSan](http://en.wikipedia.org/wiki/Xsan) issues or corrupt meta files. Mac OS X spreads these meta-files around wherever it goes and apparently they go corrupt from time to time. A quick and simple way to fix this issue is just to clear them all out and let Finder have fun recreating them. As these files are hidden in the Finder, and Mac OS X is so kind to not give us an easy way of showing hidden files, I once again opened up a Terminal. I then went to the directory with the broken meta-files and ran these two commands:
+After some digging I found that it might have to do with some [XSan](https://en.wikipedia.org/wiki/Xsan) issues or corrupt meta files. Mac OS X spreads these meta-files around wherever it goes and apparently they go corrupt from time to time. A quick and simple way to fix this issue is just to clear them all out and let Finder have fun recreating them. As these files are hidden in the Finder, and Mac OS X is so kind to not give us an easy way of showing hidden files, I once again opened up a Terminal. I then went to the directory with the broken meta-files and ran these two commands:
 
 ```bash
 $ rm ._* $ rm .DS_Store

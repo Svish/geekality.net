@@ -13,11 +13,11 @@ tags:
   - unicode
 ---
 
-Ok, so I was happily reading CSV files from an SFTP server. The file content is returned as an [`InputStream`](http://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html) and I I used a [`BufferedReader`](http://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html) to read it line by line. Each line contained either a header or an order. The header lines started with the string `"HDR"`.
+Ok, so I was happily reading CSV files from an SFTP server. The file content is returned as an [`InputStream`](https://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html) and I I used a [`BufferedReader`](https://docs.oracle.com/javase/6/docs/api/java/io/BufferedReader.html) to read it line by line. Each line contained either a header or an order. The header lines started with the string `"HDR"`.
 
-However, I suddenly discovered that my code was consistently skipping the first header (and as a result the orders belonging to it). The reason, I found, was simple. The first header, on the first line, didn't start with `"HDR"`, it started with `"□HDR"`! And that undisplayable square turned out to be a [Unicode](http://en.wikipedia.org/wiki/Unicode) [Byte Order Mark](http://en.wikipedia.org/wiki/Byte-order_mark) (BOM).
+However, I suddenly discovered that my code was consistently skipping the first header (and as a result the orders belonging to it). The reason, I found, was simple. The first header, on the first line, didn't start with `"HDR"`, it started with `"□HDR"`! And that undisplayable square turned out to be a [Unicode](https://en.wikipedia.org/wiki/Unicode) [Byte Order Mark](https://en.wikipedia.org/wiki/Byte-order_mark) (BOM).
 
-To deal with the BOM, we can use a simple class I found [at StackOverflow](http://stackoverflow.com/q/1835430/39321#1835529) which handles it for us. Here it is 🙂
+To deal with the BOM, we can use a simple class I found [at StackOverflow](https://stackoverflow.com/q/1835430/39321#1835529) which handles it for us. Here it is 🙂
 
 ```java
 import java.io.IOException;
@@ -28,10 +28,10 @@ import java.io.PushbackInputStream;
  * The {@link UnicodeBOMInputStream} class wraps any
  * {@link InputStream} and detects the presence of any Unicode BOM
  * (Byte Order Mark) at its beginning, as defined by
- * [RFC 3629 - UTF-8, a transformation format of ISO 10646](http://www.faqs.org/rfcs/rfc3629.html)
+ * [RFC 3629 - UTF-8, a transformation format of ISO 10646](https://www.faqs.org/rfcs/rfc3629.html)
  *
  * <p>The
- * [Unicode FAQ](http://www.unicode.org/unicode/faq/utf_bom.html)
+ * [Unicode FAQ](https://www.unicode.org/unicode/faq/utf_bom.html)
  * defines 5 types of BOMs:<ul>
  * <li><pre>00 00 FE FF  = UTF-32, big-endian</pre></li>
  * <li><pre>FF FE 00 00  = UTF-32, little-endian</pre></li>
@@ -47,7 +47,7 @@ import java.io.PushbackInputStream;
  * wrapped {@link InputStream} object.</p>
  *
  * @author Gregory Pakosz
- * @see http://stackoverflow.com/q/1835430/39321#1835529
+ * @see https://stackoverflow.com/q/1835430/39321#1835529
  */
 class UnicodeBOMInputStream extends InputStream
 {
@@ -326,7 +326,7 @@ Looks long, but it's simple to use.
 InputStream cleanStream = new UnicodeBOMInputStream(stream).skipBOM();
 ```
 
-When reading the stream, remember to also use an [InputStreamReader](http://docs.oracle.com/javase/6/docs/api/java/io/InputStreamReader.html) with the correct character set. For example something like this:
+When reading the stream, remember to also use an [InputStreamReader](https://docs.oracle.com/javase/6/docs/api/java/io/InputStreamReader.html) with the correct character set. For example something like this:
 
 ```java
 BufferedReader reader = new BufferedReader(new InputStreamReader(cleanStream,
@@ -343,8 +343,9 @@ To sum up, this is tricky and annoying stuff! Please, if something in this post 
 
 <ins dateTime="2011-05-25T14:41:02+00:00">
   **Update 2011-05-25:** Found an alternative to the above class in the [Apache
-  Commons IO](http://commons.apache.org/proper/commons-io/) library. It's called
-  [BOMInputStream](http://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/input/BOMInputStream.html)
+  Commons IO](https://commons.apache.org/proper/commons-io/) library. It's
+  called
+  [BOMInputStream](https://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/input/BOMInputStream.html)
   and seems to do pretty much the same thing, except it has some extra features
   as well. Might be nice to use if you're already using that library or don't
   mind adding another. 🙂

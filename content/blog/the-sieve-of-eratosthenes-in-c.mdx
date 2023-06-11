@@ -13,9 +13,9 @@ tags:
   - sieve-of-eratosthenes
 ---
 
-In [some](/?p=176 'Problem 3') [of](/?p=496 'Problem 7') [the](/?p=543 'Problem 10') [Project Euler](https://projecteuler.net/) [problems](https://projecteuler.net/index.php?section=problems) we have needed a source of [primes](http://en.wikipedia.org/wiki/Primes). One algorithm for finding primes is called the [Sieve of Eratosthenes](http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes). This algorithm is both pretty simple to understand and to implement. It is also fairly fast and usable, at least for the lower primes.
+In [some](/?p=176 'Problem 3') [of](/?p=496 'Problem 7') [the](/?p=543 'Problem 10') [Project Euler](https://projecteuler.net/) [problems](https://projecteuler.net/index.php?section=problems) we have needed a source of [primes](https://en.wikipedia.org/wiki/Primes). One algorithm for finding primes is called the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes). This algorithm is both pretty simple to understand and to implement. It is also fairly fast and usable, at least for the lower primes.
 
-My implementation is based upon the algorithm described on the Wikipedia page and some helpful optimizations I found in an article at [Black Wasp](http://www.blackwasp.co.uk/Eratosthenes.aspx). The differences from the original algorithm and the solution at Black Wasp is that it finds the primes incrementally and that it only looks for a new prime when asked.
+My implementation is based upon the algorithm described on the Wikipedia page and some helpful optimizations I found in an article at [Black Wasp](https://www.blackwasp.co.uk/Eratosthenes.aspx). The differences from the original algorithm and the solution at Black Wasp is that it finds the primes incrementally and that it only looks for a new prime when asked.
 
 My code should be pretty self explanatory, but the basic idea is that we have a list of known primes and for each odd number we check it against the these. If a number is not evenly divisible by any of the known primes, then we have found a new one and can add it to our list.
 

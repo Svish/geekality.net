@@ -15,7 +15,7 @@ The following `.htaccess` redirects all traffic to a different domain and preser
 
 ```apache
 RewriteEngine On
-RewriteRule (.*) http://example.com/$1 [R=301,L]
+RewriteRule (.*) https://example.com/$1 [R=301,L]
 ```
 
 The following redirects non-www to www version, also preserving the path.
@@ -23,7 +23,7 @@ The following redirects non-www to www version, also preserving the path.
 ```apache
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^example\.com
-RewriteRule (.*) http://www.example.com/$1 [R=301,L]
+RewriteRule (.*) https://www.example.com/$1 [R=301,L]
 ```
 
 And hopefully I'll remember I put this here the next time I've forgotten how to do this...

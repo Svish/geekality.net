@@ -16,7 +16,7 @@ tags:
 As a simple way to keep my computer backed up I copy all that I care about onto external
 hard drives twice a day. I mostly do this in case my internal hard drives would die
 or something like that, so I haven't cared too much about finding anything more fancy
-with incremental history and such. What I have is a simple [batch file](http://en.wikipedia.org/wiki/Batch_file) that I have set to run periodically using the Task Scheduler in Windows.
+with incremental history and such. What I have is a simple [batch file](https://en.wikipedia.org/wiki/Batch_file) that I have set to run periodically using the Task Scheduler in Windows.
 
 The batch file simply looks like this:
 
@@ -31,7 +31,7 @@ You can duplicate those two last lines for other folders you want to back up as 
 
 ## Robocopy
 
-[Robocopy](http://en.wikipedia.org/wiki/Robocopy) is of course the command
+[Robocopy](https://en.wikipedia.org/wiki/Robocopy) is of course the command
 that does the backing up. The options I use here are as follows:
 
 1. Source (directory we want to back up)
@@ -58,7 +58,7 @@ In my case I am copying a whole drive, and the attributes on the resulting folde
 
 ## How to run it
 
-You can either run this yourself in a Command Prompt or schedule it using the [Task Scheduler](http://windows.microsoft.com/en-us/windows/schedule-task). What is important to remember is that you should run this using Administrator rights.
+You can either run this yourself in a Command Prompt or schedule it using the [Task Scheduler](https://windows.microsoft.com/en-us/windows/schedule-task). What is important to remember is that you should run this using Administrator rights.
 
 So, if you use a Command Prompt: Remember to use an [elevated Command Prompt](/?p=1139). And if you use the Task Scheduler, remember to select that the task should _Run with highest privileges_ in the task properties.
 

@@ -15,7 +15,7 @@ tags:
 
 Here's how to fairly easily compress/minify Javascript by using the [Closure Compiler Service API](https://developers.google.com/closure/compiler/docs/api-tutorial1).
 
-More or less verbatim how I'm currently doing it over at [bibelstudiet.no](http://bibelstudiet.no) in my [script controller class](https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/Controller/Javascript.php), and so far it's been working great. Just remember to cache the result on your server so that you're not calling the API more than necessary. In my case it's handled further up the chain by [the parent class](https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/CachedController.php) 🙂
+More or less verbatim how I'm currently doing it over at [bibelstudiet.no](https://bibelstudiet.no) in my [script controller class](https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/Controller/Javascript.php), and so far it's been working great. Just remember to cache the result on your server so that you're not calling the API more than necessary. In my case it's handled further up the chain by [the parent class](https://bitbucket.org/sdaweb/bibelstudiet.no/src/master/src/CachedController.php) 🙂
 
 ```php
 <?php

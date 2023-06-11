@@ -59,7 +59,7 @@ We simply add an event handler which sets a boolean flag when called, start the 
 
 What now if the Start method just sends the work to a new thread and returns immediately? Our current test can not be trusted at all in that case. It might pass and it might fail. Most likely fail. All depending on if it managed to finish its work and raise the event before we check the flag. And that would be unlikely to happen. Highly unlikely.
 
-So what do we do? We use a [ManualResetEvent](http://msdn.microsoft.com/en-us/library/system.threading.manualresetevent.aspx) instead of the boolean flag:
+So what do we do? We use a [ManualResetEvent](https://msdn.microsoft.com/en-us/library/system.threading.manualresetevent.aspx) instead of the boolean flag:
 
 ```csharp
 [TestFixture]
@@ -86,4 +86,4 @@ Brilliant, simple and readable. Just how we like it 😎
 
 ## Credits
 
-I am still a total testing newbie at the moment and didn't have a clue what to do, so after some failing google-fu I asked [a question](https://stackoverflow.com/q/1770830/39321) about it at [StackOverflow](http://stackoverflow.com). My solution is based on [one of the answers](https://stackoverflow.com/a/1770862/39321) I got there 🙂
+I am still a total testing newbie at the moment and didn't have a clue what to do, so after some failing google-fu I asked [a question](https://stackoverflow.com/q/1770830/39321) about it at [StackOverflow](https://stackoverflow.com). My solution is based on [one of the answers](https://stackoverflow.com/a/1770862/39321) I got there 🙂

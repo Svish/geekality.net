@@ -11,7 +11,7 @@ tags:
   - php
 ---
 
-PHP has a function called [`get_headers`](http://php.net/manual/en/function.get-headers.php) which, as you'd guess, gives you the headers returned from an HTTP request. _However_ it actually uses a `GET`, rather than a `HEAD`, request.
+PHP has a function called [`get_headers`](https://php.net/manual/en/function.get-headers.php) which, as you'd guess, gives you the headers returned from an HTTP request. _However_ it actually uses a `GET`, rather than a `HEAD`, request.
 
 Figured out you can change this by setting a stream context, so I wrapped it in a function and posting it here in case I need it again.
 

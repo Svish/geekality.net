@@ -10,7 +10,7 @@ tags:
   - mediawiki
 ---
 
-Using a MediaWiki installation to document internal systems where i'm currently at, and although we all have users it's easy to forget to login before making edits. This results in a history full of IP addresses rather than names, which is a bit less useful. So, to prevent us from forgetting to login we decided to force ourselves to log in by [disabling anonymous edits](http://www.mediawiki.org/wiki/Manual_talk:$wgGroupPermissions#Allow_just_registered_users_to_edit_pages.3F). You do that by adding the following to your LocalSettings.php.
+Using a MediaWiki installation to document internal systems where i'm currently at, and although we all have users it's easy to forget to login before making edits. This results in a history full of IP addresses rather than names, which is a bit less useful. So, to prevent us from forgetting to login we decided to force ourselves to log in by [disabling anonymous edits](https://www.mediawiki.org/wiki/Manual_talk:$wgGroupPermissions#Allow_just_registered_users_to_edit_pages.3F). You do that by adding the following to your LocalSettings.php.
 
 ```php
 $wgGroupPermissions['*']['edit'] = false;
