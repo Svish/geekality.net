@@ -6,7 +6,7 @@ import { BASE_URL } from '@/config/url'
 import Link, { ExternalLink } from '@/components/Link'
 
 const mdxComponents: MDXComponents = {
-  a: ({ href, children }) => {
+  a: ({ href, children, ...props }) => {
     invariant(href != null, 'href is required')
 
     const base = new URL(BASE_URL)
@@ -14,9 +14,13 @@ const mdxComponents: MDXComponents = {
     const isExternal = url.hostname !== base.hostname
 
     return isExternal ? (
-      <ExternalLink href={href}>{children}</ExternalLink>
+      <ExternalLink href={href} {...props}>
+        {children}
+      </ExternalLink>
     ) : (
-      <Link href={href as Route<string>}>{children}</Link>
+      <Link href={href as Route<string>} {...props}>
+        {children}
+      </Link>
     )
   },
   Note: ({ children }) => <div className="note">{children}</div>,

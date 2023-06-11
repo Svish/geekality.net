@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge'
 
-import { type ReactNode } from 'react'
+import { type AnchorHTMLAttributes, type ReactNode } from 'react'
 import NextLink, { type LinkProps } from 'next/link'
 
 const linkClasses = null
@@ -17,18 +17,24 @@ export default function Link<R extends string>({
   )
 }
 
-interface ExternalLinkProps {
+interface ExternalLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
   children: ReactNode
   className?: string
 }
 
-export function ExternalLink({ href, className, children }: ExternalLinkProps) {
+export function ExternalLink({
+  href,
+  className,
+  children,
+  ...props
+}: ExternalLinkProps) {
   return (
     <a
       href={href}
       className={twMerge(linkClasses, className)}
       rel="external norefferer"
+      {...props}
     >
       {children}
     </a>
