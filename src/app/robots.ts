@@ -1,8 +1,8 @@
 import { type MetadataRoute } from 'next'
-import invariant from 'tiny-invariant'
+import { absolute } from '@/config/url'
 
 export default function robots(): MetadataRoute.Robots {
-  invariant(process.env.ORIGIN != null)
+  console.log(process.env.VERCEL_URL)
 
   return {
     rules: {
@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       // disallow: '/private/',
     },
-    sitemap: process.env.ORIGIN + '/sitemap.xml',
+    sitemap: absolute('/sitemap.xml'),
   }
 }

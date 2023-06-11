@@ -2,18 +2,14 @@ import '@/styles/globals.css'
 
 import { type ReactNode } from 'react'
 import { type Metadata } from 'next'
-import invariant from 'tiny-invariant'
+
+import { BASE_URL } from '@/config/url'
 
 import Link from '@/components/Link'
 import MenuItems from './MenuItems'
 
-// TODO: Move katex CSS to slug page
-// https://github.com/vercel/next.js/discussions/49014
-
-invariant(process.env.ORIGIN != null)
-
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.ORIGIN),
+  metadataBase: new URL(BASE_URL),
   title: {
     absolute: 'Geekality',
     template: '%s | Geekality',

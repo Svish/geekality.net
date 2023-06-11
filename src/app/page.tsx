@@ -10,12 +10,6 @@ interface Props {
   searchParams: { p?: string }
 }
 
-export const metadata: Metadata = {
-  alternates: {
-    canonical: '/',
-  },
-}
-
 export default function HomePage({ searchParams }: Props) {
   // Redirects from old wordpress id-based permalinks
   if (searchParams.p) {

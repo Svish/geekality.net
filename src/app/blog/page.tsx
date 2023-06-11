@@ -7,9 +7,6 @@ import Link from '@/components/Link'
 
 export const metadata: Metadata = {
   title: 'Blog',
-  alternates: {
-    canonical: '/blog',
-  },
 }
 
 export default async function BlogPage() {
