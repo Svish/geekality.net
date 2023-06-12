@@ -1,0 +1,82 @@
+/* Additions and adjustments */
+.prose {
+  /* https://github.com/tailwindlabs/tailwindcss-typography/blob/master/src/styles.js#L206 */
+  --prose-block-margin: 1.6em;
+
+  ins {
+    @apply block px-4 pt-2 pb-3 -mx-4 no-underline rounded-sm bg-amber-200 dark:bg-amber-950;
+    margin-block: var(--prose-block-margin);
+    margin-trim: block;
+    & > *:first-child {
+      margin-top: 0;
+    }
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  del {
+    @apply line-through;
+  }
+
+  kbd {
+    @apply bg-gray-200 dark:bg-gray-700 dark:border-gray-300 rounded-sm border-gray-700 px-1 py-[0.05rem];
+    font: inherit;
+    border-width: 1px;
+    border-style: dashed;
+  }
+
+  br {
+    /* Fixes breaks getting weird margin inside lists */
+    margin: 0 !important;
+  }
+
+  dl {
+    margin-block: var(--prose-block-margin);
+  }
+  dt {
+    @apply font-bold;
+  }
+  dd {
+    @apply ml-4;
+    margin-trim: block;
+    & > *:first-child {
+      margin-top: 0;
+    }
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .note {
+    @apply px-4 pt-2 pb-3 -mx-4 bg-gray-200 rounded-sm dark:bg-gray-800;
+    margin-block: var(--prose-block-margin);
+    margin-trim: block;
+    & > *:first-child {
+      margin-top: 0;
+    }
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :not(pre) > code {
+    @apply bg-gray-200 rounded-sm dark:bg-gray-700;
+    padding: 0.125rem 0.25rem;
+  }
+
+  /* FireFox: about:config => layout.css.has-selector.enabled */
+  pre:has(.hljs) {
+    margin-block: var(--prose-block-margin);
+    background-color: initial;
+    padding: initial;
+    color: initial;
+
+    .hljs {
+      padding-top: 0.8571429em;
+      padding-right: 1.1428571em;
+      padding-bottom: 0.8571429em;
+      padding-left: 1.1428571em;
+    }
+  }
+}
