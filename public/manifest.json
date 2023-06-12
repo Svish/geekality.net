@@ -1,13 +1,21 @@
 {
+  "display": "browser",
+  "start_url": "/",
+  "lang": "en",
   "name": "Geekality",
   "short_name": "Geekality",
   "icons": [
     {
-      "src": "favicon-512x512.png",
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-512x512.png",
       "sizes": "512x512"
     }
   ],
   "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "display": "browser"
+  "theme_color": "#ffffff"
 }

@@ -17,6 +17,8 @@ export const metadata: Metadata = {
     template: '%s | Geekality',
   },
   description: 'My website',
+  manifest: '/manifest.json',
+  themeColor: '#ffffff',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -26,8 +28,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.svg" />
         <link rel="mask-icon" href="/favicon.svg" color="#000" />
         <link rel="apple-touch-icon" href="/favicon-180x180.png" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="m-0 overflow-y-scroll antialiased text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-900 flex flex-col min-h-[100dvh]">
         <header className="sticky top-0 z-10 bg-gray-300 border-b-2 border-gray-800 select-none text-gray-950 dark:text-gray-50 dark:bg-gray-700 dark:border-gray-200 sm:text-2xl">
