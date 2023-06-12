@@ -12,9 +12,9 @@ export default async function BlogCategoriesPage() {
     <>
       <H1>Categories</H1>
       <ul>
-        {categories.map((slug) => (
+        {categories.map(({ slug, count }) => (
           <li key={slug}>
-            <Link href={`/blog/categories/${slug}`}>{slug}</Link>
+            <Link href={`/blog/categories/${slug}`}>{slug}</Link> ({count})
           </li>
         ))}
       </ul>

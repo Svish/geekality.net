@@ -9,15 +9,21 @@ export const postsByPublished = [...allPosts]
   .sort(byStringValue((p) => p.published))
   .reverse()
 
-// TODO: Add count of posts to each category
 export const categories = [
   ...new Set(allPosts.flatMap((p) => p.categories ?? [])),
-].sort(byString())
+]
+  .sort(byString())
+  .map((category) => ({
+    slug: category,
+    count: allPosts.filter((p) => p.categories?.includes(category)).length,
+  }))
 
-// TODO: Add count of posts to each tag
-export const tags = [...new Set(allPosts.flatMap((p) => p.tags ?? []))].sort(
-  byString()
-)
+export const tags = [...new Set(allPosts.flatMap((p) => p.tags ?? []))]
+  .sort(byString())
+  .map((tag) => ({
+    slug: tag,
+    count: allPosts.filter((p) => p.tags?.includes(tag)).length,
+  }))
 
 export function findSiblings(post: Post) {
   const index = postsByPublished.findIndex(({ slug }) => slug === post.slug)
