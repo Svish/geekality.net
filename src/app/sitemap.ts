@@ -12,6 +12,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absolute(),
       lastModified,
     },
+    {
+      url: absolute('about'),
+      lastModified,
+    },
+    {
+      url: absolute('blog'),
+      lastModified,
+    },
 
     ...allPosts.map((p) => ({
       url: absolute(p.pathname),
