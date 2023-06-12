@@ -30,11 +30,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="m-0 overflow-y-scroll antialiased text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-900 flex flex-col min-h-[100dvh]">
-        <header className="sticky top-0 z-10 bg-gray-300 border-b-2 border-gray-800 text-gray-950 dark:text-gray-50 dark:bg-gray-700 dark:border-gray-200 sm:text-2xl">
+        <header className="sticky top-0 z-10 bg-gray-300 border-b-2 border-gray-800 select-none text-gray-950 dark:text-gray-50 dark:bg-gray-700 dark:border-gray-200 sm:text-2xl">
           <div className="container flex text-lg">
             <div className="mr-auto">
               <Link
                 href="/"
+                rel="home"
                 className="block px-4 py-3 hover:bg-gray-400 dark:hover:bg-gray-600"
               >
                 Geekality
@@ -50,11 +51,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
         <main className="container flex-grow p-4">{children}</main>
 
-        <footer className="p-4 mt-8 text-xs border-t-2 border-gray-300 dark:border-gray-700">
+        <footer className="p-4 mt-8 text-xs border-t-2 border-gray-300 select-none dark:border-gray-700">
           <div className="container flex gap-4">
             <div>– With a hint of social ineptitude</div>
             <div className="flex gap-2 ml-auto">
-              <Link href="/about" aria-label="About me">
+              <Link href="/about" aria-label="About me" rel="author">
                 <Favicon
                   role="img"
                   aria-label="Logo"

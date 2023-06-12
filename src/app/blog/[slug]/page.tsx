@@ -68,7 +68,9 @@ export default async function BlogPostPage({ params }: Props) {
             <ul className="inline-list">
               {post.categories.map((category) => (
                 <li key={category}>
-                  <Link href={`/blog/categories/${category}`}>{category}</Link>
+                  <Link href={`/blog/categories/${category}`} rel="category">
+                    {category}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -76,7 +78,9 @@ export default async function BlogPostPage({ params }: Props) {
             <ul className="inline-list">
               {post.tags.map((tag) => (
                 <li key={tag}>
-                  <Link href={`/blog/tags/${tag}`}>{tag}</Link>
+                  <Link href={`/blog/tags/${tag}`} rel="tag">
+                    {tag}
+                  </Link>
                 </li>
               ))}
             </ul>
