@@ -7,6 +7,7 @@ import { BASE_URL } from '@/config/url'
 
 import Link from '@/components/Link'
 import MenuItems from './MenuItems'
+import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -50,6 +51,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </footer>
+
+        <Analytics />
       </body>
     </html>
   )
