@@ -1,0 +1,68 @@
+{
+  "masterPicture": "./src/icons/favicon-opaque-512x512.png",
+  "iconsPath": "/",
+  "design": {
+    "ios": {
+      "pictureAspect": "backgroundAndMargin",
+      "backgroundColor": "#ffffff",
+      "margin": "18%",
+      "assets": {
+        "ios6AndPriorIcons": false,
+        "ios7AndLaterIcons": false,
+        "precomposedIcons": false,
+        "declareOnlyDefaultIcon": true
+      },
+      "appName": "Geekality"
+    },
+    "desktopBrowser": {
+      "design": "background",
+      "backgroundColor": "#ffffff",
+      "backgroundRadius": 0.5,
+      "imageScale": 0.8
+    },
+    "windows": {
+      "pictureAspect": "noChange",
+      "backgroundColor": "#ffffff",
+      "onConflict": "override",
+      "assets": {
+        "windows80Ie10Tile": false,
+        "windows10Ie11EdgeTiles": {
+          "small": false,
+          "medium": true,
+          "big": false,
+          "rectangle": false
+        }
+      },
+      "appName": "Geekality"
+    },
+    "androidChrome": {
+      "pictureAspect": "backgroundAndMargin",
+      "margin": "10%",
+      "backgroundColor": "#ffffff",
+      "themeColor": "#ffffff",
+      "manifest": {
+        "name": "Geekality",
+        "display": "browser",
+        "orientation": "notSet",
+        "onConflict": "override",
+        "declared": true
+      },
+      "assets": {
+        "legacyIcon": false,
+        "lowResolutionIcons": false
+      }
+    },
+    "safariPinnedTab": {
+      "pictureAspect": "blackAndWhite",
+      "threshold": 50,
+      "themeColor": "#777777"
+    }
+  },
+  "settings": {
+    "scalingAlgorithm": "Lanczos",
+    "errorOnImageTooSmall": false,
+    "readmeFile": false,
+    "htmlCodeFile": true,
+    "usePathAsIs": false
+  }
+}
