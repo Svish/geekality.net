@@ -8,6 +8,7 @@ import { BASE_URL } from '@/config/url'
 import Link from '@/components/Link'
 import MenuItems from './MenuItems'
 import { Analytics } from '@vercel/analytics/react'
+import { Favicon } from './Favicon'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -50,10 +51,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <main className="container flex-grow p-4">{children}</main>
 
         <footer className="p-4 mt-8 text-xs border-t-2 border-gray-300 dark:border-gray-700">
-          <div className="container flex">
+          <div className="container flex gap-4">
             <div>– With a hint of social ineptitude</div>
-            <div className="ml-auto">
-              Terribly designed by <Link href="/about">myself</Link>
+            <div className="flex gap-2 ml-auto">
+              <Link href="/about" aria-label="About me">
+                <Favicon
+                  role="img"
+                  aria-label="Logo"
+                  className="h-4 fill-gray-950 dark:fill-gray-50"
+                />
+              </Link>
             </div>
           </div>
         </footer>
