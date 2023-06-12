@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { byString, byStringValue } from '@/util/sort'
 
 import { allPosts, type Post } from 'contentlayer/generated'

@@ -1,3 +1,5 @@
+import 'server-only'
+
 import Fuse from 'fuse.js'
 import { allPosts } from '@/content'
 

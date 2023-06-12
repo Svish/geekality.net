@@ -14,17 +14,6 @@ export default async function BlogPage() {
     <>
       <H1>Blog</H1>
       <PostList posts={postsByPublished} />
-
-      <aside className="prose">
-        <ul>
-          <li>
-            <Link href="/blog/tags">All tags</Link>
-          </li>
-          <li>
-            <Link href="/blog/categories">All categories</Link>
-          </li>
-        </ul>
-      </aside>
     </>
   )
 }
