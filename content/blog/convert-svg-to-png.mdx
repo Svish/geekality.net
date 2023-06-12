@@ -1,0 +1,23 @@
+---
+title: Convert SVG to PNG using InkScape CLI
+published: '2023-06-12'
+categories:
+  - technology
+tags:
+  - tools
+  - inkscape
+  - svg
+  - png
+---
+
+There are _so_ many awkward terrible online solutions for converting SVGs to PNG. Here's how to do it locally, on the CLI using [InkScape](https://inkscape.org/).
+
+```bash
+# Transparent background
+inkscape -h 512 icon.svg -o icon-512x512.png
+```
+
+```bash
+# With a background color
+inkscape -b FFFFFF -h 512 icon.svg -o icon-512x512.png
+```
