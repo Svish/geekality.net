@@ -9,6 +9,12 @@ export const postsByPublished = [...allPosts]
   .sort(byStringValue((p) => p.published))
   .reverse()
 
+export const permalinkMap = new Map(
+  allPosts.flatMap((post) =>
+    (post.permalinks ?? []).map((permalink) => [permalink, post])
+  )
+)
+
 export const categories = [
   ...new Set(allPosts.flatMap((p) => p.categories ?? [])),
 ]

@@ -1,12 +1,18 @@
 import { type MDXComponents } from 'mdx/types'
 import { type Route } from 'next'
+
 import invariant from 'tiny-invariant'
+import { permalinkMap } from '@/content'
 import { BASE_URL } from '@/config/url'
 
 import Link, { ExternalLink } from '@/components/Link'
 
 const mdxComponents: MDXComponents = {
   a: ({ href, children, ...props }) => {
+    if (href != null && permalinkMap.has(href)) {
+      href = permalinkMap.get(href)?.pathname
+    }
+
     invariant(href != null, 'href is required')
 
     const base = new URL(BASE_URL)
