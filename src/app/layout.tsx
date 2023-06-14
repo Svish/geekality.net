@@ -81,7 +81,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="container flex gap-4">
             <div className="py-2">– With a hint of social ineptitude</div>
             <div className="flex ml-auto">
-              <Link href="/about" aria-label="About me" rel="author">
+              <Link
+                href="/about"
+                aria-label="About me"
+                rel="author"
+                className="-translate-y-0.5"
+              >
                 <Favicon
                   role="img"
                   aria-label="Logo"
