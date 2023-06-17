@@ -56,7 +56,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body className="m-0 overflow-y-scroll antialiased text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-900 flex flex-col min-h-[100dvh]">
-        <header className="sticky top-0 z-10 bg-gray-300 border-b-2 border-gray-800 select-none text-gray-950 dark:text-gray-50 dark:bg-gray-700 dark:border-gray-200 sm:text-2xl">
+        <header className="sticky top-0 z-10 border-b-2 border-gray-800 select-none bg-gray-300/70 backdrop-blur-sm text-gray-950 dark:text-gray-50 dark:bg-gray-700/70 dark:border-gray-200 sm:text-2xl">
           <div className="container flex text-lg">
             <div className="mr-auto">
               <Link
