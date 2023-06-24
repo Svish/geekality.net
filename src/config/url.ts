@@ -10,5 +10,5 @@ export const BASE_URL = process.env.PRIMARY_URL
  * Returns the absolute URL for the given pathname.
  */
 export function absolute(pathname: string = ''): string {
-  return BASE_URL + pathname
+  return new URL(pathname, BASE_URL).href
 }

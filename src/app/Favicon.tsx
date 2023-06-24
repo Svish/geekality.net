@@ -1,6 +1,6 @@
 import { type SVGProps } from 'react'
 
-export function Favicon(props: SVGProps<SVGSVGElement>) {
+export default function Favicon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 115" {...props}>
       <g transform="translate(-.25 -1)">

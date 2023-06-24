@@ -3,20 +3,35 @@ import '@/styles/globals.css'
 import { type ReactNode } from 'react'
 import { type Metadata } from 'next'
 
-import { BASE_URL } from '@/config/url'
+import { BASE_URL, absolute } from '@/config/url'
+import { site } from '@/config'
+import feed from '@/content/feed'
 
 import Link from '@/components/Link'
 import MenuItems from './MenuItems'
+import Favicon from './Favicon'
 import { Analytics } from '@vercel/analytics/react'
-import { Favicon } from './Favicon'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    absolute: 'Geekality',
-    template: '%s | Geekality',
+    absolute: site.title,
+    template: '%s | ' + site.title,
   },
   description: 'My website',
+  alternates: {
+    types: {
+      'application/rss+xml': [
+        { url: absolute('blog/feed/xml'), title: feed.title },
+      ],
+      'application/atom+xml': [
+        { url: absolute('blog/feed/atom'), title: feed.title },
+      ],
+      'application/json': [
+        { url: absolute('blog/feed/json'), title: feed.title },
+      ],
+    },
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -64,7 +79,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 rel="home"
                 className="block px-4 py-3 hover:bg-gray-400 dark:hover:bg-gray-600"
               >
-                Geekality
+                {site.title}
               </Link>
             </div>
             <nav aria-label="Main navigation">
@@ -79,7 +94,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
         <footer className="p-2 mt-8 text-xs border-t-2 border-gray-300 select-none dark:border-gray-700">
           <div className="container flex gap-4">
-            <div className="py-2">– With a hint of social ineptitude</div>
+            <div className="py-2">– {site.tagline}</div>
             <div className="flex ml-auto">
               <Link
                 href="/about"
