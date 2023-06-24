@@ -1,3 +1,5 @@
+import { type Metadata } from 'next'
+
 import { allPosts } from '@/content'
 import { notFound } from 'next/navigation'
 
@@ -7,7 +9,7 @@ import PostList from '@/components/PostList'
 interface Props {
   params: { slug: string }
 }
-export function generateMetadata({ params }: Props) {
+export function generateMetadata({ params }: Props): Metadata {
   const categoryHasPosts = allPosts.some(
     ({ categories }) => categories?.includes(params.slug) === true
   )

@@ -1,3 +1,5 @@
+import { type Metadata } from 'next'
+
 import { allPosts } from '@/content'
 import { notFound } from 'next/navigation'
 
@@ -8,7 +10,7 @@ interface Props {
   params: { slug: string }
 }
 
-export function generateMetadata({ params }: Props) {
+export function generateMetadata({ params }: Props): Metadata {
   const tagHasPosts = allPosts.some(
     ({ tags }) => tags?.includes(params.slug) === true
   )

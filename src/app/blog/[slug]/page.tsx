@@ -1,11 +1,12 @@
 import '@/styles/post.css'
 
-import { postsByPublished, findSiblings } from '@/content'
-
-import { getMDXComponent } from 'next-contentlayer/hooks'
+import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { formatDate } from '@/util/format'
+import { absolute } from '@/config/url'
 
+import { getMDXComponent } from 'next-contentlayer/hooks'
+import { postsByPublished, findSiblings } from '@/content'
 import mdxComponents from '@/components/mdx'
 
 import H1 from '@/components/H1'
@@ -22,7 +23,7 @@ export async function generateStaticParams() {
   }))
 }
 
-export function generateMetadata({ params }: Props) {
+export function generateMetadata({ params }: Props): Metadata {
   const post = postsByPublished.find(({ slug }) => slug === params.slug)
   if (post == null) notFound()
 
@@ -32,7 +33,7 @@ export function generateMetadata({ params }: Props) {
       title: post.title,
     },
     alternates: {
-      canonical: post.pathname,
+      canonical: absolute(post.pathname),
     },
   }
 }
