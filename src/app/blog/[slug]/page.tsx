@@ -18,9 +18,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return postsSortedByPublished.map((post) => ({
-    slug: post.slug,
-  }))
+  // return postsSortedByPublished.map(({ slug }) => ({ slug }))
+  return []
 }
 
 export function generateMetadata({ params }: Props): Metadata {

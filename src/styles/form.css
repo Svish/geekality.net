@@ -1,0 +1,50 @@
+/**
+ * https://github.com/tailwindlabs/tailwindcss-forms/#using-classes-to-style
+ */
+[type='text'],
+[type='email'],
+[type='url'],
+[type='password'],
+[type='number'],
+[type='date'],
+[type='datetime-local'],
+[type='month'],
+[type='search'],
+[type='tel'],
+[type='time'],
+[type='week'] {
+  @apply form-input;
+}
+textarea {
+  @apply form-textarea;
+}
+select {
+  @apply form-select;
+}
+select[multiple] {
+  @apply form-multiselect;
+}
+[type='checkbox'] {
+  @apply form-checkbox;
+}
+[type='radio'] {
+  @apply form-radio;
+}
+
+[type='text'],
+[type='email'],
+[type='url'],
+[type='password'],
+[type='number'],
+[type='date'],
+[type='datetime-local'],
+[type='month'],
+[type='search'],
+[type='tel'],
+[type='time'],
+[type='week'],
+[multiple],
+textarea,
+select {
+  @apply border-gray-600 bg-gray-50 dark:bg-gray-800 dark:border-gray-600;
+}

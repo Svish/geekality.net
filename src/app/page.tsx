@@ -1,5 +1,3 @@
-import type { Metadata } from 'next'
-
 import { handlePermalink } from '@/content/wordpress'
 import { postsSortedByPublished } from '@/content'
 

@@ -10,6 +10,10 @@ interface Props {
   params: { slug: string }
 }
 
+export async function generateStaticParams() {
+  return []
+}
+
 export function generateMetadata({ params }: Props): Metadata {
   const tagHasPosts = allPosts.some(
     ({ tags }) => tags?.includes(params.slug) === true

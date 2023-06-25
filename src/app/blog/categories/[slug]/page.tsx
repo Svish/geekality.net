@@ -9,6 +9,11 @@ import PostList from '@/components/PostList'
 interface Props {
   params: { slug: string }
 }
+
+export async function generateStaticParams() {
+  return []
+}
+
 export function generateMetadata({ params }: Props): Metadata {
   const categoryHasPosts = allPosts.some(
     ({ categories }) => categories?.includes(params.slug) === true

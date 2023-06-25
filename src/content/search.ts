@@ -1,23 +1,28 @@
-import 'server-only'
-
+import { allPosts, type Post } from '@/content'
 import Fuse from 'fuse.js'
-import { allPosts } from '@/content'
 
-// TODO: Make a search component, somewhere, somehow, with this
-// TODO: Index during build?
-// https://fusejs.io/api/indexing.html
-
-const fuse = new Fuse(allPosts, {
+const config = {
   keys: [
     { name: 'title', weight: 1 },
-    { name: 'body.raw', weight: 0.5 },
+    { name: 'body.raw', weight: 0.75 },
   ],
-  findAllMatches: true,
+  threshold: 0.25,
   shouldSort: true,
-  minMatchCharLength: 2,
-  useExtendedSearch: true,
-})
+  ignoreLocation: true,
+  includeMatches: true,
+} satisfies Fuse.IFuseOptions<Post>
 
-export function searchWithFuse(query: string) {
-  return query === '' ? [] : fuse.search(query)
+export async function searchPosts(query: string, limit = 15) {
+  // TODO: Try get or create index from somewhere
+  return query === '' ? [] : new Fuse(allPosts, config).search(query, { limit })
+}
+
+function createIndex() {
+  // https://fusejs.io/api/indexing.html#fuse-createIndex
+  return Fuse.createIndex(config.keys, allPosts)
+}
+
+async function readIndex() {
+  // https://fusejs.io/api/indexing.html#fuse-parseindex
+  return Fuse.parseIndex('')
 }

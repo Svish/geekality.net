@@ -4,7 +4,9 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './content/**/*.mdx'],
   plugins: [
     require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
+    require('@tailwindcss/forms')({
+      strategy: 'class',
+    }),
     require('tailwindcss-text-balance'),
   ],
   theme: {

@@ -2,23 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .inline-list {
-    display: contents;
-    li {
-      display: contents;
-      &::before {
-        content: ' ';
-      }
-      &:not(:first-of-type) {
-        &::before {
-          content: ', ';
-        }
-      }
-    }
-  }
-}
-
 html {
   font-family: sans-serif;
 }
@@ -49,3 +32,4 @@ footer {
 }
 
 @import './prose.css';
+@import './form.css';
