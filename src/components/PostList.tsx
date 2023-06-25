@@ -1,4 +1,4 @@
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/util'
 import { formatDate } from '@/util/format'
 
 import Link from '@/components/Link'
@@ -11,7 +11,7 @@ interface Props {
 
 export default function PostList({ className, posts }: Props) {
   return (
-    <ul className={twMerge('flex flex-col gap-4', className)}>
+    <ul className={cn('flex flex-col gap-4', className)}>
       {posts.map((post) => (
         <li key={post._id} className="flex flex-col">
           <div>

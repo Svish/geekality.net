@@ -1,12 +1,12 @@
 import { type HTMLProps } from 'react'
 
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/util'
 
 type Props = HTMLProps<HTMLDivElement>
 
 export default function Prose({ children, className, ...props }: Props) {
   return (
-    <div className={twMerge('prose dark:prose-invert', className)} {...props}>
+    <div className={cn('prose dark:prose-invert', className)} {...props}>
       {children}
     </div>
   )
