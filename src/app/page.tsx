@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import { handlePermalink } from '@/content/wordpress'
-import { postsByPublished } from '@/content'
+import { postsSortedByPublished } from '@/content'
 
 import H1 from '@/components/H1'
 import PostList from '@/components/PostList'
@@ -16,7 +16,7 @@ export default function HomePage({ searchParams }: Props) {
     return handlePermalink(`/?p=${searchParams.p}`)
   }
 
-  const posts = postsByPublished.slice(0, 7)
+  const posts = postsSortedByPublished.slice(0, 7)
 
   return (
     <>

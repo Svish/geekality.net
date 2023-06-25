@@ -9,9 +9,8 @@ import Link, { ExternalLink } from '@/components/Link'
 
 const mdxComponents: MDXComponents = {
   a: ({ href, children, ...props }) => {
-    if (href != null && permalinkMap.has(href)) {
+    if (href != null && permalinkMap.has(href))
       href = permalinkMap.get(href)?.pathname
-    }
 
     invariant(href != null, 'href is required')
 

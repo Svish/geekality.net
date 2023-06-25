@@ -2,13 +2,13 @@ import { Feed } from 'feed'
 
 import { site } from '@/config'
 import { absolute } from '@/config/url'
-import { postsByPublished } from '@/content'
+import { postsSortedByPublished } from '@/content'
 import invariant from 'tiny-invariant'
 
 feed.title = `${site.title} – Blog`
 
 export default function feed() {
-  const latestPost = postsByPublished.at(0)
+  const latestPost = postsSortedByPublished.at(0)
   invariant(latestPost)
 
   const f = new Feed({
@@ -31,7 +31,7 @@ export default function feed() {
 
   f.addCategory('blog')
 
-  postsByPublished.slice(0, 7).forEach((post) =>
+  postsSortedByPublished.slice(0, 7).forEach((post) =>
     f.addItem({
       id: absolute(post.pathname),
       link: absolute(post.pathname),

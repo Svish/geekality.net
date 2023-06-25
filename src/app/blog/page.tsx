@@ -1,4 +1,4 @@
-import { postsByPublished } from '@/content'
+import { postsSortedByPublished } from '@/content'
 import { type Metadata } from 'next'
 
 import H1 from '@/components/H1'
@@ -9,7 +9,7 @@ export const metadata = {
 }
 
 export default async function BlogPage() {
-  const publishedPosts = postsByPublished.filter(
+  const publishedPosts = postsSortedByPublished.filter(
     (post) => new Date(post.published).getTime() <= Date.now()
   )
   return (

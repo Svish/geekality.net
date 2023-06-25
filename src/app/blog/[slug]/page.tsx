@@ -6,7 +6,7 @@ import { formatDate } from '@/util/format'
 import { absolute } from '@/config/url'
 
 import { getMDXComponent } from 'next-contentlayer/hooks'
-import { postsByPublished, findSiblings } from '@/content'
+import { postsSortedByPublished, findSiblingPosts } from '@/content'
 import mdxComponents from '@/components/mdx'
 
 import H1 from '@/components/H1'
@@ -18,13 +18,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return postsByPublished.map((post) => ({
+  return postsSortedByPublished.map((post) => ({
     slug: post.slug,
   }))
 }
 
 export function generateMetadata({ params }: Props): Metadata {
-  const post = postsByPublished.find(({ slug }) => slug === params.slug)
+  const post = postsSortedByPublished.find(({ slug }) => slug === params.slug)
   if (post == null) notFound()
 
   return {
@@ -39,11 +39,11 @@ export function generateMetadata({ params }: Props): Metadata {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const post = postsByPublished.find(({ slug }) => slug === params.slug)
+  const post = postsSortedByPublished.find(({ slug }) => slug === params.slug)
   if (post == null) notFound()
 
   const MDXContent = getMDXComponent(post.body.code)
-  const { prev, next } = findSiblings(post)
+  const { prev, next } = findSiblingPosts(post)
 
   return (
     <>
@@ -87,8 +87,8 @@ export default async function BlogPostPage({ params }: Props) {
             </ul>
           </div>
           <div>
-            Index: {postsByPublished.indexOf(post) + 1} of{' '}
-            {postsByPublished.length}
+            Index: {postsSortedByPublished.indexOf(post) + 1} of{' '}
+            {postsSortedByPublished.length}
           </div>
           {prev && (
             <div className="mt-2">
