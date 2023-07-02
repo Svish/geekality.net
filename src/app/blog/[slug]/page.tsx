@@ -48,6 +48,31 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <H1 lang={post.lang}>{post.title}</H1>
 
+      <ul className="flex flex-wrap gap-2 mb-4 -mt-2">
+        {post.categories.map((category) => (
+          <li key={category}>
+            <Link
+              href={`/blog/categories/${category}`}
+              rel="category"
+              className="block px-2 py-1 bg-gray-300 border border-gray-500 rounded dark:bg-gray-700 dark:border-gray-500 whitespace-nowrap"
+            >
+              {category}
+            </Link>
+          </li>
+        ))}
+        {post.tags.map((tag) => (
+          <li key={tag}>
+            <Link
+              href={`/blog/tags/${tag}`}
+              rel="tag"
+              className="block px-2 py-1 bg-gray-200 border border-gray-400 rounded dark:bg-gray-800 dark:border-gray-600 whitespace-nowrap"
+            >
+              {tag}
+            </Link>
+          </li>
+        ))}
+      </ul>
+
       <Prose lang={post.lang}>
         <MDXContent components={mdxComponents} />
       </Prose>
@@ -64,45 +89,27 @@ export default async function BlogPostPage({ params }: Props) {
             </time>
           </div>
           <div>
-            Posted in
-            <ul className="inline-list">
-              {post.categories.map((category) => (
-                <li key={category}>
-                  <Link href={`/blog/categories/${category}`} rel="category">
-                    {category}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            , tagged with
-            <ul className="inline-list">
-              {post.tags.map((tag) => (
-                <li key={tag}>
-                  <Link href={`/blog/tags/${tag}`} rel="tag">
-                    {tag}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
             Index: {postsSortedByPublished.indexOf(post) + 1} of{' '}
             {postsSortedByPublished.length}
           </div>
-          {prev && (
+          {(prev || next) && (
             <div className="mt-2">
-              Next post:{' '}
-              <Link href={`/blog/${prev.slug}`} rel="prev">
-                {prev.title}
-              </Link>
-            </div>
-          )}
-          {next && (
-            <div>
-              Previous post:{' '}
-              <Link href={`/blog/${next.slug}`} rel="next">
-                {next.title}
-              </Link>
+              {next && (
+                <div>
+                  Next post:{' '}
+                  <Link href={`/blog/${next.slug}`} rel="next">
+                    {next.title}
+                  </Link>
+                </div>
+              )}
+              {prev && (
+                <div>
+                  Previous post:{' '}
+                  <Link href={`/blog/${prev.slug}`} rel="prev">
+                    {prev.title}
+                  </Link>
+                </div>
+              )}
             </div>
           )}
         </aside>

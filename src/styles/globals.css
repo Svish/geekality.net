@@ -24,9 +24,7 @@ footer {
 
   a,
   .prose :where(a):not(:where([class~='not-prose'] *)) {
-    @apply font-medium;
-    color: var(--tw-prose-links);
-    text-decoration-line: underline;
+    @apply font-medium underline text-gray-950 dark:text-gray-50 decoration-gray-400 hover:decoration-gray-600 dark:hover:decoration-gray-300 dark:decoration-gray-500;
     text-decoration-thickness: 0.1rem;
   }
 }
