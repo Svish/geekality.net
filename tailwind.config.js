@@ -22,6 +22,8 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
+            '--tw-prose-maxWidth': '65ch',
+            maxWidth: 'var(--tw-prose-maxWidth)',
             // Remove prose qutoes from blockquote
             blockquote: {
               'p:first-of-type::before': { content: 'none' },

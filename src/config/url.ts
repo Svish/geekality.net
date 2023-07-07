@@ -1,5 +1,3 @@
-import invariant from 'tiny-invariant'
-
 export const BASE_URL = process.env.PRIMARY_URL
   ? `https://${process.env.PRIMARY_URL}`
   : process.env.VERCEL_URL

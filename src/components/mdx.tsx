@@ -1,11 +1,14 @@
 import { type MDXComponents } from 'mdx/types'
 import { type Route } from 'next'
 
-import invariant from 'tiny-invariant'
-import { permalinkMap } from '@/content'
 import { BASE_URL } from '@/config/url'
 
+import invariant from 'tiny-invariant'
+import { permalinkMap } from '@/content'
+import { tryGetLonelyHref } from '@/util/oembed'
+
 import Link, { ExternalLink } from '@/components/Link'
+import Embed from './Embed'
 
 const mdxComponents: MDXComponents = {
   a: ({ href, children, ...props }) => {
@@ -27,6 +30,11 @@ const mdxComponents: MDXComponents = {
         {children}
       </Link>
     )
+  },
+  p: (props) => {
+    const embeddableHref = tryGetLonelyHref(props.children)
+
+    return embeddableHref ? <Embed href={embeddableHref} /> : <p {...props} />
   },
   Note: ({ children }) => <div className="note">{children}</div>,
 }
