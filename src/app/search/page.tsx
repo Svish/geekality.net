@@ -27,7 +27,7 @@ export default async function SearchPage({
           {results.length === 0 ? (
             <p>No results</p>
           ) : (
-            <PostList posts={results.map(({ item }) => item)} />
+            <PostList withMeta posts={results.map(({ item }) => item)} />
           )}
         </output>
       )}

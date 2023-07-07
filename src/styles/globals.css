@@ -29,5 +29,20 @@ footer {
   }
 }
 
+.inline-list {
+  display: contents;
+  li {
+    display: contents;
+    &::before {
+      content: ' ';
+    }
+    &:not(:first-of-type) {
+      &::before {
+        content: ', ';
+      }
+    }
+  }
+}
+
 @import './prose.css';
 @import './form.css';
