@@ -18,9 +18,10 @@ export default function SearchInput() {
       }}
     >
       <input
-        className="w-full rounded-full"
+        className="w-full px-4 py-2 rounded-full"
         name="query"
         type="search"
+        autoFocus
         defaultValue={query}
       />
     </form>
