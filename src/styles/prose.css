@@ -48,6 +48,14 @@
     }
   }
 
+  table {
+    tbody {
+      th {
+        vertical-align: baseline;
+      }
+    }
+  }
+
   .oembed {
     margin-block: var(--prose-block-margin);
 
