@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import H1 from '@/components/H1'
 import PostList from '@/components/PostList'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 interface Props {
   params: { slug: string }
@@ -36,7 +37,14 @@ export default async function BlogCategoriesCategoryPage({ params }: Props) {
 
   return (
     <>
-      <H1>Category: {params.slug}</H1>
+      <Breadcrumbs
+        crumbs={[
+          { pathname: '/blog', label: 'Blog' },
+          { pathname: '/blog/categories', label: 'Categories' },
+          { pathname: `/blog/categories/${params.slug}`, label: params.slug },
+        ]}
+      />
+      <H1>{params.slug}</H1>
       <PostList posts={postsInCategory} />
     </>
   )

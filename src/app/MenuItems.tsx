@@ -22,14 +22,19 @@ const items = [
 
 export default function MenuItems() {
   const pathname = usePathname()
-
   return (
     <>
       {items.map(({ href, label }) => (
         <li key={href}>
           <Link
             href={href}
-            aria-current={pathname.startsWith(href) ? 'page' : undefined}
+            aria-current={
+              pathname === href
+                ? 'page'
+                : pathname.startsWith(href)
+                ? 'true'
+                : undefined
+            }
             className={cn(
               'block px-4 py-3 h-full hover:bg-gray-400 dark:hover:bg-gray-600',
               {

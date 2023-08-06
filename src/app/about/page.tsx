@@ -1,6 +1,7 @@
 import H1 from '@/components/H1'
 import Link from '@/components/Link'
 import Prose from '@/components/Prose'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata = {
   title: 'About',
@@ -9,6 +10,7 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <>
+      <Breadcrumbs crumbs={[{ pathname: '/about', label: 'About' }]} />
       <H1>About</H1>
       <Prose>
         <p>

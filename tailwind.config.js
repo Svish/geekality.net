@@ -18,6 +18,10 @@ module.exports = {
       md: '768px',
       lg: '1024px',
     },
+    textDecorationThickness: {
+      1: '0.075rem',
+      2: '0.1rem',
+    },
     extend: {
       typography: (theme) => ({
         DEFAULT: {

@@ -12,6 +12,7 @@ import mdxComponents from '@/components/mdx'
 import H1 from '@/components/H1'
 import Link from '@/components/Link'
 import Prose from '@/components/Prose'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 interface Props {
   params: { slug: string }
@@ -46,6 +47,12 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
+      <Breadcrumbs
+        crumbs={[
+          { pathname: '/blog', label: 'Blog' },
+          { pathname: `/blog/${params.slug}`, label: post.title },
+        ]}
+      />
       <H1 lang={post.lang}>{post.title}</H1>
 
       <ul className="flex flex-wrap gap-2 mb-4 -mt-2">

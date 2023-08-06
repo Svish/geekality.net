@@ -5,6 +5,7 @@ import { searchPosts } from '@/content/search'
 import H1 from '@/components/H1'
 import SearchInput from './SearchInput'
 import PostList from '@/components/PostList'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Search',
@@ -19,6 +20,7 @@ export default async function SearchPage({
 
   return (
     <>
+      <Breadcrumbs crumbs={[{ pathname: '/search', label: 'Search' }]} />
       <H1>Search</H1>
       <SearchInput />
 

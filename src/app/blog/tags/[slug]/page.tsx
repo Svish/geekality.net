@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import H1 from '@/components/H1'
 import PostList from '@/components/PostList'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 interface Props {
   params: { slug: string }
@@ -34,9 +35,18 @@ export default async function BlogTagsTagPage({ params }: Props) {
   )
   if (postsInTag.length === 0) notFound()
 
+  const title = params.slug
+
   return (
     <>
-      <H1>Tag: {params.slug}</H1>
+      <Breadcrumbs
+        crumbs={[
+          { pathname: '/blog', label: 'Blog' },
+          { pathname: '/blog/tags', label: 'Tags' },
+          { pathname: `/blog/tags/${params.slug}`, label: title },
+        ]}
+      />
+      <H1>{title}</H1>
       <PostList posts={postsInTag} />
     </>
   )

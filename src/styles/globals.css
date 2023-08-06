@@ -24,8 +24,29 @@ footer {
 
   a,
   .prose :where(a):not(:where([class~='not-prose'] *)) {
+    @apply font-medium underline decoration-2 text-gray-950 dark:text-gray-50 decoration-gray-400 hover:decoration-gray-600 dark:hover:decoration-gray-300 dark:decoration-gray-500;
+  }
+}
+
+.breadcrumbs {
+  @apply mb-4 text-sm text-gray-600 dark:text-gray-400;
+
+  ol {
+    @apply flex flex-wrap gap-1;
+  }
+
+  li {
+    display: inline;
+
+    &:not(:first-child)::before {
+      content: '/';
+      @apply mr-1 text-gray-400;
+    }
+  }
+
+  a {
     @apply font-medium underline text-gray-950 dark:text-gray-50 decoration-gray-400 hover:decoration-gray-600 dark:hover:decoration-gray-300 dark:decoration-gray-500;
-    text-decoration-thickness: 0.1rem;
+    text-decoration-thickness: 0.075rem;
   }
 }
 
