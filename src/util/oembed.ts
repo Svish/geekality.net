@@ -4,6 +4,13 @@ import { Parser } from 'htmlparser2'
 import { isValidElement, Children, type ReactNode } from 'react'
 import { z } from 'zod'
 
+const allowed = [
+  'www.youtube.com',
+  'www.flickr.com',
+  'vimeo.com',
+  'open.spotify.com',
+] as const
+
 /**
  * Checks if the children given is a single element with an `href` prop,
  * and returns the value of the `href` prop if it is.
@@ -27,6 +34,11 @@ export function tryGetLonelyHref(children: ReactNode): null | string {
  * @see https://oembed.link/
  */
 export async function tryGetOembed(href: string) {
+  const { hostname } = new URL(href)
+  if (!allowed.includes(hostname)) {
+    return null
+  }
+
   try {
     // Get the HTML
     const res = await fetch(href, {
