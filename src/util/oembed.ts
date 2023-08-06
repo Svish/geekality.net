@@ -27,47 +27,55 @@ export function tryGetLonelyHref(children: ReactNode): null | string {
  * @see https://oembed.link/
  */
 export async function tryGetOembed(href: string) {
-  // Get the HTML
-  const html = await (await fetch(href)).text()
+  try {
+    // Get the HTML
+    const res = await fetch(href, {
+      signal: AbortSignal.timeout(4000),
+    })
+    const html = await res.text()
 
-  // Parse and look for the oembed link
-  let url = null as URL | null
-  const parser = new Parser({
-    onopentag(name, attribs) {
-      if (
-        name === 'link' &&
-        attribs.rel === 'alternate' &&
-        href.includes('flickr')
-      ) {
-        console.log(attribs)
-      }
+    // Parse and look for the oembed link
+    let url = null as URL | null
+    const parser = new Parser({
+      onopentag(name, attribs) {
+        if (
+          name === 'link' &&
+          attribs.rel === 'alternate' &&
+          href.includes('flickr')
+        ) {
+          console.log(attribs)
+        }
 
-      if (
-        name === 'link' &&
-        /alternate|alternative/.test(attribs.rel ?? '') &&
-        attribs.type === 'application/json+oembed' &&
-        attribs.href != null
-      ) {
-        url = new URL(attribs.href)
-        parser.reset()
-      }
-    },
-    onerror(error) {
-      console.error('parsing failed', error)
-    },
-  })
-  parser.write(html)
-  parser.end()
+        if (
+          name === 'link' &&
+          /alternate|alternative/.test(attribs.rel ?? '') &&
+          attribs.type === 'application/json+oembed' &&
+          attribs.href != null
+        ) {
+          url = new URL(attribs.href)
+          parser.reset()
+        }
+      },
+      onerror(error) {
+        console.error('`tryGetOembed` parsing failed', error)
+      },
+    })
+    parser.write(html)
+    parser.end()
 
-  if (url == null) return null
+    if (url == null) return null
 
-  // Get oembed info
-  url.searchParams.set('format', 'json')
-  url.searchParams.set('maxwidth', '640')
-  url.searchParams.set('maxheight', '480')
-  const oembed = await (await fetch(url)).json()
+    // Get oembed info
+    url.searchParams.set('format', 'json')
+    url.searchParams.set('maxwidth', '640')
+    url.searchParams.set('maxheight', '480')
+    const oembed = await (await fetch(url)).json()
 
-  return oembedSchema.parse(oembed)
+    return oembedSchema.parse(oembed)
+  } catch (error) {
+    console.warn('`tryGetOembed` failed', error)
+    return null
+  }
 }
 
 /**
