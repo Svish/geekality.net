@@ -55,7 +55,14 @@ export default async function BlogPostPage({ params }: Props) {
       />
       <H1 lang={post.lang}>{post.title}</H1>
 
-      <ul className="flex flex-wrap gap-2 mb-4 -mt-2">
+      <div className="mb-2 -mt-4 text-xs text-gray-600 dark:text-gray-400">
+        Published:{' '}
+        <time dateTime={post.published}>
+          {formatDate(post.published, 'long')}
+        </time>
+      </div>
+
+      <ul className="flex flex-wrap gap-2 mb-4">
         {post.categories.map((category) => (
           <li key={category}>
             <Link
@@ -89,16 +96,6 @@ export default async function BlogPostPage({ params }: Props) {
           aria-label="Post meta"
           className="mt-4 text-xs text-gray-600 dark:text-gray-400"
         >
-          <div>
-            Published:{' '}
-            <time dateTime={post.published}>
-              {formatDate(post.published, 'long')}
-            </time>
-          </div>
-          <div>
-            Index: {postsSortedByPublished.indexOf(post) + 1} of{' '}
-            {postsSortedByPublished.length}
-          </div>
           {(prev || next) && (
             <div className="mt-2">
               {next && (
