@@ -2,6 +2,9 @@
   "private": true,
   "name": "geekality.net",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=18"
+  },
   "browserslist": [
     ">1%, last 2 versions, not dead"
   ],
