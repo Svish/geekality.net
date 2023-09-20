@@ -1,0 +1,36 @@
+---
+title: 'Git: Squash all commits in feature branch'
+published: '2023-09-20'
+categories:
+  - software-development
+tags:
+  - git
+---
+
+Sometimes there's an old and super messy feature branch that needs to be merged back into the main branch. If the branch has been appropriately tended to, regularly rebased, commits squashed and tidied up, then that is usually a very simple process.
+
+If however that is not the case, and the branch is a total mess of nonsensical commits, merge commits, and lots of conflicts, then it's less simple...
+
+Found [a simple, although slightly sketchy, workaround](https://stackoverflow.com/a/50880042/39321): Do a soft reset to throw away all the commits, while keeping the changes, and create a new commit.
+
+```bash
+# Checkout the feature branch
+git checkout feature/foobar
+
+# Do a soft reset to main, throwing away commits,
+# while keeping changes in working dir
+git reset --soft main
+
+# Create a new commit
+git add .
+git commit -m "Foobar changes in a single commit"
+```
+
+Before actually merging this new commit back into main, it's probably a good idea to create a PR and look through the diff properly...
+
+<Note>
+  <dl>
+    <dt>Source</dt>
+    <dd>[StackOverflow](https://stackoverflow.com/a/50880042/39321)</dd>
+  </dl>
+</Note>
