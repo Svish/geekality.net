@@ -1,5 +1,5 @@
 import { allPosts, type Post } from '@/content'
-import Fuse from 'fuse.js'
+import Fuse, { IFuseOptions } from 'fuse.js'
 
 const config = {
   keys: [
@@ -10,7 +10,7 @@ const config = {
   shouldSort: true,
   ignoreLocation: true,
   includeMatches: true,
-} satisfies Fuse.IFuseOptions<Post>
+} satisfies IFuseOptions<Post>
 
 export async function searchPosts(query: string) {
   // TODO: Try get or create index from somewhere
