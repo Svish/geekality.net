@@ -1,5 +1,6 @@
-import { allPosts, type Post } from '@/content'
 import Fuse, { IFuseOptions } from 'fuse.js'
+
+import { getAllPosts, type Post } from '@/content'
 
 const config = {
   keys: [
@@ -13,16 +14,9 @@ const config = {
 } satisfies IFuseOptions<Post>
 
 export async function searchPosts(query: string) {
-  // TODO: Try get or create index from somewhere
-  return query === '' ? [] : new Fuse(allPosts, config).search(query)
+  const posts = await getAllPosts()
+  return query === '' ? [] : new Fuse(posts, config).search(query)
 }
 
-function createIndex() {
-  // https://fusejs.io/api/indexing.html#fuse-createIndex
-  return Fuse.createIndex(config.keys, allPosts)
-}
-
-async function readIndex() {
-  // https://fusejs.io/api/indexing.html#fuse-parseindex
-  return Fuse.parseIndex('')
-}
+// TODO: Try get or create index from somewhere
+// https://www.fusejs.io/api/indexing.html#indexing

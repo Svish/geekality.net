@@ -1,6 +1,7 @@
-import H1 from '@/components/H1'
+import { byString } from '@/util/sort'
+import { getAllPosts } from '@/content'
 
-import { categories } from '@/content'
+import H1 from '@/components/H1'
 import Link from '@/components/Link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
@@ -9,6 +10,15 @@ export const metadata = {
 }
 
 export default async function BlogCategoriesPage() {
+  const posts = await getAllPosts()
+
+  const categories = [...new Set(posts.flatMap((p) => p.categories ?? []))]
+    .sort(byString())
+    .map((category) => ({
+      slug: category,
+      count: posts.filter((p) => p.categories?.includes(category)).length,
+    }))
+
   return (
     <>
       <Breadcrumbs

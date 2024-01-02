@@ -1,3 +1,4 @@
+import { getAllPosts } from '@/content'
 import { handlePermalink } from '@/content/wordpress'
 
 interface Props {
@@ -9,8 +10,11 @@ interface Props {
   }
 }
 
-export default function Page({ params }: Props) {
+export default async function Page({ params }: Props) {
+  const posts = await getAllPosts()
+
   return handlePermalink(
+    posts,
     `/${params.year}/${params.month}/${params.day}/${params.slug}/`
   )
 }

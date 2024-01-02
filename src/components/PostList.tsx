@@ -2,10 +2,10 @@ import { cn } from '@/util'
 import { formatDate } from '@/util/format'
 
 import Link from '@/components/Link'
-import { type Post } from '@/content'
+import { type PostMeta } from '@/content'
 
 interface Props {
-  posts: Post[]
+  posts: PostMeta[]
   withMeta?: boolean
   className?: string
 }
@@ -18,7 +18,7 @@ export default function PostList({
   return (
     <ul className={cn('flex flex-col gap-4', className)}>
       {posts.map((post) => (
-        <li key={post._id} className="flex flex-col">
+        <li key={post.slug} className="flex flex-col">
           <div>
             <Link href={`/blog/${post.slug}`}>{post.title}</Link>
           </div>

@@ -1,6 +1,5 @@
 /.next
 /.vercel
-/.contentlayer
 /.unlighthouse
 /node_modules
 /next-env.d.ts

@@ -2,14 +2,13 @@ import { Feed } from 'feed'
 
 import { site } from '@/config'
 import { absolute } from '@/config/url'
-import { postsSortedByPublished } from '@/content'
-import invariant from 'tiny-invariant'
+import { getAllPosts } from '@/content'
 
 feed.title = `${site.title} – Blog`
 
-export default function feed() {
-  const latestPost = postsSortedByPublished.at(0)
-  invariant(latestPost)
+export default async function feed() {
+  const posts = await getAllPosts()
+  const latestPost = posts.at(0)
 
   const f = new Feed({
     id: absolute('blog'),
@@ -25,13 +24,13 @@ export default function feed() {
       rss: absolute('blog/feed/rss'),
       atom: absolute('blog/feed/atom'),
     },
-    updated: new Date(latestPost.published),
+    updated: latestPost != null ? new Date(latestPost.published) : new Date(),
     ttl: 60 * 60 * 24,
   })
 
   f.addCategory('blog')
 
-  postsSortedByPublished.slice(0, 7).forEach((post) =>
+  posts.slice(0, 7).forEach((post) =>
     f.addItem({
       id: absolute(post.pathname),
       link: absolute(post.pathname),

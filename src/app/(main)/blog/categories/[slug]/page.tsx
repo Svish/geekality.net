@@ -1,6 +1,6 @@
 import { type Metadata } from 'next'
 
-import { allPosts } from '@/content'
+import { getAllPosts } from '@/content'
 import { notFound } from 'next/navigation'
 
 import H1 from '@/components/H1'
@@ -15,8 +15,10 @@ export async function generateStaticParams() {
   return []
 }
 
-export function generateMetadata({ params }: Props): Metadata {
-  const categoryHasPosts = allPosts.some(
+export async function generateMetadata({ params }: Props) {
+  const posts = await getAllPosts()
+
+  const categoryHasPosts = posts.some(
     ({ categories }) => categories?.includes(params.slug) === true
   )
   if (!categoryHasPosts) notFound()
@@ -26,12 +28,14 @@ export function generateMetadata({ params }: Props): Metadata {
     openGraph: {
       title: `Category: ${params.slug}`,
     },
-  }
+  } satisfies Metadata
 }
 
 export default async function BlogCategoriesCategoryPage({ params }: Props) {
-  const postsInCategory = allPosts.filter(
-    ({ categories }) => categories?.includes(params.slug) === true
+  const posts = await getAllPosts()
+
+  const postsInCategory = posts.filter(({ categories }) =>
+    categories.includes(params.slug)
   )
   if (postsInCategory.length === 0) notFound()
 

@@ -1,5 +1,4 @@
-import { postsSortedByPublished } from '@/content'
-import { type Metadata } from 'next'
+import { getAllPosts } from '@/content'
 
 import H1 from '@/components/H1'
 import PostList from '@/components/PostList'
@@ -10,14 +9,13 @@ export const metadata = {
 }
 
 export default async function BlogPage() {
-  const publishedPosts = postsSortedByPublished.filter(
-    (post) => new Date(post.published).getTime() <= Date.now()
-  )
+  const posts = await getAllPosts()
+
   return (
     <>
       <Breadcrumbs crumbs={[{ pathname: '/blog', label: 'Blog' }]} />
       <H1>Blog</H1>
-      <PostList posts={publishedPosts} />
+      <PostList posts={posts} />
     </>
   )
 }

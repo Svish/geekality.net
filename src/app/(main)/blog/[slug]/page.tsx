@@ -5,9 +5,7 @@ import { notFound } from 'next/navigation'
 import { formatDate } from '@/util/format'
 import { absolute } from '@/config/url'
 
-import { getMDXComponent } from 'next-contentlayer/hooks'
-import { postsSortedByPublished, findSiblingPosts } from '@/content'
-import mdxComponents from '@/components/mdx'
+import { getAllPosts, getPost, findSiblingPosts } from '@/content'
 
 import H1 from '@/components/H1'
 import Link from '@/components/Link'
@@ -19,12 +17,14 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  // return postsSortedByPublished.map(({ slug }) => ({ slug }))
+  // const posts = await getAllPostsMeta()
+  // return posts.map(({ slug }) => ({ slug }))
   return []
 }
 
-export function generateMetadata({ params }: Props): Metadata {
-  const post = postsSortedByPublished.find(({ slug }) => slug === params.slug)
+export async function generateMetadata({ params }: Props) {
+  const post = await getPost(params.slug)
+
   if (post == null) notFound()
 
   return {
@@ -35,15 +35,15 @@ export function generateMetadata({ params }: Props): Metadata {
     alternates: {
       canonical: absolute(post.pathname),
     },
-  }
+  } satisfies Metadata
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const post = postsSortedByPublished.find(({ slug }) => slug === params.slug)
+  const post = await getPost(params.slug)
   if (post == null) notFound()
 
-  const MDXContent = getMDXComponent(post.body.code)
-  const { prev, next } = findSiblingPosts(post)
+  const posts = await getAllPosts()
+  const { prev, next } = findSiblingPosts(posts, post)
 
   return (
     <>
@@ -87,9 +87,7 @@ export default async function BlogPostPage({ params }: Props) {
         ))}
       </ul>
 
-      <Prose lang={post.lang}>
-        <MDXContent components={mdxComponents} />
-      </Prose>
+      <Prose lang={post.lang}>{post.content}</Prose>
 
       <div className="mt-12 max-w-[65ch]">
         <aside

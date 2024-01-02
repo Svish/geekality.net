@@ -1,52 +1,73 @@
 import 'server-only'
 
-import { byString, byStringValue } from '@/util/sort'
-import { onlyPublished } from './filters'
+import fs from 'fs/promises'
+import path from 'path'
 
-import { allPosts, type Post } from 'contentlayer/generated'
-export { allPosts, type Post } from 'contentlayer/generated'
+import { z } from 'zod'
+import { byStringValue } from '@/util/sort'
+import { compileMDX } from '@/util/mdx'
 
-export const postsSortedByTitle: readonly Post[] = [...allPosts]
-  .filter(onlyPublished)
-  .sort(byStringValue((p) => p.title))
+import { unstable_cache as cache } from 'next/cache'
 
-export const postsSortedByPublished: readonly Post[] = [...allPosts]
-  .filter(onlyPublished)
-  .sort(byStringValue((p) => p.published))
-  .reverse()
+const contentDir = path.resolve(process.cwd(), 'content', 'blog')
 
-export const permalinkMap: ReadonlyMap<string, Post> = new Map(
-  allPosts.flatMap((post) =>
-    (post.permalinks ?? []).map((permalink) => [permalink, post])
+const schema = z.object({
+  title: z.string().min(1),
+  published: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  lang: z.enum(['en', 'nb']).default('en'),
+  categories: z.string().min(1).array().min(1),
+  tags: z.string().min(1).array().min(0),
+  permalinks: z.string().min(1).array().default([]),
+})
+
+export type PostMeta = Awaited<ReturnType<typeof getAllPosts>>[number]
+
+export const getAllPosts = cache(async function getAllPostsMeta() {
+  const files = await fs.readdir(contentDir)
+
+  const posts = await Promise.all(
+    files.map(async (file) => {
+      const slug = file.replace(/\.mdx$/, '')
+      const source = await fs.readFile(path.join(contentDir, file), {
+        encoding: 'utf8',
+        flag: 'r',
+      })
+
+      const { frontmatter } = await compileMDX(source)
+
+      return {
+        slug,
+        pathname: `/blog/${slug}`,
+        ...schema.parse(frontmatter),
+      }
+    })
   )
-)
 
-export function findSiblingPosts(post: Post) {
-  const index = postsSortedByPublished.findIndex(
-    ({ slug }) => slug === post.slug
-  )
+  return posts
+    .filter((p) => new Date(p.published).getTime() <= Date.now())
+    .sort(byStringValue((p) => p.published, 'desc'))
+})
+
+export type Post = Awaited<ReturnType<typeof getPost>>
+
+export const getPost = async function getPost(slug: string) {
+  const source = await fs.readFile(path.join(contentDir, `${slug}.mdx`), {
+    encoding: 'utf8',
+    flag: 'r',
+  })
+  const { frontmatter, content } = await compileMDX(source)
   return {
-    prev: postsSortedByPublished[index + 1],
-    next: postsSortedByPublished[index - 1],
-  } as const
+    slug,
+    pathname: `/blog/${slug}`,
+    ...schema.parse(frontmatter),
+    content,
+  }
 }
 
-type SlugCount = { slug: string; count: number }
-
-export const categories: readonly SlugCount[] = [
-  ...new Set(allPosts.flatMap((p) => p.categories ?? [])),
-]
-  .sort(byString())
-  .map((category) => ({
-    slug: category,
-    count: allPosts.filter((p) => p.categories?.includes(category)).length,
-  }))
-
-export const tags: readonly SlugCount[] = [
-  ...new Set(allPosts.flatMap((p) => p.tags ?? [])),
-]
-  .sort(byString())
-  .map((tag) => ({
-    slug: tag,
-    count: allPosts.filter((p) => p.tags?.includes(tag)).length,
-  }))
+export function findSiblingPosts(posts: PostMeta[], post: Post) {
+  const index = posts.findIndex(({ slug }) => slug === post.slug)
+  return {
+    prev: posts[index + 1],
+    next: posts[index - 1],
+  } as const
+}

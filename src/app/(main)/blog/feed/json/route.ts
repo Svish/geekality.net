@@ -1,5 +1,6 @@
 import feed from '@/content/feed'
 
 export async function GET() {
-  return feed().atom1()
+  const f = await feed()
+  return f.json1()
 }

@@ -1,9 +1,11 @@
 import { type MetadataRoute } from 'next'
 import { absolute } from '@/config/url'
 
-import { allPosts } from '@/content'
+import { getAllPosts } from '@/content'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap() {
+  const posts = await getAllPosts()
+
   // TODO: Find a way to get last build date, or something, here...
   const lastModified = new Date()
 
@@ -21,9 +23,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
     },
 
-    ...allPosts.map((p) => ({
+    ...posts.map((p) => ({
       url: absolute(p.pathname),
       lastModified: lastModified,
     })),
-  ]
+  ] satisfies MetadataRoute.Sitemap
 }

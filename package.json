@@ -16,7 +16,7 @@
     "favicon": "npx cli-real-favicon generate faviconDescription.json faviconData.json public",
     "unlighthouse": "npx unlighthouse --site http://localhost:3000",
     "update": "npx npm-check --update --save-exact",
-    "clean": "rimraf .contentlayer .next"
+    "clean": "rimraf .next"
   },
   "dependencies": {
     "@tailwindcss/forms": "0.5.7",
@@ -29,7 +29,6 @@
     "@vercel/speed-insights": "1.0.2",
     "autoprefixer": "10.4.16",
     "clsx": "2.1.0",
-    "contentlayer": "0.3.4",
     "eslint": "8.56.0",
     "eslint-config-next": "14.0.4",
     "feed": "4.2.2",
@@ -37,7 +36,7 @@
     "htmlparser2": "9.0.0",
     "katex": "0.16.9",
     "next": "14.0.4",
-    "next-contentlayer": "0.3.4",
+    "next-mdx-remote": "4.4.1",
     "postcss": "8.4.32",
     "postcss-nesting": "12.0.2",
     "react": "18.2.0",
