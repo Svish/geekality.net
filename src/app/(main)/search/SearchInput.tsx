@@ -1,28 +1,17 @@
-'use client'
+type Props = {
+  param: string
+  defaultValue: string
+}
 
-import { useRouter, useSearchParams } from 'next/navigation'
-
-export default function SearchInput() {
-  const params = useSearchParams()
-  const router = useRouter()
-
-  const query = params.get('q') ?? ''
-
+export default function SearchInput({ param, defaultValue }: Props) {
   return (
-    <form
-      method="GET"
-      onSubmit={(e) => {
-        e.preventDefault()
-        const query = e.currentTarget['query'].value
-        router.push(`/search?q=${encodeURIComponent(query)}`)
-      }}
-    >
+    <form method="GET">
       <input
         className="w-full px-4 py-2 rounded-full"
-        name="query"
+        name={param}
         type="search"
         autoFocus
-        defaultValue={query}
+        defaultValue={defaultValue}
       />
     </form>
   )
