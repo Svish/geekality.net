@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { formatDate } from '@/util/format'
 import { absolute } from '@/config/url'
 
-import { getAllPosts, getPost, findSiblingPosts } from '@/content'
+import { getAllPosts, getPost, findSiblingPosts } from '@/content/posts'
 
 import H1 from '@/components/H1'
 import Link from '@/components/Link'
@@ -28,9 +28,9 @@ export async function generateMetadata({ params }: Props) {
   if (post == null) notFound()
 
   return {
-    title: post.title,
+    title: post.meta.title,
     openGraph: {
-      title: post.title,
+      title: post.meta.title,
     },
     alternates: {
       canonical: absolute(post.pathname),
@@ -50,20 +50,20 @@ export default async function BlogPostPage({ params }: Props) {
       <Breadcrumbs
         crumbs={[
           { pathname: '/blog', label: 'Blog' },
-          { pathname: `/blog/${params.slug}`, label: post.title },
+          { pathname: `/blog/${params.slug}`, label: post.meta.title },
         ]}
       />
-      <H1 lang={post.lang}>{post.title}</H1>
+      <H1 lang={post.meta.lang}>{post.meta.title}</H1>
 
       <div className="mb-2 -mt-4 text-xs text-gray-600 dark:text-gray-400">
         Published:{' '}
-        <time dateTime={post.published}>
-          {formatDate(post.published, 'long')}
+        <time dateTime={post.meta.published}>
+          {formatDate(post.meta.published, 'long')}
         </time>
       </div>
 
       <ul className="flex flex-wrap gap-2 mb-4">
-        {post.categories.map((category) => (
+        {post.meta.categories.map((category) => (
           <li key={category}>
             <Link
               href={`/blog/categories/${category}`}
@@ -74,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
             </Link>
           </li>
         ))}
-        {post.tags.map((tag) => (
+        {post.meta.tags.map((tag) => (
           <li key={tag}>
             <Link
               href={`/blog/tags/${tag}`}
@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: Props) {
         ))}
       </ul>
 
-      <Prose lang={post.lang}>{post.content}</Prose>
+      <Prose lang={post.meta.lang}>{post.content}</Prose>
 
       <div className="mt-12 max-w-[65ch]">
         <aside
@@ -100,7 +100,7 @@ export default async function BlogPostPage({ params }: Props) {
                 <div>
                   Next post:{' '}
                   <Link href={`/blog/${next.slug}`} rel="next">
-                    {next.title}
+                    {next.meta.title}
                   </Link>
                 </div>
               )}
@@ -108,7 +108,7 @@ export default async function BlogPostPage({ params }: Props) {
                 <div>
                   Previous post:{' '}
                   <Link href={`/blog/${prev.slug}`} rel="prev">
-                    {prev.title}
+                    {prev.meta.title}
                   </Link>
                 </div>
               )}

@@ -1,11 +1,13 @@
 import { notFound, redirect } from 'next/navigation'
-import { type PostMeta } from '@/content'
+import { type Post } from '@/content/posts'
 
 /**
  * Redirects to a blog post if one with given permalink exists.
  */
-export function handlePermalink(posts: PostMeta[], permalink: string): never {
-  const post = posts.find((p) => p.permalinks?.includes(permalink) ?? false)
+export function handlePermalink(posts: Post[], permalink: string): never {
+  const post = posts.find(
+    ({ meta }) => meta.permalinks?.includes(permalink) ?? false
+  )
 
   return post != null
     ? redirect(`/blog/${post.slug}`)

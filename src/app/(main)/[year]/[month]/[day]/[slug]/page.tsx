@@ -1,4 +1,4 @@
-import { getAllPosts } from '@/content'
+import { getAllPosts } from '@/content/posts'
 import { handlePermalink } from '@/content/wordpress'
 
 interface Props {

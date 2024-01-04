@@ -1,5 +1,5 @@
 import { byString } from '@/util/sort'
-import { getAllPosts } from '@/content'
+import { getAllPosts } from '@/content/posts'
 
 import H1 from '@/components/H1'
 import Link from '@/components/Link'
@@ -12,11 +12,11 @@ export const metadata = {
 export default async function BlogTagsPage() {
   const posts = await getAllPosts()
 
-  const tags = [...new Set(posts.flatMap((p) => p.tags ?? []))]
+  const tags = [...new Set(posts.flatMap(({ meta }) => meta.tags ?? []))]
     .sort(byString())
     .map((tag) => ({
       slug: tag,
-      count: posts.filter((p) => p.tags?.includes(tag)).length,
+      count: posts.filter(({ meta }) => meta.tags?.includes(tag)).length,
     }))
 
   return (

@@ -1,4 +1,4 @@
-import { getAllPosts } from '@/content'
+import { getAllPosts } from '@/content/posts'
 
 import H1 from '@/components/H1'
 import PostList from '@/components/PostList'

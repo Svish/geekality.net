@@ -1,11 +1,13 @@
 import Fuse, { IFuseOptions } from 'fuse.js'
 
-import { getAllPosts, type Post } from '@/content'
+import { getAllPosts, type Post } from '@/content/posts'
 
 const config = {
   keys: [
     { name: 'title', weight: 1 },
+    // TODO: Fix searching for content (which no longer works)
     { name: 'body.raw', weight: 0.5 },
+    // TODO: Search for tags and categories
   ],
   threshold: 0.25,
   shouldSort: true,

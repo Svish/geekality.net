@@ -1,6 +1,6 @@
 import { type Metadata } from 'next'
 
-import { getAllPosts } from '@/content'
+import { getAllPosts } from '@/content/posts'
 import { notFound } from 'next/navigation'
 
 import H1 from '@/components/H1'
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props) {
   const posts = await getAllPosts()
 
   const tagHasPosts = posts.some(
-    ({ tags }) => tags?.includes(params.slug) === true
+    ({ meta: { tags } }) => tags?.includes(params.slug) === true
   )
   if (!tagHasPosts) notFound()
 
@@ -35,7 +35,7 @@ export default async function BlogTagsTagPage({ params }: Props) {
   const posts = await getAllPosts()
 
   const postsInTag = posts.filter(
-    ({ tags }) => tags?.includes(params.slug) === true
+    ({ meta: { tags } }) => tags?.includes(params.slug) === true
   )
   if (postsInTag.length === 0) notFound()
 

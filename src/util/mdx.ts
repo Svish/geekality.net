@@ -25,7 +25,7 @@ export function compileMDX(source: string) {
     source,
     components,
     options: {
-      parseFrontmatter: true,
+      parseFrontmatter: false,
       mdxOptions: {
         remarkPlugins: [remarkMath, remarkGfm],
         rehypePlugins: [

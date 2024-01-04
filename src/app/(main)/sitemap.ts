@@ -1,7 +1,7 @@
 import { type MetadataRoute } from 'next'
 import { absolute } from '@/config/url'
 
-import { getAllPosts } from '@/content'
+import { getAllPosts } from '@/content/posts'
 
 export default async function sitemap() {
   const posts = await getAllPosts()
@@ -25,6 +25,8 @@ export default async function sitemap() {
 
     ...posts.map((p) => ({
       url: absolute(p.pathname),
+      // TODO: Get modified date from git repo?
+      // https://stackoverflow.com/questions/22497597/get-the-last-modification-date-of-a-file-in-git-repo
       lastModified: lastModified,
     })),
   ] satisfies MetadataRoute.Sitemap

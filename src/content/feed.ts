@@ -2,7 +2,7 @@ import { Feed } from 'feed'
 
 import { site } from '@/config'
 import { absolute } from '@/config/url'
-import { getAllPosts } from '@/content'
+import { getAllPosts } from '@/content/posts'
 
 feed.title = `${site.title} – Blog`
 
@@ -24,7 +24,8 @@ export default async function feed() {
       rss: absolute('blog/feed/rss'),
       atom: absolute('blog/feed/atom'),
     },
-    updated: latestPost != null ? new Date(latestPost.published) : new Date(),
+    updated:
+      latestPost != null ? new Date(latestPost.meta.published) : new Date(),
     ttl: 60 * 60 * 24,
   })
 
@@ -34,9 +35,9 @@ export default async function feed() {
     f.addItem({
       id: absolute(post.pathname),
       link: absolute(post.pathname),
-      date: new Date(post.published),
-      title: post.title,
-      category: post.categories.map((name) => ({ name })),
+      date: new Date(post.meta.published),
+      title: post.meta.title,
+      category: post.meta.categories.map((name) => ({ name })),
       author: [site.author],
     })
   )

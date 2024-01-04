@@ -31,23 +31,6 @@
     margin: 0 !important;
   }
 
-  dl {
-    margin-block: var(--prose-block-margin);
-  }
-  dt {
-    @apply font-bold;
-  }
-  dd {
-    @apply ml-4;
-    margin-trim: block;
-    & > *:first-child {
-      margin-top: 0;
-    }
-    & > *:last-child {
-      margin-bottom: 0;
-    }
-  }
-
   table {
     tbody {
       th {
@@ -74,6 +57,10 @@
     }
     & > *:last-child {
       margin-bottom: 0;
+    }
+    & dt {
+      /* TODO: Remove this when `margin-trim` works... */
+      margin-top: 0;
     }
   }
 
