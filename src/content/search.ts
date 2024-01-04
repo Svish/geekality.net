@@ -4,21 +4,18 @@ import { getAllPosts, type Post } from '@/content/posts'
 
 const config = {
   keys: [
-    { name: 'title', weight: 1 },
-    // TODO: Fix searching for content (which no longer works)
-    { name: 'body.raw', weight: 0.5 },
-    // TODO: Search for tags and categories
+    { name: 'meta.title', weight: 0.8 },
+    { name: 'source', weight: 0.5 },
+    { name: 'meta.tags', weight: 0.1 },
+    { name: 'meta.categories', weight: 0.05 },
   ],
-  threshold: 0.25,
+  threshold: 0.1,
   shouldSort: true,
   ignoreLocation: true,
-  includeMatches: true,
+  ignoreFieldNorm: true,
 } satisfies IFuseOptions<Post>
 
 export async function searchPosts(query: string) {
   const posts = await getAllPosts()
   return query === '' ? [] : new Fuse(posts, config).search(query)
 }
-
-// TODO: Try get or create index from somewhere
-// https://www.fusejs.io/api/indexing.html#indexing
