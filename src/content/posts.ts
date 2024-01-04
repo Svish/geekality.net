@@ -5,10 +5,10 @@ import path from 'path'
 
 import { VFile } from 'vfile'
 import { matter } from 'vfile-matter'
-
-import { z } from 'zod'
-import { byStringValue } from '@/util/sort'
+import { unstable_cache as cache } from 'next/cache'
 import { compileMDX } from '@/util/mdx'
+import { byStringValue } from '@/util/sort'
+import { z } from 'zod'
 
 const contentDir = path.resolve(process.cwd(), 'posts')
 
@@ -23,7 +23,7 @@ const metaSchema = z.object({
 
 export type Post = Awaited<ReturnType<typeof getAllPosts>>[number]
 
-export const getAllPosts = async function getAllPosts() {
+export const getAllPosts = cache(async function getAllPosts() {
   const files = await fs.readdir(contentDir)
 
   const posts = await Promise.all(
@@ -31,7 +31,7 @@ export const getAllPosts = async function getAllPosts() {
   )
 
   return posts.sort(byStringValue((p) => p.meta.published, 'desc'))
-}
+})
 
 export const getPost = async function getPost(slug: string) {
   const filepath = path.join(contentDir, `${slug}.mdx`)
