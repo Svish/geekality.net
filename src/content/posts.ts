@@ -48,16 +48,16 @@ async function parseMdx(filepath: string) {
     encoding: 'utf8',
     flag: 'r',
   })
-  const vfile = new VFile(source)
+  const file = new VFile(source)
+  matter(file, { strip: true })
 
   const slug = path.basename(filepath, '.mdx')
-  const meta = matter(vfile, { strip: true }).data.matter
 
   return {
-    meta: metaSchema.parse(meta),
+    meta: metaSchema.parse(file.data.matter),
     slug,
     pathname: `/blog/${slug}`,
-    source: String(vfile),
+    source: String(file),
   }
 }
 
