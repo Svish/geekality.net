@@ -42,8 +42,10 @@ export async function tryGetOembed(href: string) {
   try {
     // Get the HTML
     const res = await fetch(href, {
-      signal: AbortSignal.timeout(4000),
-    })
+      signal: AbortSignal.timeout(10000),
+    }).catch(() => null)
+    if (res == null) return null
+
     const html = await res.text()
 
     // Parse and look for the oembed link
